@@ -1,0 +1,31 @@
+[
+  {
+    "question_number": "0001",
+    "question_text": "Northern Trail Outfitters (NTO) creates a calculated insight to compute recency, frequency, monetary (RFM) scores on its unified individuals. NTO then creates a segment based on these scores that it activates to a Marketing Cloud activation target. Which two actions are required when configuring the activation? Choose 2 answers",
+    "options": [
+      {
+        "option_letter": "A",
+        "option_text": "Add additional attributes.",
+        "is_correct": false
+      },
+      {
+        "option_letter": "B",
+        "option_text": "Choose a segment.",
+        "is_correct": true
+      },
+      {
+        "option_letter": "C",
+        "option_text": "Select contact points.",
+        "is_correct": true
+      },
+      {
+        "option_letter": "D",
+        "option_text": "Add the calculated insight in the activation.",
+        "is_correct": false
+      }
+    ],
+    "requires_multiple_answers": true,
+    "explanation": "To configure an activation to a Marketing Cloud activation target, you need to choose a segment and select contact points. Choosing a segment allows you to specify which unified individuals you want to activate. Selecting contact points allows you to map the attributes from the segment to the fields in the Marketing Cloud data extension. You do not need to add additional attributes or add the calculated insight in the activation, as these are already part of the segment definition. Reference: Create a Marketing Cloud Activation Target; Types of Data Targets in Data Cloud",
+    "link": "https://help.salesforce.com/s/articleView?id=sf.c360_a_create_marketing_cloud_activation_target.htm"
+  }
+]
