@@ -339,15 +339,11 @@ const PDFImport: React.FC<PDFImportProps> = ({
               <button
                 onClick={handleStartProcessing}
                 disabled={isProcessing || !selectedFile || !geminiApiKey.trim()}
-                className={`w-full px-6 py-3 text-sm font-semibold rounded-lg transition-all duration-200 transform ${
-                  isProcessing || !selectedFile || !geminiApiKey.trim()
-                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-inner'
-                    : 'bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95'
-                }`}
+                className="btn btn-primary btn-full"
               >
                 {isProcessing ? (
                   <span className="flex items-center justify-center space-x-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-400"></div>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                     <span>Procesando...</span>
                   </span>
                 ) : (
