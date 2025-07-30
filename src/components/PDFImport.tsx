@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Upload, AlertCircle, Settings, FileText } from 'lucide-react';
+import { Upload, AlertCircle, Settings, FileText, ChevronDown, ChevronUp, Check, Clock } from 'lucide-react';
 import { PDFProcessorService } from '../utils/pdfProcessor';
 import { GeminiPdfService } from '../utils/geminiPdfService';
 import { GeminiQuestionProcessor, type ProcessingProgress } from '../utils/geminiQuestionProcessor';
@@ -20,6 +20,229 @@ interface PDFImportProps {
   };
   nextQuestionNumber: number;
 }
+
+// Componente colapsable para la configuración de API Key
+interface ApiKeyConfigSectionProps {
+  geminiApiKey: string;
+  saveGeminiApiKey: (key: string) => void;
+  currentGeminiModel: string;
+  fallbackStatus: {
+    currentModel: string;
+    currentModelIndex: number;
+    totalModels: number;
+    remainingModels: number;
+    availableModels: string[];
+  } | null;
+}
+
+const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({ 
+  geminiApiKey, 
+  saveGeminiApiKey, 
+  currentGeminiModel, 
+  fallbackStatus 
+}) => {
+  const [isExpanded, setIsExpanded] = useState(!geminiApiKey || geminiApiKey.trim() === '');
+  const hasApiKey = geminiApiKey && geminiApiKey.trim() !== '';
+
+  return (
+    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full flex items-start justify-between space-x-3 text-left focus:outline-none"
+      >
+        <div className="flex items-start space-x-3 flex-1">
+          <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <h3 className="font-medium text-yellow-800">
+              {hasApiKey ? '✅ API Key Configurada' : 'Configuración API Key'}
+            </h3>
+            <p className="text-sm text-yellow-700 mt-1">
+              {isExpanded 
+                ? "Configura tu API key de Google Gemini para usar esta función."
+                : hasApiKey 
+                  ? "API key configurada correctamente. Haz clic para ver detalles o cambiar."
+                  : "Se requiere API key de Google Gemini. Haz clic para configurar."
+              }
+            </p>
+          </div>
+        </div>
+        <div className="flex-shrink-0 mt-0.5">
+          {isExpanded ? (
+            <ChevronUp className="w-5 h-5 text-yellow-600" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-yellow-600" />
+          )}
+        </div>
+      </button>
+      
+      {isExpanded && (
+        <div className="mt-3">
+          <p className="text-sm text-yellow-700 mb-2">
+            Necesitas una API key de Google Gemini para usar esta función.
+            <a 
+              href="https://makersuite.google.com/app/apikey" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="underline ml-1"
+            >
+              Obtener API key gratuita
+            </a>
+          </p>
+          <input
+            type="password"
+            placeholder="Pega tu API key de Gemini aquí..."
+            value={geminiApiKey}
+            onChange={(e) => saveGeminiApiKey(e.target.value)}
+            className="mt-2 w-full px-3 py-2 border border-amber-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+          />
+          {hasApiKey && (
+            <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-200">
+              <p className="text-xs text-blue-700 mb-1">
+                🤖 <strong>Modelo actual:</strong> {currentGeminiModel}
+              </p>
+              {fallbackStatus && (
+                <div className="text-xs text-blue-600">
+                  <p>📊 Modelo {fallbackStatus.currentModelIndex + 1} de {fallbackStatus.totalModels}</p>
+                  {fallbackStatus.remainingModels > 0 && (
+                    <p>⏭️ {fallbackStatus.remainingModels} modelos de respaldo disponibles</p>
+                  )}
+                  {fallbackStatus.remainingModels === 0 && (
+                    <p className="text-amber-600">⚠️ Último modelo disponible</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Componente para el estado actual con iconos dinámicos
+interface CurrentStatusSectionProps {
+  geminiApiKey: string;
+  selectedFile: File | null;
+}
+
+const CurrentStatusSection: React.FC<CurrentStatusSectionProps> = ({ 
+  geminiApiKey, 
+  selectedFile
+}) => {
+  const hasApiKey = !!(geminiApiKey && geminiApiKey.trim() !== '');
+  
+  const getStatusIcon = (condition: boolean) => {
+    if (condition) {
+      return <Check className="w-4 h-4 text-green-600" />;
+    } else {
+      return <Clock className="w-4 h-4 text-gray-400" />;
+    }
+  };
+
+  const statusItems = [
+    { condition: hasApiKey, text: "Input de API key funcionando" },
+    { condition: hasApiKey, text: "Carga de archivos con detección de páginas" },
+    { condition: hasApiKey && !!selectedFile, text: "Selección de página específica" },
+    { condition: hasApiKey && !!selectedFile, text: "Procesamiento manual página por página" },
+    { condition: hasApiKey && !!selectedFile, text: "Procesamiento directo de PDF completo (RECOMENDADO)" },
+    { condition: hasApiKey, text: "Sistema de fallback automático de modelos Gemini" },
+    { condition: hasApiKey, text: "Procesamiento individual de preguntas con explicaciones" },
+    { condition: hasApiKey, text: "Generación automática de links de referencia" },
+    { condition: hasApiKey, text: "Numeración secuencial correcta de preguntas" },
+    { condition: hasApiKey, text: "Detección inteligente de texto vs imágenes" },
+    { condition: hasApiKey, text: "Fallback a Gemini Vision para preguntas con imágenes" },
+    { condition: hasApiKey, text: "Indicadores de progreso en tiempo real" },
+    { condition: hasApiKey, text: "Extracción e importación automática de preguntas" }
+  ];
+
+  return (
+    <div 
+      className="bg-gray-50 rounded-lg p-4"
+      style={{ marginTop: '24px' }}
+    >
+      <h4 className="font-medium text-gray-800 mb-2">🚀 Estado actual:</h4>
+      <ul className="text-sm text-gray-600 space-y-1">
+        {statusItems.map((item, index) => (
+          <li key={index} className="flex items-center space-x-2">
+            {getStatusIcon(item.condition)}
+            <span className={item.condition ? 'text-gray-700' : 'text-gray-500'}>
+              {item.text}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-200">
+        <p className="text-xs text-blue-700">
+          🎯 <strong>Sistema Completo:</strong> La aplicación puede procesar PDFs complejos con texto e imágenes, 
+          extraer preguntas automáticamente, generar explicaciones detalladas y manejar automáticamente 
+          los límites de cuota usando múltiples modelos de respaldo.
+        </p>
+      </div>
+      <p className="text-xs text-gray-500 mt-2">
+        {hasApiKey && selectedFile ? (
+          <span className="text-green-600">
+            🎯 ¡Todo listo! Puedes procesar tu PDF usando cualquiera de los métodos disponibles.
+          </span>
+        ) : !hasApiKey ? (
+          <span className="text-amber-600">
+            🔑 Configura tu API key para desbloquear todas las funciones.
+          </span>
+        ) : (
+          <span className="text-blue-600">
+            🎯 API key configurada. Arrastra un PDF arriba para extraer preguntas automáticamente.
+          </span>
+        )}
+      </p>
+    </div>
+  );
+};
+const AutomaticModelsSection: React.FC = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+      <button
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="w-full flex items-start justify-between space-x-3 text-left focus:outline-none"
+      >
+        <div className="flex items-start space-x-3 flex-1">
+          <div className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5">🤖</div>
+          <div className="flex-1">
+            <h3 className="font-medium text-blue-800">Sistema de Modelos con Fallback Automático</h3>
+            <p className="text-sm text-blue-700 mt-1">
+              {isExpanded 
+                ? "El sistema usa automáticamente diferentes modelos de Gemini si se agota la cuota diaria:"
+                : "Haz clic para ver detalles del sistema de respaldo automático de modelos"
+              }
+            </p>
+          </div>
+        </div>
+        <div className="flex-shrink-0 mt-0.5">
+          {isExpanded ? (
+            <ChevronUp className="w-5 h-5 text-blue-600" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-blue-600" />
+          )}
+        </div>
+      </button>
+      
+      {isExpanded && (
+        <div className="mt-3 pl-8">
+          <div className="mt-2 text-xs text-blue-600">
+            <p>🥇 <strong>Primero:</strong> gemini-2.5-pro (mejor calidad)</p>
+            <p>🥈 <strong>Respaldo 1:</strong> gemini-2.5-flash</p>
+            <p>🥉 <strong>Respaldo 2:</strong> gemini-2.5-flash-lite</p>
+            <p>🔄 <strong>Respaldo 3:</strong> gemini-2.0-flash-15</p>
+            <p>🔄 <strong>Respaldo 4:</strong> gemini-2.0-flash-lite</p>
+          </div>
+          <p className="text-xs text-blue-500 mt-2">
+            💡 Si todos los modelos se agotan, espera unas horas para que se restablezcan las cuotas.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const PDFImport: React.FC<PDFImportProps> = ({ 
   onImportQuestions, 
@@ -268,74 +491,16 @@ const PDFImport: React.FC<PDFImportProps> = ({
       </div>
 
       {/* Configuración API */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-        <div className="flex items-start space-x-3">
-          <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
-          <div className="flex-1">
-            <h3 className="font-medium text-yellow-800">Configuración API Key</h3>
-            <p className="text-sm text-yellow-700 mt-1">
-              Necesitas una API key de Google Gemini para usar esta función.
-              <a 
-                href="https://makersuite.google.com/app/apikey" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="underline ml-1"
-              >
-                Obtener API key gratuita
-              </a>
-            </p>
-            <input
-              type="password"
-              placeholder="Pega tu API key de Gemini aquí..."
-              value={geminiApiKey}
-              onChange={(e) => saveGeminiApiKey(e.target.value)}
-              className="mt-2 w-full px-3 py-2 border border-amber-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
-            />
-            {geminiApiKey && geminiApiKey.trim() !== '' && (
-              <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-200">
-                <p className="text-xs text-blue-700 mb-1">
-                  🤖 <strong>Modelo actual:</strong> {currentGeminiModel}
-                </p>
-                {fallbackStatus && (
-                  <div className="text-xs text-blue-600">
-                    <p>📊 Modelo {fallbackStatus.currentModelIndex + 1} de {fallbackStatus.totalModels}</p>
-                    {fallbackStatus.remainingModels > 0 && (
-                      <p>⏭️ {fallbackStatus.remainingModels} modelos de respaldo disponibles</p>
-                    )}
-                    {fallbackStatus.remainingModels === 0 && (
-                      <p className="text-amber-600">⚠️ Último modelo disponible</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      <ApiKeyConfigSection 
+        geminiApiKey={geminiApiKey}
+        saveGeminiApiKey={saveGeminiApiKey}
+        currentGeminiModel={currentGeminiModel}
+        fallbackStatus={fallbackStatus}
+      />
 
       {/* Información sobre los modelos de fallback */}
       {geminiApiKey && geminiApiKey.trim() !== '' && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <div className="flex items-start space-x-3">
-            <div className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5">🤖</div>
-            <div className="flex-1">
-              <h3 className="font-medium text-blue-800">Sistema de Modelos con Fallback Automático</h3>
-              <p className="text-sm text-blue-700 mt-1">
-                El sistema usa automáticamente diferentes modelos de Gemini si se agota la cuota diaria:
-              </p>
-              <div className="mt-2 text-xs text-blue-600">
-                <p>🥇 <strong>Primero:</strong> gemini-2.5-pro (mejor calidad)</p>
-                <p>🥈 <strong>Respaldo 1:</strong> gemini-2.5-flash</p>
-                <p>🥉 <strong>Respaldo 2:</strong> gemini-2.5-flash-lite</p>
-                <p>🔄 <strong>Respaldo 3:</strong> gemini-2.0-flash-15</p>
-                <p>🔄 <strong>Respaldo 4:</strong> gemini-2.0-flash-lite</p>
-              </div>
-              <p className="text-xs text-blue-500 mt-2">
-                💡 Si todos los modelos se agotan, espera unas horas para que se restablezcan las cuotas.
-              </p>
-            </div>
-          </div>
-        </div>
+        <AutomaticModelsSection />
       )}
 
       {/* Área de carga de archivos */}
@@ -542,23 +707,10 @@ const PDFImport: React.FC<PDFImportProps> = ({
         </div>
       )}
 
-      <div 
-        className="bg-gray-50 rounded-lg p-4"
-        style={{ marginTop: '24px' }}
-      >
-        <h4 className="font-medium text-gray-800 mb-2">🚀 Estado actual:</h4>
-        <ul className="text-sm text-gray-600 space-y-1">
-          <li>✅ Input de API key funcionando</li>
-          <li>✅ Carga de archivos con detección de páginas</li>
-          <li>✅ Selección de página específica</li>
-          <li>✅ Botón manual de procesamiento</li>
-          <li>✅ Procesamiento real con PDF.js + Gemini AI</li>
-          <li>✅ Extracción e importación de preguntas</li>
-        </ul>
-        <p className="text-xs text-gray-500 mt-2">
-          🎯 ¡Listo para usar! Configura tu API key, selecciona un PDF, elige la página y procesa.
-        </p>
-      </div>
+      <CurrentStatusSection 
+        geminiApiKey={geminiApiKey}
+        selectedFile={selectedFile}
+      />
     </div>
   );
 };
