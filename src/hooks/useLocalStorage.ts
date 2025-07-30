@@ -68,6 +68,14 @@ export const useLocalStorage = () => {
     setQuestions(prev => prev.filter(q => q.question_number !== questionNumber));
   };
 
+  const updateQuestion = (questionNumber: number, updatedQuestion: Omit<Question, 'question_number'>) => {
+    setQuestions(prev => prev.map(q => 
+      q.question_number === questionNumber 
+        ? { ...updatedQuestion, question_number: questionNumber }
+        : q
+    ));
+  };
+
   const clearAllQuestions = () => {
     setQuestions([]);
   };
@@ -89,6 +97,7 @@ export const useLocalStorage = () => {
     addQuestion,
     addQuestionsWithNumbers,
     removeQuestion,
+    updateQuestion,
     clearAllQuestions,
     getNextQuestionNumber,
     setCustomInitialNumber,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import type { QuestionFormData } from '../types/Question';
 
@@ -8,6 +8,9 @@ interface QuestionFormProps {
   onClearForm?: () => void;
   onSetInitialNumber?: (number: number) => void;
   showInitialNumberField?: boolean;
+  initialData?: QuestionFormData;
+  isEditing?: boolean;
+  onCancel?: () => void;
 }
 
 const QuestionForm: React.FC<QuestionFormProps> = ({ 
@@ -15,18 +18,18 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   nextQuestionNumber, 
   onClearForm, 
   onSetInitialNumber, 
-  showInitialNumberField 
+  showInitialNumberField,
+  initialData,
+  isEditing = false,
+  onCancel
 }) => {
   const [customNumber, setCustomNumber] = useState(nextQuestionNumber);
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors }
-  } = useForm<QuestionFormData>({
-    defaultValues: {
+  const getDefaultValues = (): QuestionFormData => {
+    if (initialData) {
+      return initialData;
+    }
+    return {
       question_text: '',
       options: [
         { option_text: '', is_correct: false },
@@ -37,8 +40,25 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       requires_multiple_answers: false,
       explanation: '',
       link: ''
-    }
+    };
+  };
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<QuestionFormData>({
+    defaultValues: getDefaultValues()
   });
+
+  // Reset del formulario cuando cambian los datos iniciales
+  useEffect(() => {
+    if (initialData) {
+      reset(initialData);
+    }
+  }, [initialData, reset]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -264,14 +284,24 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           )}
         </div>
 
-        {/* Botón de envío */}
-        <div>
+        {/* Botones de envío */}
+        <div className={`${isEditing ? 'flex space-x-4' : ''}`}>
           <button
             type="submit"
-            className="btn btn-primary btn-full"
+            className={`btn btn-primary ${isEditing ? 'flex-1' : 'btn-full'}`}
           >
-            💾 Guardar Pregunta
+            💾 {isEditing ? 'Guardar Cambios' : 'Guardar Pregunta'}
           </button>
+          
+          {isEditing && onCancel && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="btn btn-secondary flex-1"
+            >
+              ❌ Cancelar
+            </button>
+          )}
         </div>
       </form>
     </div>

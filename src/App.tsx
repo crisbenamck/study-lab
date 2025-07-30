@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import Header from './components/Header';
 import QuestionForm from './components/QuestionForm';
-import QuestionList from './components/QuestionList';
+import QuestionManager from './components/QuestionManager';
 import PDFImport from './components/PDFImport';
 import GeminiTest from './components/GeminiTest';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useAppState } from './hooks/useAppState';
 import type { QuestionFormData, Question } from './types/Question';
 
-type TabType = 'manual' | 'import' | 'test';
+type TabType = 'manual' | 'view' | 'import' | 'test';
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('manual');
@@ -18,6 +18,7 @@ function App() {
     addQuestion,
     addQuestionsWithNumbers,
     removeQuestion,
+    updateQuestion,
     clearAllQuestions,
     getNextQuestionNumber,
     setCustomInitialNumber,
@@ -47,8 +48,8 @@ function App() {
     // Las preguntas importadas ya vienen con números asignados correctamente
     addQuestionsWithNumbers(importedQuestions);
 
-    // Cambiar a la pestaña de manual para ver las preguntas agregadas
-    setActiveTab('manual');
+    // Cambiar a la pestaña de ver preguntas para ver las preguntas agregadas
+    setActiveTab('view');
   };
 
   // Mostrar loading mientras se cargan los datos del localStorage
@@ -92,6 +93,30 @@ function App() {
             >
               Crear Preguntas
               {activeTab === 'manual' && (
+                <div 
+                  className="absolute bottom-0 left-0 right-0 h-1 bg-blue-800 rounded-b-sm"
+                  style={{ marginBottom: '-1px' }}
+                ></div>
+              )}
+            </button>
+            <button
+              onClick={() => setActiveTab('view')}
+              className={`relative px-6 py-4 text-sm font-semibold rounded-t-lg transition-all duration-200 border-0 ${
+                activeTab === 'view'
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
+              }`}
+              style={{
+                marginBottom: activeTab === 'view' ? '0' : '2px',
+                zIndex: activeTab === 'view' ? '10' : '1',
+                backgroundColor: activeTab === 'view' ? '#2563eb' : '#f3f4f6',
+                color: activeTab === 'view' ? '#ffffff' : '#4b5563',
+                border: 'none',
+                outline: 'none'
+              }}
+            >
+              Ver Preguntas
+              {activeTab === 'view' && (
                 <div 
                   className="absolute bottom-0 left-0 right-0 h-1 bg-blue-800 rounded-b-sm"
                   style={{ marginBottom: '-1px' }}
@@ -154,19 +179,20 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="space-y-8">
           {activeTab === 'manual' && (
-            <>
-              <QuestionForm
-                onSubmit={handleSubmitQuestion}
-                nextQuestionNumber={getNextQuestionNumber()}
-                onSetInitialNumber={setCustomInitialNumber}
-                showInitialNumberField={questions.length === 0}
-              />
-              
-              <QuestionList
-                questions={questions}
-                onRemoveQuestion={removeQuestion}
-              />
-            </>
+            <QuestionForm
+              onSubmit={handleSubmitQuestion}
+              nextQuestionNumber={getNextQuestionNumber()}
+              onSetInitialNumber={setCustomInitialNumber}
+              showInitialNumberField={questions.length === 0}
+            />
+          )}
+          
+          {activeTab === 'view' && (
+            <QuestionManager
+              questions={questions}
+              onRemoveQuestion={removeQuestion}
+              onUpdateQuestion={updateQuestion}
+            />
           )}
           
           {activeTab === 'import' && (
