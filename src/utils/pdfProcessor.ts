@@ -1,5 +1,5 @@
 import * as pdfjsLib from 'pdfjs-dist';
-import { createWorker } from 'tesseract.js';
+import { createWorker, PSM } from 'tesseract.js';
 import type { PDFPage, PDFProcessingResult, ProcessingProgress, ExtractedQuestion } from '../types/PDFProcessor';
 import { GeminiService } from './geminiService';
 
@@ -178,8 +178,22 @@ export class PDFProcessorService {
       pageData = await this.processTextContent(pageData, textContent as { items: Array<{ str?: string }> });
     }
     
-    if (hasImages && !hasText) {
+    // Si hay imágenes, procesar con OCR si no hay texto O si no se encontraron preguntas en el texto
+    if (hasImages && (!hasText || !pageData.extractedQuestions || pageData.extractedQuestions.length === 0)) {
+      console.log(`🔍 Página ${pageData.pageNumber}: Procesando imágenes con OCR...`);
       pageData = await this.processImageContent(pageData, imageData);
+    }
+
+    // SIEMPRE configurar opción de Gemini Vision si Gemini está disponible
+    if (this.geminiService) {
+      pageData.geminiVisionOption = {
+        available: true,
+        imageData: imageData,
+        reason: pageData.extractedQuestions && pageData.extractedQuestions.length > 0 
+          ? 'Gemini Vision disponible como alternativa'
+          : 'No se detectaron preguntas, Gemini Vision disponible'
+      };
+      console.log(`🔍 Página ${pageData.pageNumber}: Gemini Vision configurado como opción`);
     }
 
     pageData.processingStatus = 'completed';
@@ -402,11 +416,14 @@ export class PDFProcessorService {
    */
   private async processImageContent(pageData: PDFPage, imageData: string): Promise<PDFPage> {
     try {
-      this.updateProgress(pageData.pageNumber, 1, 'ocr', 'Ejecutando OCR...');
+      this.updateProgress(pageData.pageNumber, 1, 'ocr', 'Ejecutando OCR mejorado...');
       
-      console.log(`🔍 Página ${pageData.pageNumber}: Iniciando OCR...`);
+      console.log(`🔍 Página ${pageData.pageNumber}: Iniciando OCR con preprocesamiento...`);
       
-      // Crear worker de Tesseract con configuración optimizada
+      // Preprocesar imagen para mejorar OCR
+      const enhancedImageData = await this.preprocessImageForOCR(imageData);
+      
+      // Crear worker de Tesseract con configuración optimizada para exámenes
       const worker = await createWorker(['eng', 'spa'], 1, {
         logger: m => {
           if (m.status === 'recognizing text') {
@@ -415,13 +432,18 @@ export class PDFProcessorService {
         }
       });
 
+      // Configuración optimizada para documentos académicos/exámenes
       await worker.setParameters({
-        tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!?()[]{}"\'-/\\+=*&%$#@^~`|<> \n\t',
-        preserve_interword_spaces: '1'
+        tessedit_pageseg_mode: PSM.SINGLE_BLOCK, // Uniform block of text
+        tessedit_ocr_engine_mode: '3', // Default + LSTM
+        tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,;:!?()[]{}"\'-/\\+=*&%$#@^~`|<> \n\t¿¡áéíóúñüÁÉÍÓÚÑÜ',
+        preserve_interword_spaces: '1',
+        tessedit_do_invert: '0',
+        tessedit_write_images: '0'
       });
       
-      // Ejecutar OCR
-      const { data: { text, confidence } } = await worker.recognize(imageData);
+      // Ejecutar OCR con imagen mejorada
+      const { data: { text, confidence } } = await worker.recognize(enhancedImageData);
       await worker.terminate();
 
       console.log(`📝 OCR completado - Confianza: ${confidence.toFixed(1)}%, Texto: ${text.length} chars`);
@@ -431,7 +453,7 @@ export class PDFProcessorService {
 
       if (text.trim().length > 20 && confidence > 30) { // Umbral de confianza más bajo
         if (this.geminiService) {
-          this.updateProgress(pageData.pageNumber, 1, 'ai-processing', 'Mejorando texto OCR...');
+          this.updateProgress(pageData.pageNumber, 1, 'ai-processing', 'Procesando texto OCR con IA...');
           
           console.log(`🤖 Procesando texto OCR con IA...`);
           
@@ -444,22 +466,20 @@ export class PDFProcessorService {
               return pageData;
             }
           } catch (error) {
-            console.log(`⚠️ Extracción directa falló, intentando mejora del texto:`, error);
-          }
-          
-          // Si no funciona la extracción directa, intentar mejorar el texto primero
-          const improvedQuestion = await this.geminiService.improveOCRQuestion(text);
-          
-          if (improvedQuestion) {
-            console.log(`✅ Pregunta mejorada desde OCR`);
-            pageData.extractedQuestions = [improvedQuestion];
-          } else {
-            console.log(`⚠️ No se pudo extraer pregunta del texto OCR`);
+            console.log(`⚠️ Extracción directa falló:`, error);
           }
         }
       } else {
         console.log(`⚠️ OCR texto insuficiente o baja confianza: ${text.length} chars, ${confidence.toFixed(1)}%`);
       }
+
+      // Si OCR falló o no extrajo preguntas, marcar para opción de Gemini Vision
+      pageData.ocrFailed = true;
+      pageData.geminiVisionOption = {
+        available: Boolean(this.geminiService),
+        imageData: enhancedImageData,
+        reason: confidence < 30 ? 'Baja confianza en OCR' : 'No se detectaron preguntas en el texto'
+      };
     } catch (error) {
       console.error(`❌ Error en procesamiento OCR:`, error);
       pageData.error = `Error OCR: ${error instanceof Error ? error.message : 'Error desconocido'}`;
@@ -591,6 +611,68 @@ export class PDFProcessorService {
   }
 
   /**
+   * Preprocesa la imagen para mejorar la calidad del OCR
+   */
+  private async preprocessImageForOCR(imageData: string): Promise<string> {
+    try {
+      // Crear canvas temporal para procesamiento
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      
+      if (!ctx) {
+        console.warn('No se pudo obtener contexto del canvas, usando imagen original');
+        return imageData;
+      }
+
+      return new Promise<string>((resolve) => {
+        img.onload = () => {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          
+          // Dibujar imagen original
+          ctx.drawImage(img, 0, 0);
+          
+          // Obtener datos de imagen
+          const imageDataObj = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          const data = imageDataObj.data;
+          
+          // Aplicar mejoras de imagen
+          for (let i = 0; i < data.length; i += 4) {
+            // Convertir a escala de grises
+            const gray = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
+            
+            // Mejorar contraste (simple threshold)
+            const enhanced = gray > 128 ? 255 : 0;
+            
+            data[i] = enhanced;     // R
+            data[i + 1] = enhanced; // G
+            data[i + 2] = enhanced; // B
+            // Alpha permanece igual
+          }
+          
+          // Aplicar datos procesados
+          ctx.putImageData(imageDataObj, 0, 0);
+          
+          // Devolver imagen mejorada
+          resolve(canvas.toDataURL('image/png'));
+        };
+        
+        img.onerror = () => {
+          console.warn('Error procesando imagen, usando original');
+          resolve(imageData);
+        };
+        
+        img.src = imageData;
+      });
+      
+    } catch (error) {
+      console.warn('Error en preprocesamiento, usando imagen original:', error);
+      return imageData;
+    }
+  }
+
+  /**
    * Actualiza el progreso del procesamiento
    */
   private updateProgress(current: number, total: number, stage: ProcessingProgress['stage'], message: string): void {
@@ -616,12 +698,57 @@ export class PDFProcessorService {
     };
   }
 
-  /**
-   * Obtiene la instancia del servicio de Gemini
-   */
   getGeminiService(): GeminiService | null {
     return this.geminiService;
   }
+
+  /**
+   * Procesa una página usando Gemini Vision directamente
+   */
+  async processPageWithGeminiVision(pageData: PDFPage): Promise<PDFPage> {
+    if (!this.geminiService || !pageData.geminiVisionOption?.imageData) {
+      throw new Error('Gemini Vision no está disponible o no hay datos de imagen');
+    }
+
+    console.log(`🔍 Procesando página ${pageData.pageNumber} con Gemini Vision...`);
+    
+    try {
+      this.updateProgress(pageData.pageNumber, 1, 'ai-processing', 'Analizando imagen con Gemini Vision...');
+      
+      const questions = await this.geminiService.extractQuestionsFromImage(pageData.geminiVisionOption.imageData);
+      
+      if (questions.length > 0) {
+        // Notificar preguntas extraídas
+        questions.forEach(question => {
+          if (this.onQuestionExtracted) {
+            this.onQuestionExtracted(question, pageData.pageNumber);
+          }
+        });
+        
+        // Generar explicaciones y links si es necesario
+        const enhancedQuestions = await this.enhanceQuestions(questions, pageData.pageNumber);
+        pageData.extractedQuestions = enhancedQuestions;
+        pageData.processingStatus = 'completed';
+        pageData.ocrFailed = false; // Ya no necesita OCR
+        
+        console.log(`✅ Gemini Vision completado: ${questions.length} preguntas extraídas`);
+      } else {
+        pageData.error = 'Gemini Vision no encontró preguntas en la imagen';
+        pageData.processingStatus = 'error';
+      }
+      
+    } catch (error) {
+      console.error(`❌ Error en Gemini Vision:`, error);
+      pageData.error = `Error Gemini Vision: ${error instanceof Error ? error.message : 'Error desconocido'}`;
+      pageData.processingStatus = 'error';
+    }
+    
+    return pageData;
+  }
+
+  /**
+   * Obtiene la instancia del servicio de Gemini
+   */
 
   /**
    * Estima el uso de memoria para un PDF

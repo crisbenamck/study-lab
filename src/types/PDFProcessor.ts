@@ -7,6 +7,12 @@ export interface PDFPage {
   extractedQuestions?: ExtractedQuestion[];
   processingStatus: 'pending' | 'processing' | 'completed' | 'error';
   error?: string;
+  ocrFailed?: boolean; // Indica si el OCR falló o tuvo baja confianza
+  geminiVisionOption?: {
+    available: boolean;
+    imageData: string;
+    reason: string;
+  };
 }
 
 export interface ExtractedQuestion {

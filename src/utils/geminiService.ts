@@ -513,4 +513,77 @@ Si no hay preguntas, responde: []
       availableModels: this.FALLBACK_MODELS.slice(this.currentModelIndex + 1)
     };
   }
+
+  /**
+   * Analiza directamente una imagen usando Gemini Vision para extraer preguntas
+   * Basado en la documentación: https://ai.google.dev/gemini-api/docs/document-processing
+   */
+  async extractQuestionsFromImage(imageData: string): Promise<ExtractedQuestion[]> {
+    console.log('🔍 Iniciando análisis de imagen con Gemini Vision...');
+    
+    // Convertir base64 a formato que acepta Gemini
+    const imageBase64 = imageData.replace(/^data:image\/[a-z]+;base64,/, '');
+    
+    const prompt = `
+Analiza esta imagen que contiene preguntas de examen y extrae TODAS las preguntas que encuentres.
+
+INSTRUCCIONES IMPORTANTES:
+1. Extrae CADA pregunta visible en la imagen
+2. Para cada pregunta, identifica TODAS las opciones de respuesta (A, B, C, D, E, etc.)
+3. Determina cuál(es) opción(es) es/son correcta(s) si está marcado o indicado
+4. Si no puedes determinar la respuesta correcta, marca la primera opción como correcta
+
+Formato de respuesta (JSON array):
+[
+  {
+    "question_text": "Texto completo de la pregunta",
+    "options": [
+      {"option_letter": "A", "option_text": "Texto de la opción A", "is_correct": false},
+      {"option_letter": "B", "option_text": "Texto de la opción B", "is_correct": true},
+      {"option_letter": "C", "option_text": "Texto de la opción C", "is_correct": false}
+    ],
+    "requires_multiple_answers": false,
+    "explanation": "",
+    "link": ""
+  }
+]
+
+IMPORTANTE: Responde SOLO con el JSON array, sin texto adicional.
+`;
+
+    try {
+      const result = await this.model.generateContent([
+        {
+          inlineData: {
+            data: imageBase64,
+            mimeType: "image/png"
+          }
+        },
+        prompt
+      ]);
+
+      const response = await result.response;
+      const text = response.text();
+      console.log('📝 Respuesta de Gemini Vision:', text.substring(0, 200) + '...');
+
+      // Usar el método existente de parsing
+      const questions = this.parseQuestionResponse(text);
+
+      console.log(`✅ Gemini Vision extrajo ${questions.length} preguntas de la imagen`);
+      
+      // Actualizar metadatos para Vision
+      return questions.map((q, index) => ({
+        ...q,
+        id: `gemini_vision_${Date.now()}_${index}`,
+        confidence: 0.8, // Alta confianza para Gemini Vision
+        source: 'ocr' as const,
+        explanation: q.explanation || 'Extraído mediante Gemini Vision',
+        needsReview: false
+      }));
+
+    } catch (error) {
+      console.error('❌ Error en Gemini Vision:', error);
+      throw new Error(`Error procesando imagen con Gemini Vision: ${error instanceof Error ? error.message : 'Error desconocido'}`);
+    }
+  }
 }

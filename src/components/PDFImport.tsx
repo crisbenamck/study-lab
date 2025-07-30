@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import { Upload, AlertCircle, Settings } from 'lucide-react';
+import { Upload, AlertCircle, Settings, FileText } from 'lucide-react';
 import { PDFProcessorService } from '../utils/pdfProcessor';
+import { GeminiPdfService } from '../utils/geminiPdfService';
 import type { Question } from '../types/Question';
 
 interface PDFImportProps {
@@ -25,6 +26,7 @@ const PDFImport: React.FC<PDFImportProps> = ({
   nextQuestionNumber 
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [processingProgress, setProcessingProgress] = useState<string>('');
   const [currentGeminiModel, setCurrentGeminiModel] = useState<string>('gemini-2.5-pro');
   const [fallbackStatus, setFallbackStatus] = useState<{
     currentModel: string;
@@ -105,8 +107,21 @@ const PDFImport: React.FC<PDFImportProps> = ({
 
       console.log('✅ Procesamiento completado:', result);
       
+      // DEBUG: Log de todas las páginas y sus opciones
+      result.pages.forEach(page => {
+        console.log(`📄 Página ${page.pageNumber}:`, {
+          hasText: page.hasText,
+          hasImages: page.hasImages,
+          extractedQuestions: page.extractedQuestions?.length || 0,
+          geminiVisionOption: page.geminiVisionOption,
+          ocrFailed: page.ocrFailed
+        });
+      });
+      
       // Extraer todas las preguntas de todas las páginas procesadas
       const allQuestions = result.pages.flatMap(page => page.extractedQuestions || []);
+      
+      console.log('📋 Páginas procesadas:', result.pages.length);
       
       if (allQuestions.length > 0) {
         // Convertir las preguntas al formato esperado, usando la numeración consecutiva
@@ -122,8 +137,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
           link: q.link || '',
           explanation: q.explanation || ''
         }));
-
-        // Incrementar contador de uso de la API (removido - no es preciso sin API)
 
         onImportQuestions(convertedQuestions);
         alert(`✅ ¡Procesamiento exitoso!\n\nSe extrajeron ${convertedQuestions.length} preguntas de la página ${pageToProcess}\n\nLas preguntas se han añadido a tu lista.`);
@@ -162,6 +175,68 @@ const PDFImport: React.FC<PDFImportProps> = ({
       setIsProcessing(false);
     }
   }, [selectedFile, geminiApiKey, pageToProcess, onImportQuestions, nextQuestionNumber]);
+
+  const handleDirectPdfProcessing = useCallback(async () => {
+    if (!selectedFile || !geminiApiKey.trim()) {
+      alert('Se requiere archivo y API key para el procesamiento directo');
+      return;
+    }
+
+    const confirmDirectProcessing = window.confirm(
+      `¿Deseas procesar TODO el PDF directamente con Gemini?\n\n` +
+      `📄 Procesará: ${selectedFile.name}\n` +
+      `🤖 Método: Gemini 2.5 Flash (análisis directo del PDF completo)\n` +
+      `💰 Costo: GRATIS (incluido en tu plan de Gemini)\n` +
+      `🎯 Ventaja: Máxima precisión, procesamiento de todo el documento\n` +
+      `⏱️ Tiempo estimado: 1-3 minutos (dependiendo del tamaño)\n\n` +
+      `¿Continuar?`
+    );
+
+    if (!confirmDirectProcessing) return;
+
+    setIsProcessing(true);
+    setProcessingProgress('🚀 Iniciando procesamiento directo de PDF...');
+    console.log(`🚀 Iniciando procesamiento directo de PDF: ${selectedFile.name}`);
+
+    try {
+      setProcessingProgress('📄 Preparando archivo PDF...');
+      const pdfService = new GeminiPdfService(geminiApiKey);
+      
+      setProcessingProgress('🤖 Analizando contenido con Gemini (esto puede tomar 1-3 minutos)...');
+      const questions = await pdfService.extractQuestionsFromPDF(selectedFile);
+      
+      setProcessingProgress('✅ Procesando respuestas...');
+      
+      if (questions.length > 0) {
+        // Convertir las preguntas al formato esperado
+        const convertedQuestions: Question[] = questions.map((q, index) => ({
+          question_number: nextQuestionNumber + index,
+          question_text: q.question_text,
+          options: q.options.map(opt => ({
+            option_letter: opt.option_letter,
+            option_text: opt.option_text,
+            is_correct: opt.is_correct
+          })),
+          requires_multiple_answers: q.requires_multiple_answers,
+          link: q.link || '',
+          explanation: q.explanation || ''
+        }));
+
+        onImportQuestions(convertedQuestions);
+        
+        alert(`✅ ¡Procesamiento directo exitoso!\n\nSe extrajeron ${convertedQuestions.length} preguntas de todo el PDF\n\nLas preguntas se han añadido a tu lista.`);
+      } else {
+        alert(`⚠️ No se encontraron preguntas en el PDF completo.`);
+      }
+    } catch (error) {
+      console.error('Error en procesamiento directo:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+      alert(`❌ Error en procesamiento directo: ${errorMessage}`);
+    } finally {
+      setIsProcessing(false);
+      setProcessingProgress('');
+    }
+  }, [selectedFile, geminiApiKey, nextQuestionNumber, onImportQuestions]);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -350,6 +425,73 @@ const PDFImport: React.FC<PDFImportProps> = ({
                   '🚀 Iniciar procesamiento'
                 )}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Nueva opción: Procesamiento directo con Gemini PDF */}
+      {selectedFile && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center space-x-2 mb-3">
+            <FileText className="w-5 h-5 text-green-600" />
+            <h3 className="font-medium text-green-800">🆕 Procesamiento Directo con Gemini (RECOMENDADO)</h3>
+          </div>
+          
+          <div className="space-y-3">
+            <p className="text-sm text-green-700">
+              <strong>Nueva funcionalidad:</strong> Procesa el PDF completo directamente con Gemini 2.5 Flash.
+              Analiza todas las páginas automáticamente con máxima precisión.
+            </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <h4 className="text-sm font-medium text-green-800">✅ Ventajas:</h4>
+                <ul className="text-xs text-green-700 space-y-1 pl-4">
+                  <li>• Procesa TODO el PDF automáticamente</li>
+                  <li>• Máxima precisión en extracción</li>
+                  <li>• Detecta tablas, imágenes y texto complejo</li>
+                  <li>• Sin límite de páginas</li>
+                  <li>• GRATIS (incluido en tu plan)</li>
+                </ul>
+              </div>
+              
+              <div className="flex items-end">
+                <button
+                  onClick={handleDirectPdfProcessing}
+                  disabled={isProcessing || !selectedFile || !geminiApiKey.trim()}
+                  className="w-full px-4 py-3 bg-green-600 text-white text-sm font-semibold rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+                >
+                  {isProcessing ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      <span>Procesando PDF...</span>
+                    </>
+                  ) : (
+                    <>
+                      <FileText className="w-4 h-4" />
+                      <span>🚀 Procesar PDF Completo</span>
+                    </>
+                  )}
+                </button>
+              </div>
+              
+              {/* Indicador de progreso */}
+              {isProcessing && processingProgress && (
+                <div className="mt-3 p-3 bg-green-100 border border-green-200 rounded-md">
+                  <div className="flex items-center space-x-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600"></div>
+                    <span className="text-sm text-green-700">{processingProgress}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="p-2 bg-green-100 rounded border border-green-200">
+              <p className="text-xs text-green-700">
+                💡 <strong>Recomendado:</strong> Esta opción es la más avanzada y precisa. 
+                Úsala si quieres extraer todas las preguntas del PDF de una vez.
+              </p>
             </div>
           </div>
         </div>
