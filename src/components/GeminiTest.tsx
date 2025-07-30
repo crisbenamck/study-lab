@@ -11,8 +11,16 @@ interface RequestInfo {
   error?: string;
 }
 
-const GeminiTest: React.FC = () => {
-  const [apiKey, setApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '');
+interface GeminiTestProps {
+  appState: {
+    geminiApiKey: string;
+    saveGeminiApiKey: (key: string) => void;
+    isLoaded: boolean;
+  };
+}
+
+const GeminiTest: React.FC<GeminiTestProps> = ({ appState }) => {
+  const { geminiApiKey, saveGeminiApiKey } = appState;
   const [prompt, setPrompt] = useState('Explain how AI works in a few words');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +41,7 @@ const GeminiTest: React.FC = () => {
   ];
 
   const listAvailableModels = async () => {
-    if (!apiKey.trim()) {
+    if (!geminiApiKey.trim()) {
       setError('Por favor ingresa tu API key para listar modelos');
       return;
     }
@@ -41,7 +49,7 @@ const GeminiTest: React.FC = () => {
     try {
       const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models', {
         headers: {
-          'X-goog-api-key': apiKey
+          'X-goog-api-key': geminiApiKey
         }
       });
 
@@ -70,7 +78,7 @@ const GeminiTest: React.FC = () => {
   ];
 
   const testGeminiDirect = async () => {
-    if (!apiKey.trim()) {
+    if (!geminiApiKey.trim()) {
       setError('Por favor ingresa tu API key');
       return;
     }
@@ -92,7 +100,7 @@ const GeminiTest: React.FC = () => {
       console.log('📡 Modelo:', model);
       console.log('📝 Prompt:', prompt);
 
-      const genAI = new GoogleGenerativeAI(apiKey);
+      const genAI = new GoogleGenerativeAI(geminiApiKey);
       const aiModel = genAI.getGenerativeModel({ model });
 
       const result = await aiModel.generateContent(prompt);
@@ -110,6 +118,8 @@ const GeminiTest: React.FC = () => {
         timestamp: new Date().toLocaleTimeString(),
         success: true
       });
+
+      // Incrementar contador de uso de la API (removido - no es preciso sin API)
 
       console.log('✅ Respuesta recibida:', responseText);
       console.log('⏱️ Duración:', duration + 'ms');
@@ -137,7 +147,7 @@ const GeminiTest: React.FC = () => {
   const testWithCurl = () => {
     const curlCommand = `curl "https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent" \\
   -H 'Content-Type: application/json' \\
-  -H 'X-goog-api-key: ${apiKey}' \\
+  -H 'X-goog-api-key: ${geminiApiKey}' \\
   -X POST \\
   -d '{
     "contents": [
@@ -169,10 +179,10 @@ const GeminiTest: React.FC = () => {
             <label className="block text-sm font-medium mb-2">API Key</label>
             <input
               type="password"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
+              value={geminiApiKey}
+              onChange={(e) => saveGeminiApiKey(e.target.value)}
               placeholder="Ingresa tu API key de Gemini"
-              className="w-full p-2 border rounded-md"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
           
@@ -190,10 +200,28 @@ const GeminiTest: React.FC = () => {
               </select>
               <button
                 onClick={listAvailableModels}
-                className="px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded border"
+                className="px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                style={{
+                  backgroundColor: '#2563eb',
+                  color: '#ffffff',
+                  border: '1px solid #2563eb',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1d4ed8';
+                  e.currentTarget.style.borderColor = '#1d4ed8';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2563eb';
+                  e.currentTarget.style.borderColor = '#2563eb';
+                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
                 title="Listar modelos disponibles"
               >
-                📋
+                📋 Listar
               </button>
             </div>
             {availableModels.length > 0 && (
@@ -211,9 +239,27 @@ const GeminiTest: React.FC = () => {
               <button
                 key={index}
                 onClick={() => setPrompt(sample)}
-                className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded"
+                className="text-xs px-3 py-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1"
+                style={{
+                  backgroundColor: '#e0e7ff',
+                  color: '#3730a3',
+                  border: '1px solid #c7d2fe',
+                  boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#c7d2fe';
+                  e.currentTarget.style.borderColor = '#a5b4fc';
+                  e.currentTarget.style.boxShadow = '0 2px 4px 0 rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#e0e7ff';
+                  e.currentTarget.style.borderColor = '#c7d2fe';
+                  e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
-                Ejemplo {index + 1}
+                📝 Ejemplo {index + 1}
               </button>
             ))}
           </div>
@@ -225,14 +271,37 @@ const GeminiTest: React.FC = () => {
           />
         </div>
 
-        <div className="flex gap-3 mb-6">
+        <div className="flex gap-4 mb-6">
           <button
             onClick={testGeminiDirect}
             disabled={isLoading}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
+            style={{
+              backgroundColor: isLoading ? '#e5e7eb' : '#2563eb',
+              color: isLoading ? '#9ca3af' : '#ffffff',
+              border: `1px solid ${isLoading ? '#e5e7eb' : '#2563eb'}`,
+              boxShadow: isLoading ? 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+              cursor: isLoading ? 'not-allowed' : 'pointer'
+            }}
+            onMouseEnter={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = '#1d4ed8';
+                e.currentTarget.style.borderColor = '#1d4ed8';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = '#2563eb';
+                e.currentTarget.style.borderColor = '#2563eb';
+                e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }
+            }}
           >
             {isLoading ? (
-              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
             ) : (
               <Send className="w-4 h-4" />
             )}
@@ -241,7 +310,25 @@ const GeminiTest: React.FC = () => {
           
           <button
             onClick={testWithCurl}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+            style={{
+              backgroundColor: '#374151',
+              color: '#ffffff',
+              border: '1px solid #374151',
+              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#1f2937';
+              e.currentTarget.style.borderColor = '#1f2937';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(55, 65, 81, 0.3)';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#374151';
+              e.currentTarget.style.borderColor = '#374151';
+              e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
           >
             <Eye className="w-4 h-4" />
             Copiar como cURL

@@ -5,17 +5,40 @@ import type { Question } from '../types/Question';
 
 interface PDFImportProps {
   onImportQuestions: (questions: Question[]) => void;
+  appState: {
+    geminiApiKey: string;
+    saveGeminiApiKey: (key: string) => void;
+    selectedFile: File | null;
+    updateSelectedFile: (file: File | null, pages?: number) => void;
+    totalPages: number;
+    setTotalPages: (pages: number) => void;
+    pageToProcess: number;
+    setPageToProcess: (page: number) => void;
+    isLoaded: boolean;
+  };
+  nextQuestionNumber: number;
 }
 
-const PDFImport: React.FC<PDFImportProps> = ({ onImportQuestions }) => {
-  const [geminiApiKey, setGeminiApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || '');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [pageToProcess, setPageToProcess] = useState<number>(1);
+const PDFImport: React.FC<PDFImportProps> = ({ 
+  onImportQuestions, 
+  appState, 
+  nextQuestionNumber 
+}) => {
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const { 
+    geminiApiKey, 
+    saveGeminiApiKey, 
+    selectedFile, 
+    updateSelectedFile, 
+    totalPages, 
+    setTotalPages, 
+    pageToProcess, 
+    setPageToProcess 
+  } = appState;
+
   const handleFileSelect = useCallback(async (file: File) => {
-    setSelectedFile(file);
+    updateSelectedFile(file);
     
     try {
       // Obtener información real del PDF
@@ -32,7 +55,7 @@ const PDFImport: React.FC<PDFImportProps> = ({ onImportQuestions }) => {
       setPageToProcess(1);
       console.log(`📄 PDF cargado (simulado): ${file.name} - ${simulatedPages} páginas`);
     }
-  }, [geminiApiKey]);
+  }, [geminiApiKey, updateSelectedFile, setTotalPages, setPageToProcess]);
 
   const handleStartProcessing = useCallback(async () => {
     if (!selectedFile || !geminiApiKey.trim()) {
@@ -64,9 +87,9 @@ const PDFImport: React.FC<PDFImportProps> = ({ onImportQuestions }) => {
       const allQuestions = result.pages.flatMap(page => page.extractedQuestions || []);
       
       if (allQuestions.length > 0) {
-        // Convertir las preguntas al formato esperado
+        // Convertir las preguntas al formato esperado, usando la numeración consecutiva
         const convertedQuestions: Question[] = allQuestions.map((q, index) => ({
-          question_number: index + 1,
+          question_number: nextQuestionNumber + index,
           question_text: q.question_text,
           options: q.options.map(opt => ({
             option_letter: opt.option_letter,
@@ -77,6 +100,8 @@ const PDFImport: React.FC<PDFImportProps> = ({ onImportQuestions }) => {
           link: q.link || '',
           explanation: q.explanation || ''
         }));
+
+        // Incrementar contador de uso de la API (removido - no es preciso sin API)
 
         onImportQuestions(convertedQuestions);
         alert(`✅ ¡Procesamiento exitoso!\n\nSe extrajeron ${convertedQuestions.length} preguntas de la página ${pageToProcess}\n\nLas preguntas se han añadido a tu lista.`);
@@ -97,7 +122,7 @@ const PDFImport: React.FC<PDFImportProps> = ({ onImportQuestions }) => {
     } finally {
       setIsProcessing(false);
     }
-  }, [selectedFile, geminiApiKey, pageToProcess, onImportQuestions]);
+  }, [selectedFile, geminiApiKey, pageToProcess, onImportQuestions, nextQuestionNumber]);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -127,8 +152,8 @@ const PDFImport: React.FC<PDFImportProps> = ({ onImportQuestions }) => {
               type="password"
               placeholder="Pega tu API key de Gemini aquí..."
               value={geminiApiKey}
-              onChange={(e) => setGeminiApiKey(e.target.value)}
-              className="mt-2 w-full px-3 py-2 border border-yellow-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              onChange={(e) => saveGeminiApiKey(e.target.value)}
+              className="mt-2 w-full px-3 py-2 border border-amber-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
             />
             {geminiApiKey && geminiApiKey.trim() !== '' && (
               <p className="text-xs text-green-600 mt-1">✅ API Key configurada correctamente</p>
@@ -138,16 +163,16 @@ const PDFImport: React.FC<PDFImportProps> = ({ onImportQuestions }) => {
       </div>
 
       {/* Área de carga de archivos */}
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+      <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-300">
         <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">Arrastra un archivo PDF aquí</h3>
-        <p className="text-gray-500 mb-4">o haz clic para seleccionar un archivo</p>
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">Arrastra un archivo PDF aquí</h3>
+        <p className="text-gray-600 mb-6 font-medium">o haz clic para seleccionar un archivo</p>
         
         <input
           type="file"
           accept=".pdf"
-          className="hidden"
-          id="pdf-upload"
+          style={{ display: 'none' }}
+          id="pdf-upload-input"
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (file) {
@@ -156,9 +181,31 @@ const PDFImport: React.FC<PDFImportProps> = ({ onImportQuestions }) => {
           }}
         />
         <label
-          htmlFor="pdf-upload"
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 cursor-pointer"
+          htmlFor="pdf-upload-input"
+          className="inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-md cursor-pointer transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
+          style={{
+            backgroundColor: '#2563eb',
+            color: '#ffffff',
+            border: '1px solid #2563eb',
+            boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = '#1d4ed8';
+            e.currentTarget.style.borderColor = '#1d4ed8';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
+            e.currentTarget.style.transform = 'translateY(-1px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = '#2563eb';
+            e.currentTarget.style.borderColor = '#2563eb';
+            e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
+          onMouseDown={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
         >
+          <Upload className="w-4 h-4 mr-2" />
           Seleccionar PDF
         </label>
 
@@ -207,13 +254,20 @@ const PDFImport: React.FC<PDFImportProps> = ({ onImportQuestions }) => {
               <button
                 onClick={handleStartProcessing}
                 disabled={isProcessing || !selectedFile || !geminiApiKey.trim()}
-                className={`w-full px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                className={`w-full px-6 py-3 text-sm font-semibold rounded-lg transition-all duration-200 transform ${
                   isProcessing || !selectedFile || !geminiApiKey.trim()
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-green-600 text-white hover:bg-green-700'
+                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-inner'
+                    : 'bg-gradient-to-r from-emerald-600 to-emerald-700 text-white hover:from-emerald-700 hover:to-emerald-800 shadow-lg hover:shadow-xl hover:scale-105 active:scale-95'
                 }`}
               >
-                {isProcessing ? '🔄 Procesando...' : '🚀 Iniciar procesamiento'}
+                {isProcessing ? (
+                  <span className="flex items-center justify-center space-x-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-400"></div>
+                    <span>Procesando...</span>
+                  </span>
+                ) : (
+                  '🚀 Iniciar procesamiento'
+                )}
               </button>
             </div>
           </div>
