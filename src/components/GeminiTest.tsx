@@ -188,42 +188,15 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState }) => {
           
           <div>
             <label className="block text-sm font-medium mb-2">Modelo</label>
-            <div className="flex gap-2">
-              <select
-                value={model}
-                onChange={(e) => setModel(e.target.value)}
-                className="flex-1 p-2 border rounded-md"
-              >
-                {(availableModels.length > 0 ? availableModels : testModels).map(m => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </select>
-              <button
-                onClick={listAvailableModels}
-                className="px-4 py-2 text-sm font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                style={{
-                  backgroundColor: '#2563eb',
-                  color: '#ffffff',
-                  border: '1px solid #2563eb',
-                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#1d4ed8';
-                  e.currentTarget.style.borderColor = '#1d4ed8';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#2563eb';
-                  e.currentTarget.style.borderColor = '#2563eb';
-                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-                title="Listar modelos disponibles"
-              >
-                📋 Listar
-              </button>
-            </div>
+            <select
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              className="w-full p-2 border rounded-md"
+            >
+              {(availableModels.length > 0 ? availableModels : testModels).map(m => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
             {availableModels.length > 0 && (
               <div className="mt-1 text-xs text-green-600">
                 ✅ {availableModels.length} modelos disponibles cargados
