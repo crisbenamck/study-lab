@@ -25,6 +25,14 @@ const PDFImport: React.FC<PDFImportProps> = ({
   nextQuestionNumber 
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [currentGeminiModel, setCurrentGeminiModel] = useState<string>('gemini-2.5-pro');
+  const [fallbackStatus, setFallbackStatus] = useState<{
+    currentModel: string;
+    currentModelIndex: number;
+    totalModels: number;
+    remainingModels: number;
+    availableModels: string[];
+  } | null>(null);
 
   const { 
     geminiApiKey, 
@@ -66,8 +74,15 @@ const PDFImport: React.FC<PDFImportProps> = ({
     setIsProcessing(true);
     console.log(`🚀 Iniciando procesamiento de página ${pageToProcess} de ${selectedFile.name}`);
 
+    const processor = new PDFProcessorService(geminiApiKey);
+    
     try {
-      const processor = new PDFProcessorService(geminiApiKey);
+      // Obtener estado inicial del modelo
+      const initialStatus = processor.getGeminiService()?.getFallbackStatus();
+      if (initialStatus) {
+        setFallbackStatus(initialStatus);
+        setCurrentGeminiModel(initialStatus.currentModel);
+      }
       
       // Procesar página específica
       const result = await processor.processPDF(
@@ -80,6 +95,13 @@ const PDFImport: React.FC<PDFImportProps> = ({
           console.log(`Pregunta extraída de página ${pageNum}:`, question.question_text);
         }
       );
+
+      // Obtener estado final del modelo (en caso de que haya cambiado)
+      const finalStatus = processor.getGeminiService()?.getFallbackStatus();
+      if (finalStatus) {
+        setFallbackStatus(finalStatus);
+        setCurrentGeminiModel(finalStatus.currentModel);
+      }
 
       console.log('✅ Procesamiento completado:', result);
       
@@ -112,10 +134,27 @@ const PDFImport: React.FC<PDFImportProps> = ({
       console.error('Error procesando PDF:', error);
       const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
       
+      // Obtener estado final del modelo en caso de error
+      const errorStatus = processor.getGeminiService()?.getFallbackStatus();
+      if (errorStatus) {
+        setFallbackStatus(errorStatus);
+        setCurrentGeminiModel(errorStatus.currentModel);
+      }
+      
       if (errorMessage.includes('503') || errorMessage.includes('overloaded')) {
         alert('⏳ Gemini está sobrecargado. Intenta nuevamente en unos minutos.');
-      } else if (errorMessage.includes('429') || errorMessage.includes('quota')) {
-        alert('🚫 Has excedido el límite de la API de Gemini.');
+      } else if (errorMessage.includes('429') || errorMessage.includes('quota') || errorMessage.includes('Todos los modelos de Gemini fallaron')) {
+        const modelInfo = errorStatus ? 
+          `\n\n🤖 Modelos intentados: ${errorStatus.currentModelIndex + 1}/${errorStatus.totalModels}\n` +
+          `� Último modelo usado: ${errorStatus.currentModel}\n` +
+          `⏭️ Modelos restantes: ${errorStatus.remainingModels}` 
+          : '';
+        
+        if (errorStatus && errorStatus.remainingModels > 0) {
+          alert(`🚫 Se agotó la cuota del modelo actual.\n\nEl sistema intentó automáticamente con los modelos de respaldo.${modelInfo}\n\n💡 Espera unas horas e intenta nuevamente.`);
+        } else {
+          alert(`🚫 Se agotaron todos los modelos de Gemini disponibles.${modelInfo}\n\n💡 Espera unas horas para que se restablezcan las cuotas.`);
+        }
       } else {
         alert(`❌ Error procesando PDF: ${errorMessage}`);
       }
@@ -156,14 +195,56 @@ const PDFImport: React.FC<PDFImportProps> = ({
               className="mt-2 w-full px-3 py-2 border border-amber-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
             />
             {geminiApiKey && geminiApiKey.trim() !== '' && (
-              <p className="text-xs text-green-600 mt-1">✅ API Key configurada correctamente</p>
+              <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-200">
+                <p className="text-xs text-blue-700 mb-1">
+                  🤖 <strong>Modelo actual:</strong> {currentGeminiModel}
+                </p>
+                {fallbackStatus && (
+                  <div className="text-xs text-blue-600">
+                    <p>📊 Modelo {fallbackStatus.currentModelIndex + 1} de {fallbackStatus.totalModels}</p>
+                    {fallbackStatus.remainingModels > 0 && (
+                      <p>⏭️ {fallbackStatus.remainingModels} modelos de respaldo disponibles</p>
+                    )}
+                    {fallbackStatus.remainingModels === 0 && (
+                      <p className="text-amber-600">⚠️ Último modelo disponible</p>
+                    )}
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>
       </div>
 
+      {/* Información sobre los modelos de fallback */}
+      {geminiApiKey && geminiApiKey.trim() !== '' && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <div className="flex items-start space-x-3">
+            <div className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5">🤖</div>
+            <div className="flex-1">
+              <h3 className="font-medium text-blue-800">Sistema de Modelos con Fallback Automático</h3>
+              <p className="text-sm text-blue-700 mt-1">
+                El sistema usa automáticamente diferentes modelos de Gemini si se agota la cuota diaria:
+              </p>
+              <div className="mt-2 text-xs text-blue-600">
+                <p>🥇 <strong>Primero:</strong> gemini-2.5-pro (mejor calidad)</p>
+                <p>🥈 <strong>Respaldo 1:</strong> gemini-2.5-flash</p>
+                <p>🥉 <strong>Respaldo 2:</strong> gemini-2.5-flash-lite</p>
+                <p>🔄 <strong>Respaldo 3:</strong> gemini-2.0-flash-15</p>
+                <p>🔄 <strong>Respaldo 4:</strong> gemini-2.0-flash-lite</p>
+              </div>
+              <p className="text-xs text-blue-500 mt-2">
+                💡 Si todos los modelos se agotan, espera unas horas para que se restablezcan las cuotas.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Área de carga de archivos */}
-      <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-300">
+
+      {/* Área de carga de archivos */}
+      <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 mb-6">
         <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Arrastra un archivo PDF aquí</h3>
         <p className="text-gray-600 mb-6 font-medium">o haz clic para seleccionar un archivo</p>
@@ -208,18 +289,22 @@ const PDFImport: React.FC<PDFImportProps> = ({
           <Upload className="w-4 h-4 mr-2" />
           Seleccionar PDF
         </label>
-
-        {selectedFile && (
-          <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-            <p className="text-sm text-blue-800">
-              📄 <strong>Archivo cargado:</strong> {selectedFile.name}
-            </p>
-            <p className="text-sm text-blue-600">
-              📊 <strong>Total de páginas:</strong> {totalPages}
-            </p>
-          </div>
-        )}
       </div>
+
+      {/* Información del archivo cargado - SEPARADO del área de carga */}
+      {selectedFile && (
+        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <p className="text-sm text-blue-800">
+            📄 <strong>Archivo cargado:</strong> {selectedFile.name}
+          </p>
+          <p className="text-sm text-blue-600">
+            📊 <strong>Total de páginas:</strong> {totalPages}
+          </p>
+        </div>
+      )}
+
+      {/* Espaciador visual */}
+      {selectedFile && <div className="h-6"></div>}
 
       {/* Configuración de procesamiento */}
       {selectedFile && (

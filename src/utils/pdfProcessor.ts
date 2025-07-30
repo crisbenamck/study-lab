@@ -617,6 +617,13 @@ export class PDFProcessorService {
   }
 
   /**
+   * Obtiene la instancia del servicio de Gemini
+   */
+  getGeminiService(): GeminiService | null {
+    return this.geminiService;
+  }
+
+  /**
    * Estima el uso de memoria para un PDF
    */
   static estimateMemoryUsage(fileSize: number): {

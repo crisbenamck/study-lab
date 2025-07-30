@@ -4,11 +4,52 @@ import type { ExtractedQuestion } from '../types/PDFProcessor';
 export class GeminiService {
   private genAI: GoogleGenerativeAI;
   private model: ReturnType<GoogleGenerativeAI['getGenerativeModel']>;
+  private currentModelIndex: number = 0;
+  private readonly FALLBACK_MODELS = [
+    'gemini-2.5-pro',
+    'gemini-2.5-flash',
+    'gemini-2.5-flash-lite',
+    'gemini-2.0-flash-15',
+    'gemini-2.0-flash-lite'
+  ];
 
   constructor(apiKey: string) {
     this.genAI = new GoogleGenerativeAI(apiKey);
-    this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
-    console.log('🤖 Gemini configurado con modelo: gemini-2.5-flash');
+    this.model = this.genAI.getGenerativeModel({ model: this.FALLBACK_MODELS[0] });
+    console.log('🤖 Gemini configurado con modelo inicial:', this.FALLBACK_MODELS[0]);
+  }
+
+  /**
+   * Cambia al siguiente modelo en caso de error de cuota
+   */
+  private switchToNextModel(): boolean {
+    if (this.currentModelIndex < this.FALLBACK_MODELS.length - 1) {
+      this.currentModelIndex++;
+      const newModel = this.FALLBACK_MODELS[this.currentModelIndex];
+      this.model = this.genAI.getGenerativeModel({ model: newModel });
+      console.log('🔄 Cambiando a modelo de respaldo:', newModel);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Verifica si el error es de límite de cuota
+   */
+  private isQuotaExceededError(error: unknown): boolean {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return errorMessage.includes('429') || 
+           errorMessage.includes('quota') || 
+           errorMessage.includes('requests per day') ||
+           errorMessage.includes('QUOTA_EXCEEDED') ||
+           errorMessage.includes('Resource has been exhausted');
+  }
+
+  /**
+   * Obtiene el modelo actual
+   */
+  getCurrentModel(): string {
+    return this.FALLBACK_MODELS[this.currentModelIndex];
   }
 
   /**
@@ -28,38 +69,70 @@ export class GeminiService {
   }
 
   /**
-   * Hace una llamada a Gemini con reintentos automáticos
+   * Hace una llamada a Gemini con reintentos automáticos y fallback de modelos
    */
   private async callGeminiWithRetry(prompt: string, maxRetries: number = 3): Promise<string> {
-    for (let attempt = 1; attempt <= maxRetries; attempt++) {
-      try {
-        console.log(`🔄 Intento ${attempt}/${maxRetries} - Llamando a Gemini...`);
-        
-        const result = await this.model.generateContent(prompt);
-        const response = await result.response;
-        const responseText = response.text();
-        
-        console.log(`✅ Intento ${attempt} exitoso`);
-        return responseText;
-        
-      } catch (error: unknown) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        const isOverloaded = errorMessage.includes('overloaded') || errorMessage.includes('503');
-        const isRateLimit = errorMessage.includes('429') || errorMessage.includes('quota');
-        
-        if ((isOverloaded || isRateLimit) && attempt < maxRetries) {
-          const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
-          console.log(`⏳ Intento ${attempt} falló (sobrecarga), reintentando en ${delay}ms...`);
-          await this.sleep(delay);
-          continue;
-        }
-        
-        console.error(`❌ Intento ${attempt} falló definitivamente:`, error);
-        throw error;
+    let lastError: unknown = null;
+
+    // Intentar con cada modelo disponible
+    for (let modelAttempt = this.currentModelIndex; modelAttempt < this.FALLBACK_MODELS.length; modelAttempt++) {
+      // Asegurar que estamos usando el modelo correcto
+      if (modelAttempt !== this.currentModelIndex) {
+        this.currentModelIndex = modelAttempt;
+        this.model = this.genAI.getGenerativeModel({ model: this.FALLBACK_MODELS[this.currentModelIndex] });
+        console.log(`🔄 Probando con modelo: ${this.FALLBACK_MODELS[this.currentModelIndex]}`);
       }
+
+      // Intentar con el modelo actual
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          console.log(`🔄 Modelo ${this.getCurrentModel()} - Intento ${attempt}/${maxRetries}`);
+          
+          const result = await this.model.generateContent(prompt);
+          const response = await result.response;
+          const responseText = response.text();
+          
+          console.log(`✅ Exitoso con modelo ${this.getCurrentModel()} en intento ${attempt}`);
+          return responseText;
+          
+        } catch (error: unknown) {
+          lastError = error;
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          
+          console.log(`❌ Error con modelo ${this.getCurrentModel()}, intento ${attempt}:`, errorMessage);
+
+          // Si es error de cuota, intentar con el siguiente modelo inmediatamente
+          if (this.isQuotaExceededError(error)) {
+            console.log(`🚫 Error de cuota detectado con modelo ${this.getCurrentModel()}`);
+            break; // Salir del loop de reintentos y probar siguiente modelo
+          }
+
+          // Si es error de sobrecarga, esperar y reintentar con el mismo modelo
+          const isOverloaded = errorMessage.includes('overloaded') || errorMessage.includes('503');
+          if (isOverloaded && attempt < maxRetries) {
+            const delay = Math.pow(2, attempt) * 1000; // 2s, 4s, 8s
+            console.log(`⏳ Modelo sobrecargado, reintentando en ${delay}ms...`);
+            await this.sleep(delay);
+            continue;
+          }
+
+          // Para otros errores, reintentar hasta maxRetries
+          if (attempt < maxRetries && !this.isQuotaExceededError(error)) {
+            const delay = 1000 * attempt; // 1s, 2s, 3s
+            console.log(`⏳ Reintentando en ${delay}ms...`);
+            await this.sleep(delay);
+            continue;
+          }
+        }
+      }
+
+      // Si llegamos aquí, el modelo actual falló, intentar siguiente
+      console.log(`❌ Modelo ${this.getCurrentModel()} agotado, probando siguiente modelo...`);
     }
     
-    throw new Error('Todos los reintentos fallaron');
+    // Todos los modelos fallaron
+    console.error('❌ Todos los modelos de Gemini han fallado');
+    throw new Error(`Todos los modelos de Gemini fallaron. Último error: ${lastError instanceof Error ? lastError.message : 'Error desconocido'}`);
   }
 
   /**
@@ -408,7 +481,7 @@ Si no hay preguntas, responde: []
   }
 
   /**
-   * Obtiene información sobre los límites de uso
+   * Obtiene información sobre los límites de uso y modelo fallback
    */
   static getUsageLimits() {
     return {
@@ -417,7 +490,27 @@ Si no hay preguntas, responde: []
         requestsPerDay: 1500,
         tokensPerMonth: 1000000
       },
-      recommendation: 'Procesa en lotes pequeños para evitar límites'
+      fallbackModels: [
+        'gemini-2.5-pro',
+        'gemini-2.5-flash', 
+        'gemini-2.5-flash-lite',
+        'gemini-2.0-flash-15',
+        'gemini-2.0-flash-lite'
+      ],
+      recommendation: 'El sistema cambiará automáticamente de modelo si se agota la cuota'
+    };
+  }
+
+  /**
+   * Obtiene el estado actual del sistema de fallback
+   */
+  getFallbackStatus() {
+    return {
+      currentModel: this.getCurrentModel(),
+      currentModelIndex: this.currentModelIndex,
+      totalModels: this.FALLBACK_MODELS.length,
+      remainingModels: this.FALLBACK_MODELS.length - this.currentModelIndex - 1,
+      availableModels: this.FALLBACK_MODELS.slice(this.currentModelIndex + 1)
     };
   }
 }
