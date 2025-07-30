@@ -22,8 +22,8 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions, onRemoveQuestion
 
   return (
     <div className="container space-y-4">
-      {questions.map((question) => (
-        <div key={question.question_number} className="question-card">
+      {questions.map((question, index) => (
+        <div key={`${question.question_number}-${index}`} className="question-card">
           <div className="flex items-start justify-between mb-4">
             <h3 className="text-lg font-semibold text-gray-900">
               Pregunta #{formatQuestionNumber(question.question_number)}
@@ -49,9 +49,9 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions, onRemoveQuestion
           </div>
 
           <div className="space-y-2 mb-4">
-            {question.options.map((option) => (
+            {question.options.map((option, optionIndex) => (
               <div
-                key={option.option_letter}
+                key={`${question.question_number}-${option.option_letter}-${optionIndex}`}
                 className={`option-item ${option.is_correct ? 'correct' : ''}`}
               >
                 <div className="option-letter">
