@@ -478,46 +478,41 @@ const PDFImport: React.FC<PDFImportProps> = ({
 
     const isTextOnly = contentType === 'text-only';
     
-    const confirmProcessing = window.confirm(
-      `¿Procesar "${selectedFile.name}" como contenido ${isTextOnly ? 'SOLO TEXTO' : 'CON IMÁGENES'}?\n\n` +
+    showConfirm(
       `📄 Archivo: ${selectedFile.name} (${totalPages} página${totalPages > 1 ? 's' : ''})\n` +
       `🔧 Método: ${isTextOnly ? 'Extracción de texto + IA para explicaciones' : 'Análisis completo con Gemini Vision'}\n` +
       `💰 Costo: ${isTextOnly ? 'Bajo (solo explicaciones)' : 'Moderado (análisis completo)'}\n` +
       `⏱️ Tiempo estimado: ${isTextOnly ? '1-2 minutos' : '3-5 minutos'}\n` +
-      `🎯 Resultado: ${isTextOnly ? 'Preguntas de texto con explicaciones' : 'Análisis completo incluyendo imágenes'}\n\n` +
-      `¿Continuar con el procesamiento?`
-    );
+      `🎯 Resultado: ${isTextOnly ? 'Preguntas de texto con explicaciones' : 'Análisis completo incluyendo imágenes'}`,
+      async () => {
+        if (isTextOnly) {
+          // Usar procesamiento manual para texto
+          await handleStartProcessing();
+        } else {
+          // Usar procesamiento directo con Gemini para contenido complejo - función interna
+          setIsProcessing(true);
+          setProcessingProgress('🚀 Iniciando procesamiento directo de PDF...');
+          setIndividualProcessingProgress(null);
+          console.log(`🚀 Iniciando procesamiento directo de PDF: ${selectedFile.name}`);
 
-    if (!confirmProcessing) return;
+          try {
+            // Paso 1: Extraer preguntas del PDF
+            setProcessingProgress('📄 Preparando archivo PDF...');
+            const pdfService = new GeminiPdfService(geminiApiKey);
+            
+            setProcessingProgress('🤖 Analizando contenido con Gemini (esto puede tomar 1-3 minutos)...');
+            const extractedQuestions = await pdfService.extractQuestionsFromPDF(selectedFile);
+            
+            if (extractedQuestions.length === 0) {
+              showAlert(`⚠️ No se encontraron preguntas en el PDF completo.`, {
+                title: 'Sin resultados',
+                type: 'warning'
+              });
+              return;
+            }
 
-    if (isTextOnly) {
-      // Usar procesamiento manual para texto
-      await handleStartProcessing();
-    } else {
-      // Usar procesamiento directo con Gemini para contenido complejo - función interna
-      setIsProcessing(true);
-      setProcessingProgress('🚀 Iniciando procesamiento directo de PDF...');
-      setIndividualProcessingProgress(null);
-      console.log(`🚀 Iniciando procesamiento directo de PDF: ${selectedFile.name}`);
-
-      try {
-        // Paso 1: Extraer preguntas del PDF
-        setProcessingProgress('📄 Preparando archivo PDF...');
-        const pdfService = new GeminiPdfService(geminiApiKey);
-        
-        setProcessingProgress('🤖 Analizando contenido con Gemini (esto puede tomar 1-3 minutos)...');
-        const extractedQuestions = await pdfService.extractQuestionsFromPDF(selectedFile);
-        
-        if (extractedQuestions.length === 0) {
-          showAlert(`⚠️ No se encontraron preguntas en el PDF completo.`, {
-            title: 'Sin resultados',
-            type: 'warning'
-          });
-          return;
-        }
-
-        console.log(`📋 Se extrajeron ${extractedQuestions.length} preguntas del PDF`);
-        setProcessingProgress(`✅ PDF analizado: ${extractedQuestions.length} preguntas encontradas`);
+            console.log(`📋 Se extrajeron ${extractedQuestions.length} preguntas del PDF`);
+            setProcessingProgress(`✅ PDF analizado: ${extractedQuestions.length} preguntas encontradas`);
         
         // Paso 2: Procesar preguntas individualmente
         setProcessingProgress('🔄 Procesando preguntas individualmente...');
@@ -568,10 +563,15 @@ const PDFImport: React.FC<PDFImportProps> = ({
         setProcessingProgress('');
         setIndividualProcessingProgress(null);
       }
-    }
-  }, [selectedFile, geminiApiKey, totalPages, handleStartProcessing, nextQuestionNumber, onImportQuestions, showAlert]);
-
-  return (
+        }
+      },
+      {
+        title: `Procesar como contenido ${isTextOnly ? 'SOLO TEXTO' : 'CON IMÁGENES'}`,
+        confirmText: 'Sí, Procesar',
+        cancelText: 'Cancelar'
+      }
+    );
+  }, [selectedFile, geminiApiKey, totalPages, handleStartProcessing, nextQuestionNumber, onImportQuestions, showAlert, showConfirm]);  return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Importar Preguntas desde PDF</h1>
