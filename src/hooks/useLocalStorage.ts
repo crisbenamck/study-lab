@@ -60,6 +60,10 @@ export const useLocalStorage = () => {
     setQuestions(prev => [...prev, questionWithNumber]);
   };
 
+  const addQuestionsWithNumbers = (questionsWithNumbers: Question[]) => {
+    setQuestions(prev => [...prev, ...questionsWithNumbers]);
+  };
+
   const removeQuestion = (questionNumber: number) => {
     setQuestions(prev => prev.filter(q => q.question_number !== questionNumber));
   };
@@ -83,6 +87,7 @@ export const useLocalStorage = () => {
   return {
     questions,
     addQuestion,
+    addQuestionsWithNumbers,
     removeQuestion,
     clearAllQuestions,
     getNextQuestionNumber,

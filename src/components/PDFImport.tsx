@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Upload, AlertCircle, Settings, FileText } from 'lucide-react';
 import { PDFProcessorService } from '../utils/pdfProcessor';
 import { GeminiPdfService } from '../utils/geminiPdfService';
+import { GeminiQuestionProcessor, type ProcessingProgress } from '../utils/geminiQuestionProcessor';
 import type { Question } from '../types/Question';
 
 interface PDFImportProps {
@@ -27,6 +28,7 @@ const PDFImport: React.FC<PDFImportProps> = ({
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingProgress, setProcessingProgress] = useState<string>('');
+  const [individualProcessingProgress, setIndividualProcessingProgress] = useState<ProcessingProgress | null>(null);
   const [currentGeminiModel, setCurrentGeminiModel] = useState<string>('gemini-2.5-pro');
   const [fallbackStatus, setFallbackStatus] = useState<{
     currentModel: string;
@@ -188,7 +190,8 @@ const PDFImport: React.FC<PDFImportProps> = ({
       `🤖 Método: Gemini 2.5 Flash (análisis directo del PDF completo)\n` +
       `💰 Costo: GRATIS (incluido en tu plan de Gemini)\n` +
       `🎯 Ventaja: Máxima precisión, procesamiento de todo el documento\n` +
-      `⏱️ Tiempo estimado: 1-3 minutos (dependiendo del tamaño)\n\n` +
+      `⏱️ Tiempo estimado: 3-5 minutos (dependiendo del tamaño)\n` +
+      `📝 Procesamiento individual: Cada pregunta se procesará por separado para obtener explicación y link\n\n` +
       `¿Continuar?`
     );
 
@@ -196,38 +199,56 @@ const PDFImport: React.FC<PDFImportProps> = ({
 
     setIsProcessing(true);
     setProcessingProgress('🚀 Iniciando procesamiento directo de PDF...');
+    setIndividualProcessingProgress(null);
     console.log(`🚀 Iniciando procesamiento directo de PDF: ${selectedFile.name}`);
 
     try {
+      // Paso 1: Extraer preguntas del PDF
       setProcessingProgress('📄 Preparando archivo PDF...');
       const pdfService = new GeminiPdfService(geminiApiKey);
       
       setProcessingProgress('🤖 Analizando contenido con Gemini (esto puede tomar 1-3 minutos)...');
-      const questions = await pdfService.extractQuestionsFromPDF(selectedFile);
+      const extractedQuestions = await pdfService.extractQuestionsFromPDF(selectedFile);
       
-      setProcessingProgress('✅ Procesando respuestas...');
-      
-      if (questions.length > 0) {
-        // Convertir las preguntas al formato esperado
-        const convertedQuestions: Question[] = questions.map((q, index) => ({
-          question_number: nextQuestionNumber + index,
-          question_text: q.question_text,
-          options: q.options.map(opt => ({
-            option_letter: opt.option_letter,
-            option_text: opt.option_text,
-            is_correct: opt.is_correct
-          })),
-          requires_multiple_answers: q.requires_multiple_answers,
-          link: q.link || '',
-          explanation: q.explanation || ''
-        }));
-
-        onImportQuestions(convertedQuestions);
-        
-        alert(`✅ ¡Procesamiento directo exitoso!\n\nSe extrajeron ${convertedQuestions.length} preguntas de todo el PDF\n\nLas preguntas se han añadido a tu lista.`);
-      } else {
+      if (extractedQuestions.length === 0) {
         alert(`⚠️ No se encontraron preguntas en el PDF completo.`);
+        return;
       }
+
+      console.log(`📋 Se extrajeron ${extractedQuestions.length} preguntas del PDF`);
+      setProcessingProgress(`✅ PDF analizado: ${extractedQuestions.length} preguntas encontradas`);
+      
+      // Paso 2: Procesar preguntas individualmente
+      setProcessingProgress('🔄 Procesando preguntas individualmente...');
+      const questionProcessor = new GeminiQuestionProcessor(geminiApiKey);
+      
+      const processedQuestions = await questionProcessor.processQuestionsIndividually(
+        extractedQuestions,
+        nextQuestionNumber,
+        (progress) => {
+          setIndividualProcessingProgress(progress);
+          if (progress.stage === 'processing') {
+            setProcessingProgress(
+              `🔄 Procesando pregunta ${progress.currentQuestion}/${progress.totalQuestions}: ${progress.currentQuestionText || 'Obteniendo explicación...'}`
+            );
+          }
+        }
+      );
+      
+      setProcessingProgress('✅ Todas las preguntas procesadas exitosamente');
+      setIndividualProcessingProgress(null);
+      
+      // Paso 3: Guardar las preguntas
+      onImportQuestions(processedQuestions);
+      
+      alert(
+        `✅ ¡Procesamiento directo exitoso!\n\n` +
+        `📋 Se extrajeron ${processedQuestions.length} preguntas de todo el PDF\n` +
+        `🔍 Cada pregunta incluye explicación y link de referencia\n` +
+        `📝 Las preguntas se han añadido a tu lista con numeración consecutiva\n\n` +
+        `🎯 Números asignados: ${nextQuestionNumber} - ${nextQuestionNumber + processedQuestions.length - 1}`
+      );
+      
     } catch (error) {
       console.error('Error en procesamiento directo:', error);
       const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
@@ -235,6 +256,7 @@ const PDFImport: React.FC<PDFImportProps> = ({
     } finally {
       setIsProcessing(false);
       setProcessingProgress('');
+      setIndividualProcessingProgress(null);
     }
   }, [selectedFile, geminiApiKey, nextQuestionNumber, onImportQuestions]);
 
@@ -483,6 +505,29 @@ const PDFImport: React.FC<PDFImportProps> = ({
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600"></div>
                     <span className="text-sm text-green-700">{processingProgress}</span>
                   </div>
+                  
+                  {/* Progreso individual de preguntas */}
+                  {individualProcessingProgress && individualProcessingProgress.stage === 'processing' && (
+                    <div className="mt-3 space-y-2">
+                      <div className="flex justify-between text-xs text-green-600">
+                        <span>Procesando preguntas individualmente</span>
+                        <span>{individualProcessingProgress.currentQuestion}/{individualProcessingProgress.totalQuestions}</span>
+                      </div>
+                      <div className="w-full bg-green-200 rounded-full h-2">
+                        <div 
+                          className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                          style={{ 
+                            width: `${(individualProcessingProgress.currentQuestion / individualProcessingProgress.totalQuestions) * 100}%` 
+                          }}
+                        ></div>
+                      </div>
+                      {individualProcessingProgress.currentQuestionText && (
+                        <p className="text-xs text-green-600 truncate">
+                          📝 {individualProcessingProgress.currentQuestionText}
+                        </p>
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

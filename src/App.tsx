@@ -16,6 +16,7 @@ function App() {
   const {
     questions,
     addQuestion,
+    addQuestionsWithNumbers,
     removeQuestion,
     clearAllQuestions,
     getNextQuestionNumber,
@@ -43,18 +44,8 @@ function App() {
   };
 
   const handleImportQuestions = (importedQuestions: Question[]) => {
-    // Agregar preguntas importadas con numeración consecutiva
-    importedQuestions.forEach((question) => {
-      // Omitir question_number para que addQuestion asigne el número correcto
-      const questionWithoutNumber: Omit<Question, 'question_number'> = {
-        question_text: question.question_text,
-        options: question.options,
-        requires_multiple_answers: question.requires_multiple_answers,
-        explanation: question.explanation,
-        link: question.link
-      };
-      addQuestion(questionWithoutNumber);
-    });
+    // Las preguntas importadas ya vienen con números asignados correctamente
+    addQuestionsWithNumbers(importedQuestions);
 
     // Cambiar a la pestaña de manual para ver las preguntas agregadas
     setActiveTab('manual');
