@@ -55,7 +55,25 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           <button
             onClick={onCancel}
             onKeyDown={(e) => handleKeyDown(e, 'cancel')}
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 font-medium"
+            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
+            style={{
+              backgroundColor: '#6b7280',
+              color: '#ffffff',
+              border: '1px solid #6b7280',
+              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#4b5563';
+              e.currentTarget.style.borderColor = '#4b5563';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(107, 114, 128, 0.3)';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#6b7280';
+              e.currentTarget.style.borderColor = '#6b7280';
+              e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
           >
             {cancelText}
           </button>
@@ -64,7 +82,25 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             onClick={handleConfirm}
             onKeyDown={(e) => handleKeyDown(e, 'confirm')}
             autoFocus
-            className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200 font-medium"
+            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
+            style={{
+              backgroundColor: '#ef4444',
+              color: '#ffffff',
+              border: '1px solid #ef4444',
+              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#dc2626';
+              e.currentTarget.style.borderColor = '#dc2626';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#ef4444';
+              e.currentTarget.style.borderColor = '#ef4444';
+              e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
           >
             {confirmText}
           </button>

@@ -60,16 +60,64 @@ const Header: React.FC<HeaderProps> = ({ questions, onClearAll, showAlert, showC
           <div className="flex items-center space-x-3">
             <button
               onClick={handleDownload}
-              className={`btn ${questions.length > 0 ? 'btn-primary' : 'btn-disabled'}`}
+              className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
+              disabled={questions.length === 0}
+              style={{
+                backgroundColor: questions.length > 0 ? '#2563eb' : '#e5e7eb',
+                color: questions.length > 0 ? '#ffffff' : '#9ca3af',
+                border: `1px solid ${questions.length > 0 ? '#2563eb' : '#e5e7eb'}`,
+                boxShadow: questions.length > 0 ? '0 1px 3px 0 rgba(0, 0, 0, 0.1)' : 'none',
+                cursor: questions.length > 0 ? 'pointer' : 'not-allowed'
+              }}
+              onMouseEnter={(e) => {
+                if (questions.length > 0) {
+                  e.currentTarget.style.backgroundColor = '#1d4ed8';
+                  e.currentTarget.style.borderColor = '#1d4ed8';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (questions.length > 0) {
+                  e.currentTarget.style.backgroundColor = '#2563eb';
+                  e.currentTarget.style.borderColor = '#2563eb';
+                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }
+              }}
             >
               ⬇️ Descargar JSON
             </button>
 
             <button
               onClick={handleClearAll}
-              className={`btn ${questions.length > 0 ? 'btn-danger' : 'btn-disabled'}`}
+              className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
+              disabled={questions.length === 0}
+              style={{
+                backgroundColor: questions.length > 0 ? '#ef4444' : '#e5e7eb',
+                color: questions.length > 0 ? '#ffffff' : '#9ca3af',
+                border: `1px solid ${questions.length > 0 ? '#ef4444' : '#e5e7eb'}`,
+                boxShadow: questions.length > 0 ? '0 1px 3px 0 rgba(0, 0, 0, 0.1)' : 'none',
+                cursor: questions.length > 0 ? 'pointer' : 'not-allowed'
+              }}
+              onMouseEnter={(e) => {
+                if (questions.length > 0) {
+                  e.currentTarget.style.backgroundColor = '#dc2626';
+                  e.currentTarget.style.borderColor = '#dc2626';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (questions.length > 0) {
+                  e.currentTarget.style.backgroundColor = '#ef4444';
+                  e.currentTarget.style.borderColor = '#ef4444';
+                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }
+              }}
             >
-              🗑️ Limpiar Todo
+              🗑️ Borrar todas las preguntas
             </button>
           </div>
         </div>

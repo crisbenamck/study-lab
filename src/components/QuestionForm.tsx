@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import type { QuestionFormData } from '../types/Question';
 
 interface QuestionFormProps {
@@ -48,6 +48,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors }
   } = useForm<QuestionFormData>({
     defaultValues: getDefaultValues()
@@ -64,6 +65,34 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     control,
     name: 'options'
   });
+
+  // Watch para detectar cambios en múltiples respuestas y opciones
+  const isMultipleAnswers = useWatch({
+    control,
+    name: 'requires_multiple_answers'
+  });
+
+  const watchedOptions = useWatch({
+    control,
+    name: 'options'
+  });
+
+  // Función para manejar el cambio de una opción correcta
+  const handleOptionCorrectChange = (index: number, isChecked: boolean) => {
+    if (!isMultipleAnswers && isChecked) {
+      // Si no permite múltiples respuestas y se marca una opción,
+      // desmarcar todas las demás
+      const updatedOptions = watchedOptions.map((option, i) => ({
+        ...option,
+        is_correct: i === index
+      }));
+      
+      // Actualizar todas las opciones
+      updatedOptions.forEach((option, i) => {
+        setValue(`options.${i}.is_correct`, option.is_correct);
+      });
+    }
+  };
 
   const handleFormSubmit = (data: QuestionFormData) => {
     // Asignar letras automáticamente (A, B, C, D, etc.)
@@ -123,7 +152,25 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => onSetInitialNumber && onSetInitialNumber(customNumber)}
-                    className="btn btn-secondary text-xs px-2 py-1"
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300 text-xs"
+                    style={{
+                      backgroundColor: '#10b981',
+                      color: '#ffffff',
+                      border: '1px solid #10b981',
+                      boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#059669';
+                      e.currentTarget.style.borderColor = '#059669';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#10b981';
+                      e.currentTarget.style.borderColor = '#10b981';
+                      e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
                   >
                     ✓
                   </button>
@@ -136,19 +183,55 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               <button
                 type="button"
                 onClick={handleClearForm}
-                className="btn btn-secondary"
+                className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
+                style={{
+                  backgroundColor: '#ef4444',
+                  color: '#ffffff',
+                  border: '1px solid #ef4444',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#dc2626';
+                  e.currentTarget.style.borderColor = '#dc2626';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#ef4444';
+                  e.currentTarget.style.borderColor = '#ef4444';
+                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
                 🧹 Limpiar Formulario
               </button>
             </div>
           )}
           
-          {/* Si no hay campo de número inicial, mostrar solo el botón limpiar */}
-          {!showInitialNumberField && (
+          {/* Si no estamos editando, mostrar el botón limpiar */}
+          {!isEditing && (
             <button
               type="button"
               onClick={handleClearForm}
-              className="btn btn-secondary"
+              className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
+              style={{
+                backgroundColor: '#ef4444',
+                color: '#ffffff',
+                border: '1px solid #ef4444',
+                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#dc2626';
+                e.currentTarget.style.borderColor = '#dc2626';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#ef4444';
+                e.currentTarget.style.borderColor = '#ef4444';
+                e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
             >
               🧹 Limpiar Formulario
             </button>
@@ -191,13 +274,71 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             <label className="block text-sm font-medium text-gray-700">
               Opciones de respuesta *
             </label>
-            <button
-              type="button"
-              onClick={addOption}
-              className="btn btn-accent text-sm"
-            >
-              ➕ Agregar opción
-            </button>
+            <div className="flex items-center" style={{ gap: '8px' }}>
+              <button
+                type="button"
+                onClick={addOption}
+                disabled={fields.length >= 5}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300 text-sm"
+                style={{
+                  backgroundColor: fields.length >= 5 ? '#e5e7eb' : '#10b981',
+                  color: fields.length >= 5 ? '#9ca3af' : '#ffffff',
+                  border: `1px solid ${fields.length >= 5 ? '#e5e7eb' : '#10b981'}`,
+                  boxShadow: fields.length >= 5 ? 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                  cursor: fields.length >= 5 ? 'not-allowed' : 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  if (fields.length < 5) {
+                    e.currentTarget.style.backgroundColor = '#059669';
+                    e.currentTarget.style.borderColor = '#059669';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (fields.length < 5) {
+                    e.currentTarget.style.backgroundColor = '#10b981';
+                    e.currentTarget.style.borderColor = '#10b981';
+                    e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
+              >
+                ➕ Agregar opción
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => remove(fields.length - 1)}
+                disabled={fields.length <= 2}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 text-sm"
+                style={{
+                  backgroundColor: fields.length <= 2 ? '#e5e7eb' : '#ef4444',
+                  color: fields.length <= 2 ? '#9ca3af' : '#ffffff',
+                  border: `1px solid ${fields.length <= 2 ? '#e5e7eb' : '#ef4444'}`,
+                  boxShadow: fields.length <= 2 ? 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                  cursor: fields.length <= 2 ? 'not-allowed' : 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  if (fields.length > 2) {
+                    e.currentTarget.style.backgroundColor = '#dc2626';
+                    e.currentTarget.style.borderColor = '#dc2626';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (fields.length > 2) {
+                    e.currentTarget.style.backgroundColor = '#ef4444';
+                    e.currentTarget.style.borderColor = '#ef4444';
+                    e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
+              >
+                🗑️ Eliminar opción
+              </button>
+            </div>
           </div>
 
           <div className="space-y-3">
@@ -228,19 +369,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                     type="checkbox"
                     {...register(`options.${index}.is_correct`)}
                     className="form-checkbox"
+                    disabled={!isMultipleAnswers && watchedOptions?.some((opt, i) => i !== index && opt.is_correct)}
+                    onChange={(e) => {
+                      const isChecked = e.target.checked;
+                      handleOptionCorrectChange(index, isChecked);
+                      // También necesitamos manejar el registro normal
+                      setValue(`options.${index}.is_correct`, isChecked);
+                    }}
                   />
                   <label className="text-sm text-gray-700">Correcta</label>
                 </div>
-
-                {fields.length > 2 && (
-                  <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="delete-btn text-red-600 hover:text-red-800 ml-3"
-                  >
-                    🗑️
-                  </button>
-                )}
               </div>
             ))}
           </div>
@@ -249,12 +387,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         {/* Link de referencia */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Link de referencia *
+            Link de referencia
           </label>
           <input
             type="url"
             {...register('link', { 
-              required: 'El link de referencia es requerido',
               pattern: {
                 value: /^https?:\/\/.+/,
                 message: 'Debe ser una URL válida (http:// o https://)'
@@ -271,10 +408,10 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         {/* Explicación */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Explicación *
+            Explicación
           </label>
           <textarea
-            {...register('explanation', { required: 'La explicación es requerida' })}
+            {...register('explanation')}
             rows={4}
             className="form-input"
             placeholder="Proporciona una explicación detallada de por qué las respuestas son correctas..."
@@ -285,10 +422,28 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         </div>
 
         {/* Botones de envío */}
-        <div className={`${isEditing ? 'flex space-x-4' : ''}`}>
+        <div className={`${isEditing ? 'flex' : 'flex justify-start'}`} style={{ gap: isEditing ? '8px' : '0' }}>
           <button
             type="submit"
-            className={`btn btn-primary ${isEditing ? 'flex-1' : 'btn-full'}`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 text-sm`}
+            style={{
+              backgroundColor: '#2563eb',
+              color: '#ffffff',
+              border: '1px solid #2563eb',
+              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#1d4ed8';
+              e.currentTarget.style.borderColor = '#1d4ed8';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#2563eb';
+              e.currentTarget.style.borderColor = '#2563eb';
+              e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
           >
             💾 {isEditing ? 'Guardar Cambios' : 'Guardar Pregunta'}
           </button>
@@ -297,7 +452,25 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             <button
               type="button"
               onClick={onCancel}
-              className="btn btn-secondary flex-1"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 text-sm"
+              style={{
+                backgroundColor: '#6b7280',
+                color: '#ffffff',
+                border: '1px solid #6b7280',
+                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#4b5563';
+                e.currentTarget.style.borderColor = '#4b5563';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(107, 114, 128, 0.3)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#6b7280';
+                e.currentTarget.style.borderColor = '#6b7280';
+                e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
             >
               ❌ Cancelar
             </button>

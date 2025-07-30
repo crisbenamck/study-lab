@@ -199,12 +199,12 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">Prompt de prueba</label>
-          <div className="mb-2 flex gap-2 flex-wrap">
+          <div className="mb-2 flex flex-wrap" style={{ gap: '8px' }}>
             {samplePrompts.map((sample, index) => (
               <button
                 key={index}
                 onClick={() => setPrompt(sample)}
-                className="text-xs px-3 py-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1"
+                className="text-xs px-3 py-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 mb-2"
                 style={{
                   backgroundColor: '#e0e7ff',
                   color: '#3730a3',
@@ -236,7 +236,7 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
           />
         </div>
 
-        <div className="flex gap-4 mb-6">
+        <div className="flex mb-6" style={{ gap: '8px' }}>
           <button
             onClick={testGeminiDirect}
             disabled={isLoading}

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import type { Question, QuestionFormData } from '../types/Question';
 import { formatQuestionNumber } from '../utils/downloadUtils';
 import QuestionForm from './QuestionForm';
+import ConfirmModal from './ConfirmModal';
+import { useConfirm } from '../hooks/useConfirm';
 
 interface QuestionManagerProps {
   questions: Question[];
@@ -15,6 +17,30 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
   onUpdateQuestion 
 }) => {
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
+  const { 
+    isConfirmOpen, 
+    confirmMessage, 
+    confirmOptions, 
+    confirmCallback, 
+    showConfirm, 
+    hideConfirm 
+  } = useConfirm();
+
+  const handleRemoveQuestion = (questionNumber: number) => {
+    const question = questions.find(q => q.question_number === questionNumber);
+    const questionNumberFormatted = formatQuestionNumber(questionNumber);
+    
+    showConfirm(
+      `¿Estás seguro de que quieres eliminar la Pregunta #${questionNumberFormatted}?`,
+      () => onRemoveQuestion(questionNumber),
+      {
+        title: 'Eliminar Pregunta',
+        confirmText: 'Sí, Eliminar',
+        cancelText: 'Cancelar',
+        type: 'error'
+      }
+    );
+  };
 
   const handleEditQuestion = (question: Question) => {
     setEditingQuestion(question);
@@ -82,7 +108,25 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
             </h2>
             <button
               onClick={handleCancelEdit}
-              className="text-gray-600 hover:text-gray-800 font-medium"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 text-sm"
+              style={{
+                backgroundColor: '#f3f4f6',
+                color: '#374151',
+                border: '1px solid #d1d5db',
+                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#e5e7eb';
+                e.currentTarget.style.borderColor = '#9ca3af';
+                e.currentTarget.style.boxShadow = '0 2px 4px 0 rgba(0, 0, 0, 0.1)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.borderColor = '#d1d5db';
+                e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
             >
               ← Volver a la lista
             </button>
@@ -123,17 +167,55 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
               )}
               <button
                 onClick={() => handleEditQuestion(question)}
-                className="edit-btn text-blue-600 hover:text-blue-800 text-sm font-medium px-3 py-1 rounded-md border border-blue-200 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+                className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
                 title="Editar pregunta"
+                style={{
+                  backgroundColor: '#2563eb',
+                  color: '#ffffff',
+                  border: '1px solid #2563eb',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                  minWidth: '120px'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#1d4ed8';
+                  e.currentTarget.style.borderColor = '#1d4ed8';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#2563eb';
+                  e.currentTarget.style.borderColor = '#2563eb';
+                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
                 ✏️ Editar
               </button>
               <button
-                onClick={() => onRemoveQuestion(question.question_number)}
-                className="delete-btn text-red-600 hover:text-red-800"
+                onClick={() => handleRemoveQuestion(question.question_number)}
+                className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
                 title="Eliminar pregunta"
+                style={{
+                  backgroundColor: '#ef4444',
+                  color: '#ffffff',
+                  border: '1px solid #ef4444',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                  minWidth: '120px'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#dc2626';
+                  e.currentTarget.style.borderColor = '#dc2626';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#ef4444';
+                  e.currentTarget.style.borderColor = '#ef4444';
+                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
-                🗑️
+                🗑️ Eliminar
               </button>
             </div>
           </div>
@@ -183,6 +265,17 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
           </div>
         </div>
       ))}
+      
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        onConfirm={confirmCallback || (() => {})}
+        onCancel={hideConfirm}
+        title={confirmOptions.title}
+        message={confirmMessage}
+        confirmText={confirmOptions.confirmText}
+        cancelText={confirmOptions.cancelText}
+        type={confirmOptions.type}
+      />
     </div>
   );
 };

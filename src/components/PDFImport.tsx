@@ -695,7 +695,30 @@ const PDFImport: React.FC<PDFImportProps> = ({
               <button
                 onClick={handleStartProcessing}
                 disabled={isProcessing || !selectedFile || !geminiApiKey.trim()}
-                className="btn btn-primary btn-full"
+                className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 w-full justify-center"
+                style={{
+                  backgroundColor: (isProcessing || !selectedFile || !geminiApiKey.trim()) ? '#e5e7eb' : '#2563eb',
+                  color: (isProcessing || !selectedFile || !geminiApiKey.trim()) ? '#9ca3af' : '#ffffff',
+                  border: `1px solid ${(isProcessing || !selectedFile || !geminiApiKey.trim()) ? '#e5e7eb' : '#2563eb'}`,
+                  boxShadow: (isProcessing || !selectedFile || !geminiApiKey.trim()) ? 'none' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                  cursor: (isProcessing || !selectedFile || !geminiApiKey.trim()) ? 'not-allowed' : 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isProcessing && selectedFile && geminiApiKey.trim()) {
+                    e.currentTarget.style.backgroundColor = '#1d4ed8';
+                    e.currentTarget.style.borderColor = '#1d4ed8';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isProcessing && selectedFile && geminiApiKey.trim()) {
+                    e.currentTarget.style.backgroundColor = '#2563eb';
+                    e.currentTarget.style.borderColor = '#2563eb';
+                    e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }
+                }}
               >
                 {isProcessing ? (
                   <span className="flex items-center justify-center space-x-2">
@@ -724,41 +747,133 @@ const PDFImport: React.FC<PDFImportProps> = ({
               Para optimizar el procesamiento, indica qué tipo de contenido tiene tu PDF:
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <button
-                onClick={() => handleIntelligentProcessing('text-only')}
-                disabled={isProcessing}
-                className="p-4 border border-green-300 rounded-lg text-left hover:bg-green-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer hover:border-green-500 hover:shadow-md"
-              >
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className="text-lg">📝</span>
-                  <span className="font-medium text-green-800">Solo texto</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Card Solo texto */}
+              <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                <div className="flex items-center space-x-2 mb-3">
+                  <span className="text-2xl">📝</span>
+                  <h4 className="font-semibold text-gray-800">Solo texto</h4>
                 </div>
-                <p className="text-xs text-green-600">
+                <p className="text-sm text-gray-600 mb-4">
                   PDF con preguntas en texto simple, sin imágenes complejas
                 </p>
-              </button>
+                <button
+                  onClick={() => handleIntelligentProcessing('text-only')}
+                  disabled={isProcessing}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300"
+                  style={{
+                    backgroundColor: isProcessing ? '#e5e7eb' : '#10b981',
+                    color: '#ffffff',
+                    border: `1px solid ${isProcessing ? '#e5e7eb' : '#10b981'}`,
+                    boxShadow: isProcessing ? 'none' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                    cursor: isProcessing ? 'not-allowed' : 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isProcessing) {
+                      e.currentTarget.style.backgroundColor = '#059669';
+                      e.currentTarget.style.borderColor = '#059669';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isProcessing) {
+                      e.currentTarget.style.backgroundColor = '#10b981';
+                      e.currentTarget.style.borderColor = '#10b981';
+                      e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }
+                  }}
+                >
+                  {isProcessing ? (
+                    <span className="flex items-center gap-2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Procesando...
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      <span>🚀</span>
+                      Procesar PDF
+                    </span>
+                  )}
+                </button>
+              </div>
               
-              <button
-                onClick={() => handleIntelligentProcessing('with-images')}
-                disabled={isProcessing}
-                className="p-4 border border-green-300 rounded-lg text-left hover:bg-green-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer hover:border-green-500 hover:shadow-md"
-              >
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className="text-lg">🖼️</span>
-                  <span className="font-medium text-green-800">Con imágenes</span>
+              {/* Card Con imágenes */}
+              <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+                <div className="flex items-center space-x-2 mb-3">
+                  <span className="text-2xl">�️</span>
+                  <h4 className="font-semibold text-gray-800">Con imágenes</h4>
                 </div>
-                <p className="text-xs text-green-600">
+                <p className="text-sm text-gray-600 mb-4">
                   PDF con diagramas, tablas complejas o preguntas con imágenes
                 </p>
-              </button>
+                <button
+                  onClick={() => handleIntelligentProcessing('with-images')}
+                  disabled={isProcessing}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300"
+                  style={{
+                    backgroundColor: isProcessing ? '#e5e7eb' : '#10b981',
+                    color: '#ffffff',
+                    border: `1px solid ${isProcessing ? '#e5e7eb' : '#10b981'}`,
+                    boxShadow: isProcessing ? 'none' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+                    cursor: isProcessing ? 'not-allowed' : 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isProcessing) {
+                      e.currentTarget.style.backgroundColor = '#059669';
+                      e.currentTarget.style.borderColor = '#059669';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isProcessing) {
+                      e.currentTarget.style.backgroundColor = '#10b981';
+                      e.currentTarget.style.borderColor = '#10b981';
+                      e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }
+                  }}
+                >
+                  {isProcessing ? (
+                    <span className="flex items-center gap-2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Procesando...
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-2">
+                      <span>🚀</span>
+                      Procesar PDF
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
             
             {/* Opción para mostrar configuración manual */}
             <div className="text-center">
               <button
                 onClick={() => setShowManualProcessing(!showManualProcessing)}
-                className="text-xs text-green-600 hover:text-green-800 underline cursor-pointer"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 text-xs underline"
+                style={{
+                  backgroundColor: '#f3f4f6',
+                  color: '#374151',
+                  border: '1px solid #d1d5db',
+                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#e5e7eb';
+                  e.currentTarget.style.borderColor = '#9ca3af';
+                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(107, 114, 128, 0.2)';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#f3f4f6';
+                  e.currentTarget.style.borderColor = '#d1d5db';
+                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
                 {showManualProcessing ? '🔽 Ocultar' : '⚙️ Mostrar'} configuración manual (página específica)
               </button>
