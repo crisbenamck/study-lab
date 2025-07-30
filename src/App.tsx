@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Header from './components/Header';
 import QuestionForm from './components/QuestionForm';
 import QuestionManager from './components/QuestionManager';
 import PDFImport from './components/PDFImport';
 import GeminiTest from './components/GeminiTest';
+import AlertModal from './components/AlertModal';
+import ConfirmModal from './components/ConfirmModal';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useAppState } from './hooks/useAppState';
+import { useAlert } from './hooks/useAlert';
+import { useConfirm } from './hooks/useConfirm';
 import type { QuestionFormData, Question } from './types/Question';
 
 type TabType = 'manual' | 'view' | 'import' | 'test';
@@ -26,6 +30,28 @@ function App() {
   } = useLocalStorage();
 
   const appState = useAppState();
+  
+  // Hooks para modales
+  const { 
+    isAlertOpen, 
+    alertMessage, 
+    alertOptions, 
+    showAlert: showAlertRaw, 
+    hideAlert 
+  } = useAlert();
+  
+  const { 
+    isConfirmOpen, 
+    confirmMessage, 
+    confirmOptions, 
+    confirmCallback, 
+    showConfirm: showConfirmRaw, 
+    hideConfirm 
+  } = useConfirm();
+
+  // Envolver en useCallback para evitar re-renders
+  const showAlert = useCallback(showAlertRaw, [showAlertRaw]);
+  const showConfirm = useCallback(showConfirmRaw, [showConfirmRaw]);
 
   const handleSubmitQuestion = (formData: QuestionFormData) => {
     // Convertir las opciones del formulario al formato correcto
@@ -69,6 +95,8 @@ function App() {
       <Header 
         questions={questions}
         onClearAll={clearAllQuestions}
+        showAlert={showAlert}
+        showConfirm={showConfirm}
       />
       
       {/* Navegación por pestañas */}
@@ -200,17 +228,41 @@ function App() {
               onImportQuestions={handleImportQuestions}
               appState={appState}
               nextQuestionNumber={getNextQuestionNumber()}
+              showAlert={showAlert}
+              showConfirm={showConfirm}
             />
           )}
           
           {activeTab === 'test' && (
             <GeminiTest 
               appState={appState}
+              showAlert={showAlert}
             />
           )}
           </div>
         </div>
       </main>
+      
+      {/* Modales */}
+      <AlertModal
+        isOpen={isAlertOpen}
+        onClose={hideAlert}
+        title={alertOptions.title}
+        message={alertMessage}
+        type={alertOptions.type}
+        buttonText={alertOptions.buttonText}
+      />
+      
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        onConfirm={confirmCallback || (() => {})}
+        onCancel={hideConfirm}
+        title={confirmOptions.title}
+        message={confirmMessage}
+        confirmText={confirmOptions.confirmText}
+        cancelText={confirmOptions.cancelText}
+        type={confirmOptions.type}
+      />
     </div>
   );
 }

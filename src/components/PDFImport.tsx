@@ -19,6 +19,8 @@ interface PDFImportProps {
     isLoaded: boolean;
   };
   nextQuestionNumber: number;
+  showAlert: (message: string, options?: { title?: string; type?: 'info' | 'success' | 'warning' | 'error'; buttonText?: string; }) => void;
+  showConfirm: (message: string, onConfirm: () => void, options?: { title?: string; confirmText?: string; cancelText?: string; }) => void;
 }
 
 // Componente colapsable para la configuración de API Key
@@ -286,7 +288,9 @@ const AutomaticModelsSection: React.FC = () => {
 const PDFImport: React.FC<PDFImportProps> = ({ 
   onImportQuestions, 
   appState, 
-  nextQuestionNumber 
+  nextQuestionNumber,
+  showAlert,
+  showConfirm
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingProgress, setProcessingProgress] = useState<string>('');
@@ -334,7 +338,10 @@ const PDFImport: React.FC<PDFImportProps> = ({
 
   const handleStartProcessing = useCallback(async () => {
     if (!selectedFile || !geminiApiKey.trim()) {
-      alert('Por favor asegúrate de tener un archivo y API key configurados');
+      showAlert('Por favor asegúrate de tener un archivo y API key configurados', {
+        title: 'Configuración incompleta',
+        type: 'warning'
+      });
       return;
     }
 
@@ -404,9 +411,16 @@ const PDFImport: React.FC<PDFImportProps> = ({
         }));
 
         onImportQuestions(convertedQuestions);
-        alert(`✅ ¡Procesamiento de SOLO TEXTO exitoso!\n\n📝 Se extrajeron ${convertedQuestions.length} preguntas de la página ${pageToProcess}\n💡 Cada pregunta incluye explicación generada por IA\n📋 Las preguntas se han añadido a tu lista con numeración consecutiva\n\n🎯 Números asignados: ${nextQuestionNumber} - ${nextQuestionNumber + convertedQuestions.length - 1}`);
+        showAlert(`✅ ¡Procesamiento de SOLO TEXTO exitoso!\n\n📝 Se extrajeron ${convertedQuestions.length} preguntas de la página ${pageToProcess}\n💡 Cada pregunta incluye explicación generada por IA\n📋 Las preguntas se han añadido a tu lista con numeración consecutiva\n\n🎯 Números asignados: ${nextQuestionNumber} - ${nextQuestionNumber + convertedQuestions.length - 1}`, {
+          title: 'Procesamiento exitoso',
+          type: 'success',
+          buttonText: 'Perfecto!'
+        });
       } else {
-        alert('⚠️ No se encontraron preguntas en la página seleccionada. Intenta con otra página o usa el modo "Con imágenes" si hay contenido visual complejo.');
+        showAlert('⚠️ No se encontraron preguntas en la página seleccionada. Intenta con otra página o usa el modo "Con imágenes" si hay contenido visual complejo.', {
+          title: 'Sin resultados',
+          type: 'warning'
+        });
       }
     } catch (error) {
       console.error('Error procesando PDF:', error);
@@ -420,7 +434,10 @@ const PDFImport: React.FC<PDFImportProps> = ({
       }
       
       if (errorMessage.includes('503') || errorMessage.includes('overloaded')) {
-        alert('⏳ Gemini está sobrecargado. Intenta nuevamente en unos minutos.');
+        showAlert('⏳ Gemini está sobrecargado. Intenta nuevamente en unos minutos.', {
+          title: 'Servidor sobrecargado',
+          type: 'warning'
+        });
       } else if (errorMessage.includes('429') || errorMessage.includes('quota') || errorMessage.includes('Todos los modelos de Gemini fallaron')) {
         const modelInfo = errorStatus ? 
           `\n\n🤖 Modelos intentados: ${errorStatus.currentModelIndex + 1}/${errorStatus.totalModels}\n` +
@@ -429,21 +446,33 @@ const PDFImport: React.FC<PDFImportProps> = ({
           : '';
         
         if (errorStatus && errorStatus.remainingModels > 0) {
-          alert(`🚫 Se agotó la cuota del modelo actual.\n\nEl sistema intentó automáticamente con los modelos de respaldo.${modelInfo}\n\n💡 Espera unas horas e intenta nuevamente.`);
+          showAlert(`🚫 Se agotó la cuota del modelo actual.\n\nEl sistema intentó automáticamente con los modelos de respaldo.${modelInfo}\n\n💡 Espera unas horas e intenta nuevamente.`, {
+            title: 'Cuota agotada',
+            type: 'error'
+          });
         } else {
-          alert(`🚫 Se agotaron todos los modelos de Gemini disponibles.${modelInfo}\n\n💡 Espera unas horas para que se restablezcan las cuotas.`);
+          showAlert(`🚫 Se agotaron todos los modelos de Gemini disponibles.${modelInfo}\n\n💡 Espera unas horas para que se restablezcan las cuotas.`, {
+            title: 'Sin modelos disponibles',
+            type: 'error'
+          });
         }
       } else {
-        alert(`❌ Error procesando PDF: ${errorMessage}`);
+        showAlert(`❌ Error procesando PDF: ${errorMessage}`, {
+          title: 'Error de procesamiento',
+          type: 'error'
+        });
       }
     } finally {
       setIsProcessing(false);
     }
-  }, [selectedFile, geminiApiKey, pageToProcess, onImportQuestions, nextQuestionNumber]);
+  }, [selectedFile, geminiApiKey, pageToProcess, onImportQuestions, nextQuestionNumber, showAlert]);
 
   const handleIntelligentProcessing = useCallback(async (contentType: 'text-only' | 'with-images') => {
     if (!selectedFile || !geminiApiKey.trim()) {
-      alert('Se requiere archivo y API key para el procesamiento');
+      showAlert('Se requiere archivo y API key para el procesamiento', {
+        title: 'Configuración incompleta',
+        type: 'warning'
+      });
       return;
     }
 
@@ -480,7 +509,10 @@ const PDFImport: React.FC<PDFImportProps> = ({
         const extractedQuestions = await pdfService.extractQuestionsFromPDF(selectedFile);
         
         if (extractedQuestions.length === 0) {
-          alert(`⚠️ No se encontraron preguntas en el PDF completo.`);
+          showAlert(`⚠️ No se encontraron preguntas en el PDF completo.`, {
+            title: 'Sin resultados',
+            type: 'warning'
+          });
           return;
         }
 
@@ -510,26 +542,34 @@ const PDFImport: React.FC<PDFImportProps> = ({
         // Paso 3: Guardar las preguntas
         onImportQuestions(processedQuestions);
         
-        alert(
+        showAlert(
           `✅ ¡Procesamiento CON IMÁGENES exitoso!\n\n` +
-          `�️ Se analizó todo el PDF incluyendo contenido visual\n` +
-          `�📋 Se extrajeron ${processedQuestions.length} preguntas del PDF completo\n` +
+          `🖼️ Se analizó todo el PDF incluyendo contenido visual\n` +
+          `📋 Se extrajeron ${processedQuestions.length} preguntas del PDF completo\n` +
           `🔍 Cada pregunta incluye explicación detallada y link de referencia\n` +
           `📝 Las preguntas se han añadido a tu lista con numeración consecutiva\n\n` +
-          `🎯 Números asignados: ${nextQuestionNumber} - ${nextQuestionNumber + processedQuestions.length - 1}`
+          `🎯 Números asignados: ${nextQuestionNumber} - ${nextQuestionNumber + processedQuestions.length - 1}`,
+          {
+            title: 'Procesamiento completo exitoso',
+            type: 'success',
+            buttonText: 'Excelente!'
+          }
         );
         
       } catch (error) {
         console.error('Error en procesamiento directo:', error);
         const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
-        alert(`❌ Error en procesamiento directo: ${errorMessage}`);
+        showAlert(`❌ Error en procesamiento directo: ${errorMessage}`, {
+          title: 'Error de procesamiento',
+          type: 'error'
+        });
       } finally {
         setIsProcessing(false);
         setProcessingProgress('');
         setIndividualProcessingProgress(null);
       }
     }
-  }, [selectedFile, geminiApiKey, totalPages, handleStartProcessing, nextQuestionNumber, onImportQuestions]);
+  }, [selectedFile, geminiApiKey, totalPages, handleStartProcessing, nextQuestionNumber, onImportQuestions, showAlert]);
 
   return (
     <div className="max-w-4xl mx-auto p-6">

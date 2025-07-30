@@ -17,9 +17,10 @@ interface GeminiTestProps {
     saveGeminiApiKey: (key: string) => void;
     isLoaded: boolean;
   };
+  showAlert: (message: string, options?: { title?: string; type?: 'info' | 'success' | 'warning' | 'error'; buttonText?: string; }) => void;
 }
 
-const GeminiTest: React.FC<GeminiTestProps> = ({ appState }) => {
+const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
   const { geminiApiKey, saveGeminiApiKey } = appState;
   const [prompt, setPrompt] = useState('Explain how AI works in a few words');
   const [response, setResponse] = useState('');
@@ -155,7 +156,11 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState }) => {
 
     navigator.clipboard.writeText(curlCommand);
     console.log('📋 Comando cURL copiado al portapapeles');
-    alert('Comando cURL copiado al portapapeles');
+    showAlert('Comando cURL copiado al portapapeles', {
+      title: 'Copiado',
+      type: 'success',
+      buttonText: 'Perfecto'
+    });
   };
 
   return (

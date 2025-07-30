@@ -5,12 +5,17 @@ import { downloadQuestionsAsJSON } from '../utils/downloadUtils';
 interface HeaderProps {
   questions: Question[];
   onClearAll: () => void;
+  showAlert: (message: string, options?: { title?: string; type?: 'info' | 'success' | 'warning' | 'error'; buttonText?: string; }) => void;
+  showConfirm: (message: string, onConfirm: () => void, options?: { title?: string; confirmText?: string; cancelText?: string; }) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ questions, onClearAll }) => {
+const Header: React.FC<HeaderProps> = ({ questions, onClearAll, showAlert, showConfirm }) => {
   const handleDownload = () => {
     if (questions.length === 0) {
-      alert('No hay preguntas para descargar');
+      showAlert('No hay preguntas para descargar', {
+        title: 'Lista vacía',
+        type: 'warning'
+      });
       return;
     }
     downloadQuestionsAsJSON(questions);
@@ -18,17 +23,22 @@ const Header: React.FC<HeaderProps> = ({ questions, onClearAll }) => {
 
   const handleClearAll = () => {
     if (questions.length === 0) {
-      alert('No hay preguntas para eliminar');
+      showAlert('No hay preguntas para eliminar', {
+        title: 'Lista vacía',
+        type: 'warning'
+      });
       return;
     }
     
-    const confirmed = window.confirm(
-      `¿Estás seguro de que quieres eliminar todas las ${questions.length} preguntas? Esta acción no se puede deshacer.`
+    showConfirm(
+      `¿Estás seguro de que quieres eliminar todas las ${questions.length} preguntas? Esta acción no se puede deshacer.`,
+      onClearAll,
+      {
+        title: 'Confirmar eliminación',
+        confirmText: 'Sí, eliminar todo',
+        cancelText: 'Cancelar'
+      }
     );
-    
-    if (confirmed) {
-      onClearAll();
-    }
   };
 
   return (
@@ -50,16 +60,14 @@ const Header: React.FC<HeaderProps> = ({ questions, onClearAll }) => {
           <div className="flex items-center space-x-3">
             <button
               onClick={handleDownload}
-              disabled={questions.length === 0}
-              className={`btn ${questions.length > 0 ? 'btn-primary' : ''}`}
+              className={`btn ${questions.length > 0 ? 'btn-primary' : 'btn-disabled'}`}
             >
               ⬇️ Descargar JSON
             </button>
 
             <button
               onClick={handleClearAll}
-              disabled={questions.length === 0}
-              className={`btn ${questions.length > 0 ? 'btn-danger' : ''}`}
+              className={`btn ${questions.length > 0 ? 'btn-danger' : 'btn-disabled'}`}
             >
               🗑️ Limpiar Todo
             </button>
