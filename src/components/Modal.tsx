@@ -73,17 +73,27 @@ const Modal: React.FC<ModalProps> = ({
   const styles = getTypeStyles();
 
   return (
-    <div className="fixed inset-0 z-[999999] flex items-center justify-center">
+    <div 
+      className="fixed inset-0 z-[999999] flex items-end justify-center"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 999999,
+        display: 'flex',
+        alignItems: 'flex-end',
+        justifyContent: 'center'
+      }}
+    >
       {/* Backdrop - Capa gris transparente que bloquea toda la página */}
       <div 
         className="absolute inset-0 transition-opacity duration-200"
         onClick={showCloseButton ? onClose : undefined}
-        style={{ 
+        style={{
           position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
+          inset: 0,
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
           zIndex: 999998
         }}
@@ -91,8 +101,14 @@ const Modal: React.FC<ModalProps> = ({
       
       {/* Modal */}
       <div 
-        className="relative bg-white rounded-lg shadow-2xl max-w-md w-full mx-4 max-h-[90vh] overflow-hidden animate-in fade-in zoom-in duration-200"
-        style={{ zIndex: 999999 }}
+        className="relative bg-white rounded-lg shadow-2xl w-full max-h-[90vh] overflow-hidden animate-in fade-in zoom-in duration-200"
+        style={{ 
+          zIndex: 999999,
+          marginLeft: '3rem',
+          marginRight: '3rem',
+          marginBottom: '2rem',
+          maxWidth: '600px'
+        }}
       >
         {/* Header */}
         {(title || showCloseButton) && (

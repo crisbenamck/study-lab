@@ -18,7 +18,19 @@ const Header: React.FC<HeaderProps> = ({ questions, onClearAll, showAlert, showC
       });
       return;
     }
-    downloadQuestionsAsJSON(questions);
+
+    const questionCount = questions.length;
+    const questionText = questionCount === 1 ? 'pregunta' : 'preguntas';
+    
+    showConfirm(
+      `¿Estás seguro de que quieres descargar ${questionCount} ${questionText} en formato JSON?`,
+      () => downloadQuestionsAsJSON(questions),
+      {
+        title: 'Descargar Preguntas',
+        confirmText: 'Sí, Descargar',
+        cancelText: 'Cancelar'
+      }
+    );
   };
 
   const handleClearAll = () => {
