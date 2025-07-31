@@ -1,9 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
-import QuestionForm from './components/QuestionForm';
-import QuestionManager from './components/QuestionManager';
-import PDFImport from './components/PDFImport';
-import GeminiTest from './components/GeminiTest';
+import CreateQuestionPage from './pages/CreateQuestionPage';
+import ViewQuestionsPage from './pages/ViewQuestionsPage';
+import ImportPDFPage from './pages/ImportPDFPage';
+import TestAPIPage from './pages/TestAPIPage';
 import AlertModal from './components/AlertModal';
 import ConfirmModal from './components/ConfirmModal';
 import { useLocalStorage } from './hooks/useLocalStorage';
@@ -12,10 +13,8 @@ import { useAlert } from './hooks/useAlert';
 import { useConfirm } from './hooks/useConfirm';
 import type { QuestionFormData, Question } from './types/Question';
 
-type TabType = 'manual' | 'view' | 'import' | 'test';
-
 function App() {
-  const [activeTab, setActiveTab] = useState<TabType>('manual');
+  const navigate = useNavigate();
   
   const {
     questions,
@@ -74,8 +73,8 @@ function App() {
     // Las preguntas importadas ya vienen con números asignados correctamente
     addQuestionsWithNumbers(importedQuestions);
 
-    // Cambiar a la pestaña de ver preguntas para ver las preguntas agregadas
-    setActiveTab('view');
+    // Navegar a la página de ver preguntas para ver las preguntas agregadas
+    navigate('/questions');
   };
 
   // Mostrar loading mientras se cargan los datos del localStorage
@@ -92,154 +91,57 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header 
-        questions={questions}
-      />
-      
-      {/* Navegación por pestañas */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-6">
-          <nav className="flex space-x-1">
-            <button
-              onClick={() => setActiveTab('manual')}
-              className={`relative px-6 py-4 text-sm font-semibold rounded-t-lg transition-all duration-200 border-0 ${
-                activeTab === 'manual'
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
-              }`}
-              style={{
-                marginBottom: activeTab === 'manual' ? '0' : '2px',
-                zIndex: activeTab === 'manual' ? '10' : '1',
-                backgroundColor: activeTab === 'manual' ? '#2563eb' : '#f3f4f6',
-                color: activeTab === 'manual' ? '#ffffff' : '#4b5563',
-                border: 'none',
-                outline: 'none'
-              }}
-            >
-              Crear Preguntas
-              {activeTab === 'manual' && (
-                <div 
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-blue-800 rounded-b-sm"
-                  style={{ marginBottom: '-1px' }}
-                ></div>
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab('view')}
-              className={`relative px-6 py-4 text-sm font-semibold rounded-t-lg transition-all duration-200 border-0 ${
-                activeTab === 'view'
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
-              }`}
-              style={{
-                marginBottom: activeTab === 'view' ? '0' : '2px',
-                zIndex: activeTab === 'view' ? '10' : '1',
-                backgroundColor: activeTab === 'view' ? '#2563eb' : '#f3f4f6',
-                color: activeTab === 'view' ? '#ffffff' : '#4b5563',
-                border: 'none',
-                outline: 'none'
-              }}
-            >
-              Ver Preguntas
-              {activeTab === 'view' && (
-                <div 
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-blue-800 rounded-b-sm"
-                  style={{ marginBottom: '-1px' }}
-                ></div>
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab('import')}
-              className={`relative px-6 py-4 text-sm font-semibold rounded-t-lg transition-all duration-200 border-0 ${
-                activeTab === 'import'
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
-              }`}
-              style={{
-                marginBottom: activeTab === 'import' ? '0' : '2px',
-                zIndex: activeTab === 'import' ? '10' : '1',
-                backgroundColor: activeTab === 'import' ? '#2563eb' : '#f3f4f6',
-                color: activeTab === 'import' ? '#ffffff' : '#4b5563',
-                border: 'none',
-                outline: 'none'
-              }}
-            >
-              Importar PDF
-              {activeTab === 'import' && (
-                <div 
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-blue-800 rounded-b-sm"
-                  style={{ marginBottom: '-1px' }}
-                ></div>
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab('test')}
-              className={`relative px-6 py-4 text-sm font-semibold rounded-t-lg transition-all duration-200 border-0 ${
-                activeTab === 'test'
-                  ? 'bg-blue-600 text-white shadow-lg'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 hover:text-gray-800'
-              }`}
-              style={{
-                marginBottom: activeTab === 'test' ? '0' : '2px',
-                zIndex: activeTab === 'test' ? '10' : '1',
-                backgroundColor: activeTab === 'test' ? '#2563eb' : '#f3f4f6',
-                color: activeTab === 'test' ? '#ffffff' : '#4b5563',
-                border: 'none',
-                outline: 'none'
-              }}
-            >
-              Test API
-              {activeTab === 'test' && (
-                <div 
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-blue-800 rounded-b-sm"
-                  style={{ marginBottom: '-1px' }}
-                ></div>
-              )}
-            </button>
-          </nav>
-        </div>
-      </div>
+      <Header questions={questions} />
       
       <main className="main-content bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="space-y-8">
-          {activeTab === 'manual' && (
-            <QuestionForm
-              onSubmit={handleSubmitQuestion}
-              nextQuestionNumber={getNextQuestionNumber()}
-              onSetInitialNumber={setCustomInitialNumber}
-              showInitialNumberField={questions.length === 0}
+          <Routes>
+            <Route 
+              path="/" 
+              element={
+                <CreateQuestionPage
+                  onSubmit={handleSubmitQuestion}
+                  nextQuestionNumber={getNextQuestionNumber()}
+                  onSetInitialNumber={setCustomInitialNumber}
+                  showInitialNumberField={questions.length === 0}
+                />
+              } 
             />
-          )}
-          
-          {activeTab === 'view' && (
-            <QuestionManager
-              questions={questions}
-              onRemoveQuestion={removeQuestion}
-              onUpdateQuestion={updateQuestion}
-              onClearAll={clearAllQuestions}
-              showAlert={showAlert}
-              showConfirmModal={showConfirm}
+            <Route 
+              path="/questions" 
+              element={
+                <ViewQuestionsPage
+                  questions={questions}
+                  onRemoveQuestion={removeQuestion}
+                  onUpdateQuestion={updateQuestion}
+                  onClearAll={clearAllQuestions}
+                  showAlert={showAlert}
+                  showConfirmModal={showConfirm}
+                />
+              } 
             />
-          )}
-          
-          {activeTab === 'import' && (
-            <PDFImport 
-              onImportQuestions={handleImportQuestions}
-              appState={appState}
-              nextQuestionNumber={getNextQuestionNumber()}
-              showAlert={showAlert}
-              showConfirm={showConfirm}
+            <Route 
+              path="/import" 
+              element={
+                <ImportPDFPage
+                  onImportQuestions={handleImportQuestions}
+                  appState={appState}
+                  nextQuestionNumber={getNextQuestionNumber()}
+                  showAlert={showAlert}
+                  showConfirm={showConfirm}
+                />
+              } 
             />
-          )}
-          
-          {activeTab === 'test' && (
-            <GeminiTest 
-              appState={appState}
-              showAlert={showAlert}
+            <Route 
+              path="/test" 
+              element={
+                <TestAPIPage
+                  appState={appState}
+                  showAlert={showAlert}
+                />
+              } 
             />
-          )}
-          </div>
+          </Routes>
         </div>
       </main>
       
