@@ -93,6 +93,9 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <Header questions={questions} />
       
+      {/* Spacer para compensar el header fijo */}
+      <div style={{ height: '80px' }}></div>
+      
       <main className="main-content bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Routes>

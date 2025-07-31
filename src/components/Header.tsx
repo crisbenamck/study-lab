@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import type { Question } from '../types/Question';
+import { useScrollDirection } from '../hooks/useScrollDirection';
 
 interface HeaderProps {
   questions: Question[];
@@ -8,6 +9,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ questions }) => {
   const location = useLocation();
+  const { isVisible } = useScrollDirection();
 
   const navItems = [
     { path: '/', label: 'Crear Preguntas' },
@@ -17,14 +19,26 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
   ];
 
   return (
-    <div className="header" style={{ backgroundColor: '#1e3a8a' }}>
+    <div 
+      className="header fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out" 
+      style={{ 
+        backgroundColor: '#1e3a8a',
+        transform: isVisible ? 'translateY(0)' : 'translateY(-100%)'
+      }}
+    >
       <div className="container py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <div className="mr-3" style={{ fontSize: '24px' }}>📝</div>
+            <div className="mr-3">
+              <img 
+                src="/icons/study-lab-azul-nocturno-optimized.svg" 
+                alt="Study Lab" 
+                className="w-8 h-8"
+              />
+            </div>
             <div>
               <h1 className="text-2xl font-bold" style={{ color: '#ffffff' }}>
-                Generador de Preguntas
+                Study Lab
               </h1>
               <p className="text-sm" style={{ color: '#cbd5e1' }}>
                 {questions.length} pregunta{questions.length !== 1 ? 's' : ''} guardada{questions.length !== 1 ? 's' : ''}

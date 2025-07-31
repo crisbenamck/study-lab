@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Libro digital optimizado - Azul Nocturno Simplificado -->
+  <defs>
+    <!-- Gradientes simplificados -->
+    <linearGradient id="book-left" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="book-right" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+    <linearGradient id="screen-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#1e40af"/>
+    </linearGradient>
+    <linearGradient id="sparkle1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="sparkle2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0891b2"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Libro base simplificado -->
+  <path d="M3 6 L16 6 L16 26 L3 26 Q2 26 2 25 L2 7 Q2 6 3 6 Z" 
+        fill="url(#book-left)" 
+        stroke="#1e293b" 
+        stroke-width="0.5"/>
+  <path d="M16 6 L29 6 Q30 6 30 7 L30 25 Q30 26 29 26 L16 26 Z" 
+        fill="url(#book-right)" 
+        stroke="#1e293b" 
+        stroke-width="0.5"/>
+  
+  <!-- Pantalla digital izquierda - simplificada -->
+  <rect x="4" y="9" width="10" height="14" rx="1" fill="#0f172a" opacity="0.6"/>
+  <rect x="5" y="10" width="8" height="12" rx="0.5" fill="url(#screen-glow)" opacity="0.4"/>
+  
+  <!-- Interfaz digital simplificada -->
+  <g opacity="0.8">
+    <!-- Barras de progreso principales -->
+    <rect x="6" y="12" width="6" height="1" rx="0.5" fill="#60a5fa"/>
+    <rect x="6" y="14" width="4" height="1" rx="0.5" fill="#3b82f6"/>
+    <rect x="6" y="16" width="5" height="1" rx="0.5" fill="#93c5fd"/>
+    
+    <!-- Elemento central de concentración -->
+    <circle cx="9" cy="19" r="1.5" fill="none" stroke="#60a5fa" stroke-width="1"/>
+    <circle cx="9" cy="19" r="0.5" fill="#93c5fd"/>
+  </g>
+  
+  <!-- Página derecha - laboratorio simplificado -->
+  <g opacity="0.8">
+    <!-- Panel de control -->
+    <rect x="18" y="9" width="10" height="2.5" rx="0.5" fill="#1e293b" opacity="0.7"/>
+    
+    <!-- Matraz científico simplificado -->
+    <path d="M20.5 14 L22.5 14 L24 17 Q24 18 22.25 18 L20.75 18 Q19 18 19 17 Z" 
+          fill="none" 
+          stroke="#60a5fa" 
+          stroke-width="1.2"/>
+    <rect x="21.2" y="12.5" width="0.6" height="1.5" fill="none" stroke="#60a5fa" stroke-width="1"/>
+    
+    <!-- Contenido del matraz -->
+    <path d="M20.7 15.5 L22.3 15.5 L23.5 17 Q23.5 17.5 22.2 17.5 L20.8 17.5 Q19.5 17.5 19.5 17 Z" 
+          fill="#60a5fa" 
+          opacity="0.5"/>
+    
+    <!-- Métricas simplificadas -->
+    <rect x="18" y="20" width="10" height="3" rx="0.5" fill="#0f172a" opacity="0.5"/>
+    <rect x="19" y="21" width="6" height="0.4" rx="0.2" fill="#60a5fa" opacity="0.7"/>
+    <rect x="19" y="22" width="4" height="0.4" rx="0.2" fill="#3b82f6" opacity="0.6"/>
+  </g>
+  
+  <!-- Lomo del libro -->
+  <line x1="16" y1="6" x2="16" y2="26" stroke="#93c5fd" stroke-width="0.5" opacity="0.8"/>
+  
+  <!-- Destellos de IA - 3 estrellas de 4 puntas mantenidas -->
+  <!-- Destello principal -->
+  <path d="M 25 7 L 26.2 9.5 L 28.7 10.7 L 26.2 11.9 L 25 14.4 L 23.8 11.9 L 21.3 10.7 L 23.8 9.5 Z" 
+        fill="url(#sparkle1)" 
+        opacity="0.9"/>
+  
+  <!-- Destello secundario -->
+  <path d="M 28 3 L 28.6 4.4 L 30 5 L 28.6 5.6 L 28 7 L 27.4 5.6 L 26 5 L 27.4 4.4 Z" 
+        fill="url(#sparkle2)" 
+        opacity="0.8"/>
+  
+  <!-- Destello pequeño -->
+  <path d="M 29.5 9 L 29.8 9.7 L 30.5 10 L 29.8 10.3 L 29.5 11 L 29.2 10.3 L 28.5 10 L 29.2 9.7 Z" 
+        fill="#fbbf24" 
+        opacity="0.9"/>
+        
+  <!-- Partículas de conexión sutiles -->
+  <circle cx="7" cy="8" r="0.3" fill="#93c5fd" opacity="0.6"/>
+  <circle cx="25" cy="25" r="0.3" fill="#60a5fa" opacity="0.6"/>
+</svg>
