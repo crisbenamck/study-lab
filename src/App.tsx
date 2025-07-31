@@ -94,9 +94,6 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <Header 
         questions={questions}
-        onClearAll={clearAllQuestions}
-        showAlert={showAlert}
-        showConfirm={showConfirm}
       />
       
       {/* Navegación por pestañas */}
@@ -220,6 +217,9 @@ function App() {
               questions={questions}
               onRemoveQuestion={removeQuestion}
               onUpdateQuestion={updateQuestion}
+              onClearAll={clearAllQuestions}
+              showAlert={showAlert}
+              showConfirmModal={showConfirm}
             />
           )}
           
