@@ -12,7 +12,8 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
   const { isVisible } = useScrollDirection();
 
   const navItems = [
-    { path: '/', label: 'Crear Preguntas' },
+    { path: '/', label: 'Inicio' },
+    { path: '/create', label: 'Crear Preguntas' },
     { path: '/questions', label: 'Ver Preguntas' },
     { path: '/import', label: 'Importar PDF' },
     { path: '/test', label: 'Test API' }

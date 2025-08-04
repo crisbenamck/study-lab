@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
+import HomePage from './pages/HomePage';
 import CreateQuestionPage from './pages/CreateQuestionPage';
 import ViewQuestionsPage from './pages/ViewQuestionsPage';
 import ImportPDFPage from './pages/ImportPDFPage';
@@ -101,6 +102,10 @@ function App() {
           <Routes>
             <Route 
               path="/" 
+              element={<HomePage />} 
+            />
+            <Route 
+              path="/create" 
               element={
                 <CreateQuestionPage
                   onSubmit={handleSubmitQuestion}
