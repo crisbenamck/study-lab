@@ -48,7 +48,18 @@ body {
 .container {
   max-width: 64rem;
   margin: 0 auto;
-  padding: 0 1.5rem;
+}
+
+/* Ocultar flechas de inputs numéricos */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 .shadow-lg {
