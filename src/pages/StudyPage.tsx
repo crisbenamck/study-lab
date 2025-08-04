@@ -348,10 +348,12 @@ const StudyPage: React.FC = () => {
 
             {/* Configuración específica para Test */}
             {mode === 'test' && (
-              <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '2rem', marginTop: '2rem' }}>
-                <h3 className="text-lg font-medium text-gray-800 mb-6">Configuración del Test</h3>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div>
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-6" style={{ marginTop: '2rem' }}>
+                <h3 className="text-lg font-medium text-gray-800 mb-6">
+                  Configuración del Test
+                </h3>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <div className="bg-white rounded-lg border border-gray-200 p-5">
                     <div className="flex items-center justify-between mb-4">
                       <label className="text-sm font-medium text-gray-700">
                         Mostrar Respuestas
@@ -369,39 +371,57 @@ const StudyPage: React.FC = () => {
                     </div>
                     <div className="space-y-3">
                       <div 
-                        className={`flex items-center p-3 border-2 rounded-lg hover:border-gray-300 transition-colors cursor-pointer ${
-                          showAnswersMode === 'immediate' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                        className={`flex items-center p-4 border-2 rounded-lg hover:border-gray-300 transition-all cursor-pointer ${
+                          showAnswersMode === 'immediate' ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-200'
                         }`}
                         onClick={() => setShowAnswersMode('immediate')}
                       >
-                        <div>
-                          <span className="font-medium text-gray-700 block">
-                            Inmediatamente
-                          </span>
-                          <p className="text-sm text-gray-500">
-                            Después de cada pregunta
-                          </p>
+                        <div className="flex items-center">
+                          <div className={`w-4 h-4 rounded-full border-2 mr-3 flex items-center justify-center ${
+                            showAnswersMode === 'immediate' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                          }`}>
+                            {showAnswersMode === 'immediate' && (
+                              <div className="w-2 h-2 bg-white rounded-full"></div>
+                            )}
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-700 block">
+                              Inmediatamente
+                            </span>
+                            <p className="text-sm text-gray-500">
+                              Después de cada pregunta
+                            </p>
+                          </div>
                         </div>
                       </div>
                       <div 
-                        className={`flex items-center p-3 border-2 rounded-lg hover:border-gray-300 transition-colors cursor-pointer ${
-                          showAnswersMode === 'end' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                        className={`flex items-center p-4 border-2 rounded-lg hover:border-gray-300 transition-all cursor-pointer ${
+                          showAnswersMode === 'end' ? 'border-blue-500 bg-blue-50 shadow-sm' : 'border-gray-200'
                         }`}
                         onClick={() => setShowAnswersMode('end')}
                       >
-                        <div>
-                          <span className="font-medium text-gray-700 block">
-                            Al finalizar
-                          </span>
-                          <p className="text-sm text-gray-500">
-                            Todo el test completo
-                          </p>
+                        <div className="flex items-center">
+                          <div className={`w-4 h-4 rounded-full border-2 mr-3 flex items-center justify-center ${
+                            showAnswersMode === 'end' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                          }`}>
+                            {showAnswersMode === 'end' && (
+                              <div className="w-2 h-2 bg-white rounded-full"></div>
+                            )}
+                          </div>
+                          <div>
+                            <span className="font-medium text-gray-700 block">
+                              Al finalizar
+                            </span>
+                            <p className="text-sm text-gray-500">
+                              Todo el test completo
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  <div>
+                  <div className="bg-white rounded-lg border border-gray-200 p-5">
                     <div className="flex items-center justify-between mb-4">
                       <label className="text-sm font-medium text-gray-700">
                         Límite de Tiempo (opcional)
@@ -417,23 +437,28 @@ const StudyPage: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="p-4 border border-gray-200 rounded-lg">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <input
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          placeholder="Minutos"
-                          value={timeLimit}
-                          onChange={(e) => {
-                            const value = e.target.value.replace(/[^0-9]/g, '');
-                            setTimeLimit(value);
-                          }}
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
-                          style={{ appearance: 'textfield' }}
-                        />
-                        <span className="text-gray-500 text-sm font-medium">minutos</span>
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            placeholder="Ej: 30"
+                            value={timeLimit}
+                            onChange={(e) => {
+                              const value = e.target.value.replace(/[^0-9]/g, '');
+                              setTimeLimit(value);
+                            }}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                            style={{ appearance: 'textfield' }}
+                          />
+                        </div>
+                        <span className="text-gray-600 text-sm font-medium whitespace-nowrap">minutos</span>
                       </div>
+                      <p className="text-xs text-gray-500 mt-2">
+                        Deja vacío para tiempo ilimitado
+                      </p>
                     </div>
                   </div>
                 </div>
