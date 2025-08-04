@@ -1,14 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
 
-interface StudyTestPageProps {
-  showConfirm: (message: string, onConfirm: () => void) => void;
-}
-
-const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
+const StudyTestPage: React.FC = () => {
   const navigate = useNavigate();
   const { questions } = useLocalStorage();
   const { currentSession, completeSession, updateCurrentSession, isLoaded } = useStudyStorage();
@@ -30,23 +26,6 @@ const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
     getSessionStats,
     updateQuestionAnswer,
   } = useStudySession(currentSession, questions);
-
-  // Finalizar test
-  const handleComplete = useCallback(async () => {
-    if (!currentSession) return;
-
-    try {
-      await showConfirm(
-        '¿Estás seguro de que quieres finalizar el test?',
-        () => {
-          completeSession(currentSession);
-          navigate('/study/results');
-        }
-      );
-    } catch {
-      // El usuario canceló
-    }
-  }, [currentSession, showConfirm, completeSession, navigate]);
 
   // Verificar si hay sesión activa
   useEffect(() => {
@@ -85,7 +64,10 @@ const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
       setTimeLeft(prev => {
         if (prev && prev <= 1) {
           // Tiempo agotado, finalizar test automáticamente
-          handleComplete();
+          if (currentSession) {
+            completeSession(currentSession);
+            navigate('/study/results');
+          }
           return 0;
         }
         return prev ? prev - 1 : null;
@@ -93,7 +75,7 @@ const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, handleComplete]);
+  }, [timeLeft, currentSession, completeSession, navigate]);
 
   // Cargar respuestas guardadas cuando cambia la pregunta
   useEffect(() => {
@@ -148,7 +130,7 @@ const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
 
   // Confirmar respuesta
   const handleConfirmAnswer = () => {
-    if (selectedAnswers.length === 0) return;
+    if (selectedAnswers.length === 0 || !currentSession) return;
 
     const currentSessionQuestion = currentSession.questions[currentQuestionIndex];
     const updatedQuestion = updateQuestionAnswer(currentSessionQuestion, selectedAnswers, currentQuestion);
@@ -169,7 +151,16 @@ const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
       setShowAnswers(true);
     } else {
       // Avanzar automáticamente si no se muestran respuestas
-      handleNext();
+      if (canGoNext()) {
+        setSelectedAnswers([]);
+        setShowAnswers(false);
+        setStartTime(new Date());
+        goToNext();
+      } else {
+        // Es la última pregunta, finalizar test
+        completeSession(currentSession);
+        navigate('/study/results');
+      }
     }
   };
 
@@ -181,8 +172,11 @@ const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
       setStartTime(new Date());
       goToNext();
     } else {
-      // Es la última pregunta, finalizar test
-      handleComplete();
+      // Es la última pregunta, finalizar test automáticamente
+      if (currentSession) {
+        completeSession(currentSession);
+        navigate('/study/results');
+      }
     }
   };
 
@@ -196,13 +190,15 @@ const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
 
   // Saltar pregunta
   const handleSkip = () => {
+    if (!currentSession) return;
+
     const currentSessionQuestion = currentSession.questions[currentQuestionIndex];
     const updatedQuestion = {
       ...currentSessionQuestion,
       answered: false,
       selectedOptions: [],
       timeSpent: Math.floor((new Date().getTime() - startTime.getTime()) / 1000),
-      markedForReview: false,
+      markedForReview: currentSessionQuestion.markedForReview || false,
       skipped: true,
     };
 
@@ -214,7 +210,17 @@ const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
       questions: updatedQuestions,
     });
 
-    handleNext();
+    // Avanzar a la siguiente pregunta o finalizar
+    if (canGoNext()) {
+      setSelectedAnswers([]);
+      setShowAnswers(false);
+      setStartTime(new Date());
+      goToNext();
+    } else {
+      // Es la última pregunta, finalizar test
+      completeSession(currentSession);
+      navigate('/study/results');
+    }
   };
 
   // Marcar para revisión
@@ -280,20 +286,10 @@ const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
 
         {/* Pregunta */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-          <div className="flex justify-between items-start mb-4">
-            <h2 className="text-lg font-semibold text-gray-800 flex-1">
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold text-gray-800">
               {currentQuestion.question_text}
             </h2>
-            <button
-              onClick={handleMarkForReview}
-              className={`ml-4 px-3 py-1 rounded-md text-sm transition-colors ${
-                currentSessionQuestion?.markedForReview
-                  ? 'bg-yellow-100 text-yellow-800 border border-yellow-300'
-                  : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
-              }`}
-            >
-              {currentSessionQuestion?.markedForReview ? '🔖 Marcada' : '🔖 Marcar'}
-            </button>
           </div>
 
           {/* Opciones */}
@@ -344,32 +340,24 @@ const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
               );
             })}
           </div>
-
-          {/* Explicación (solo si se muestran respuestas) */}
-          {showAnswers && currentQuestion.explanation && (
-            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-2">Explicación:</h4>
-              <p className="text-blue-700">{currentQuestion.explanation}</p>
-            </div>
-          )}
-
-          {/* Link de referencia */}
-          {showAnswers && currentQuestion.link && (
-            <div className="mt-4">
-              <a
-                href={currentQuestion.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 underline text-sm"
-              >
-                📚 Ver referencia
-              </a>
-            </div>
-          )}
         </div>
 
         {/* Controles */}
         <div className="bg-white rounded-lg shadow-lg p-6">
+          {/* Botón de marcar para revisión */}
+          <div className="mb-4 pb-4 border-b border-gray-200">
+            <button
+              onClick={handleMarkForReview}
+              className={`px-3 py-1 rounded-md text-sm transition-colors ${
+                currentSessionQuestion?.markedForReview
+                  ? 'bg-yellow-100 text-yellow-800 border border-yellow-300'
+                  : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
+              }`}
+            >
+              {currentSessionQuestion?.markedForReview ? '🔖 Marcada para revisión' : '🔖 Marcar para revisión'}
+            </button>
+          </div>
+
           <div className="flex justify-between items-center">
             <button
               onClick={handlePrevious}
@@ -408,16 +396,31 @@ const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
               )}
             </div>
           </div>
-
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <button
-              onClick={handleComplete}
-              className="text-red-600 hover:text-red-800 text-sm"
-            >
-              Finalizar test ahora
-            </button>
-          </div>
         </div>
+
+        {/* Explicación (solo si se muestran respuestas) */}
+        {showAnswers && currentQuestion.explanation && (
+          <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <h4 className="font-semibold text-blue-800 mb-2">Explicación:</h4>
+              <p className="text-blue-700">{currentQuestion.explanation}</p>
+            </div>
+
+            {/* Link de referencia */}
+            {currentQuestion.link && (
+              <div className="mt-4">
+                <a
+                  href={currentQuestion.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 underline text-sm"
+                >
+                  📚 Ver referencia
+                </a>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
