@@ -19,6 +19,7 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
 
   const navItems = [
     { path: '/', label: 'Inicio' },
+    { path: '/study', label: 'Estudiar' },
     { path: '/test', label: 'Test API' }
   ];
 

@@ -27,6 +27,23 @@ body {
   background-color: #ffffff;
 }
 
+/* Estilos para Flash Cards - Animaciones 3D */
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
 /* Contenedores */
 .container {
   max-width: 64rem;

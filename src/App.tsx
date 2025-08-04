@@ -6,6 +6,10 @@ import CreateQuestionPage from './pages/CreateQuestionPage';
 import ViewQuestionsPage from './pages/ViewQuestionsPage';
 import ImportPDFPage from './pages/ImportPDFPage';
 import TestAPIPage from './pages/TestAPIPage';
+import StudyPage from './pages/StudyPage';
+import StudyFlashCardsPage from './pages/StudyFlashCardsPage';
+import StudyTestPage from './pages/StudyTestPage';
+import StudyResultsPage from './pages/StudyResultsPage';
 import AlertModal from './components/AlertModal';
 import ConfirmModal from './components/ConfirmModal';
 import { useLocalStorage } from './hooks/useLocalStorage';
@@ -148,6 +152,22 @@ function App() {
                   showAlert={showAlert}
                 />
               } 
+            />
+            <Route 
+              path="/study" 
+              element={<StudyPage />} 
+            />
+            <Route 
+              path="/study/flashcards" 
+              element={<StudyFlashCardsPage />} 
+            />
+            <Route 
+              path="/study/test" 
+              element={<StudyTestPage />} 
+            />
+            <Route 
+              path="/study/results" 
+              element={<StudyResultsPage />} 
             />
           </Routes>
         </div>
