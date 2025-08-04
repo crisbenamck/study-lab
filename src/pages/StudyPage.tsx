@@ -371,26 +371,12 @@ const StudyPage: React.FC = () => {
                       </div>
                     </div>
                     <div className="space-y-3">
-                      <label 
+                      <div 
                         className={`flex items-center p-4 rounded-lg hover:bg-gray-50 transition-all cursor-pointer ${
                           showAnswersMode === 'immediate' ? 'bg-blue-50 ring-2 ring-blue-500' : 'bg-white border border-gray-200'
                         }`}
+                        onClick={() => setShowAnswersMode('immediate')}
                       >
-                        <input
-                          type="radio"
-                          name="showAnswers"
-                          value="immediate"
-                          checked={showAnswersMode === 'immediate'}
-                          onChange={() => setShowAnswersMode('immediate')}
-                          className="sr-only"
-                        />
-                        <div className={`w-4 h-4 rounded-full border-2 mr-3 flex items-center justify-center ${
-                          showAnswersMode === 'immediate' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
-                        }`}>
-                          {showAnswersMode === 'immediate' && (
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                          )}
-                        </div>
                         <div>
                           <span className="font-medium text-gray-700 block">
                             Inmediatamente
@@ -399,27 +385,13 @@ const StudyPage: React.FC = () => {
                             Después de cada pregunta
                           </p>
                         </div>
-                      </label>
-                      <label 
+                      </div>
+                      <div 
                         className={`flex items-center p-4 rounded-lg hover:bg-gray-50 transition-all cursor-pointer ${
                           showAnswersMode === 'end' ? 'bg-blue-50 ring-2 ring-blue-500' : 'bg-white border border-gray-200'
                         }`}
+                        onClick={() => setShowAnswersMode('end')}
                       >
-                        <input
-                          type="radio"
-                          name="showAnswers"
-                          value="end"
-                          checked={showAnswersMode === 'end'}
-                          onChange={() => setShowAnswersMode('end')}
-                          className="sr-only"
-                        />
-                        <div className={`w-4 h-4 rounded-full border-2 mr-3 flex items-center justify-center ${
-                          showAnswersMode === 'end' ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
-                        }`}>
-                          {showAnswersMode === 'end' && (
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                          )}
-                        </div>
                         <div>
                           <span className="font-medium text-gray-700 block">
                             Al finalizar
@@ -428,7 +400,7 @@ const StudyPage: React.FC = () => {
                             Todo el test completo
                           </p>
                         </div>
-                      </label>
+                      </div>
                     </div>
                   </div>
 
@@ -449,7 +421,9 @@ const StudyPage: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-3 p-4 bg-white border border-gray-200 rounded-lg">
+                    <div className={`flex items-center space-x-3 p-4 rounded-lg border transition-all ${
+                      timeLimit ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-500' : 'bg-white border-gray-200'
+                    }`}>
                       <input
                         type="text"
                         inputMode="numeric"
@@ -460,7 +434,7 @@ const StudyPage: React.FC = () => {
                           const value = e.target.value.replace(/[^0-9]/g, '');
                           setTimeLimit(value);
                         }}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                        className="flex-1 px-3 py-2 border-0 bg-white rounded-md text-sm text-gray-900 focus:outline-none transition-all"
                         style={{ appearance: 'textfield' }}
                       />
                       <span className="text-gray-600 text-sm font-medium whitespace-nowrap">minutos</span>
