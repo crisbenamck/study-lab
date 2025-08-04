@@ -184,15 +184,7 @@ const StudyPage: React.FC = () => {
                   }`}
                   onClick={() => setMode('flashcards')}
                 >
-                  <div className="flex items-center mb-2">
-                    <input
-                      type="radio"
-                      name="mode"
-                      value="flashcards"
-                      checked={mode === 'flashcards'}
-                      onChange={(e) => setMode(e.target.value as StudyMode)}
-                      className="mr-2"
-                    />
+                  <div className="mb-2">
                     <h3 className="font-semibold text-gray-800">Flash Cards</h3>
                   </div>
                   <p className="text-sm text-gray-600">
@@ -208,15 +200,7 @@ const StudyPage: React.FC = () => {
                   }`}
                   onClick={() => setMode('test')}
                 >
-                  <div className="flex items-center mb-2">
-                    <input
-                      type="radio"
-                      name="mode"
-                      value="test"
-                      checked={mode === 'test'}
-                      onChange={(e) => setMode(e.target.value as StudyMode)}
-                      className="mr-2"
-                    />
+                  <div className="mb-2">
                     <h3 className="font-semibold text-gray-800">Test de Práctica</h3>
                   </div>
                   <p className="text-sm text-gray-600">
@@ -235,14 +219,6 @@ const StudyPage: React.FC = () => {
                 <div className={`flex items-center p-4 border-2 rounded-lg hover:border-gray-300 transition-colors cursor-pointer ${
                   scope === 'all' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
                 }`} onClick={() => setScope('all')}>
-                  <input
-                    type="radio"
-                    name="scope"
-                    value="all"
-                    checked={scope === 'all'}
-                    onChange={(e) => setScope(e.target.value as StudyScope)}
-                    className="mr-3"
-                  />
                   <div>
                     <span className="font-medium text-gray-700">
                       Todas las preguntas
@@ -256,16 +232,22 @@ const StudyPage: React.FC = () => {
                 <div className={`flex items-center p-4 border-2 rounded-lg hover:border-gray-300 transition-colors cursor-pointer ${
                   scope === 'range' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
                 }`} onClick={() => setScope('range')}>
-                  <input
-                    type="radio"
-                    name="scope"
-                    value="range"
-                    checked={scope === 'range'}
-                    onChange={(e) => setScope(e.target.value as StudyScope)}
-                    className="mr-3"
-                  />
                   <div className="flex-1">
-                    <span className="font-medium text-gray-700 block mb-2">Rango específico</span>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-medium text-gray-700">Rango específico</span>
+                      {scope === 'range' && (
+                        <div className="relative group">
+                          <div className="text-blue-500 cursor-help">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                          <div className="absolute right-0 top-6 z-10 w-48 bg-gray-700 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" style={{ padding: '12px' }}>
+                            Ingresa el rango de preguntas a estudiar
+                          </div>
+                        </div>
+                      )}
+                    </div>
                     <div className="flex items-center space-x-2 mb-2">
                       <input
                         type="text"
@@ -307,11 +289,6 @@ const StudyPage: React.FC = () => {
                         style={{ appearance: 'textfield' }}
                       />
                     </div>
-                    {scope === 'range' && (
-                      <p className="text-xs text-blue-600 mb-1">
-                        💡 Ingresa el rango de preguntas a estudiar
-                      </p>
-                    )}
                     {rangeError && scope === 'range' && (
                       <p className="text-xs text-red-500 mt-1">{rangeError}</p>
                     )}
@@ -321,16 +298,22 @@ const StudyPage: React.FC = () => {
                 <div className={`flex items-center p-4 border-2 rounded-lg hover:border-gray-300 transition-colors cursor-pointer ${
                   scope === 'random' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
                 }`} onClick={() => setScope('random')}>
-                  <input
-                    type="radio"
-                    name="scope"
-                    value="random"
-                    checked={scope === 'random'}
-                    onChange={(e) => setScope(e.target.value as StudyScope)}
-                    className="mr-3"
-                  />
                   <div className="flex-1">
-                    <span className="font-medium text-gray-700 block mb-2">Preguntas aleatorias</span>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-medium text-gray-700">Preguntas aleatorias</span>
+                      {scope === 'random' && (
+                        <div className="relative group">
+                          <div className="text-blue-500 cursor-help">
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                            </svg>
+                          </div>
+                          <div className="absolute right-0 top-6 z-10 w-56 bg-gray-700 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" style={{ padding: '12px' }}>
+                            Selecciona cuántas preguntas aleatorias quieres estudiar
+                          </div>
+                        </div>
+                      )}
+                    </div>
                     <div className="flex items-center space-x-2">
                       <input
                         type="text"
@@ -343,24 +326,21 @@ const StudyPage: React.FC = () => {
                           setRandomCount(value);
                         }}
                         disabled={scope !== 'random'}
-                        className={`w-20 px-2 py-1 border rounded text-sm transition-colors ${
+                        className={`flex-1 px-2 py-1 border rounded text-sm transition-colors ${
                           scope === 'random'
                             ? 'border-blue-400 bg-white text-gray-900 focus:border-blue-500 focus:ring-1 focus:ring-blue-200'
                             : 'border-gray-200 bg-gray-50 text-gray-400 cursor-not-allowed'
                         }`}
-                        style={{ appearance: 'textfield' }}
+                        style={{ 
+                          appearance: 'textfield'
+                        }}
                       />
-                      <span className={`text-sm transition-colors ${
-                        scope === 'random' ? 'text-gray-700' : 'text-gray-400'
+                      <span className={`text-sm whitespace-nowrap transition-colors ${
+                        scope === 'random' ? 'text-gray-600' : 'text-gray-400'
                       }`}>
                         (máx. {questions.length})
                       </span>
                     </div>
-                    {scope === 'random' && (
-                      <p className="text-xs text-blue-600 mt-2">
-                        💡 Selecciona cuántas preguntas aleatorias quieres estudiar
-                      </p>
-                    )}
                   </div>
                 </div>
               </div>
@@ -372,19 +352,28 @@ const StudyPage: React.FC = () => {
                 <h3 className="text-lg font-medium text-gray-800 mb-6">Configuración del Test</h3>
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-4">
-                      Mostrar Respuestas
-                    </label>
+                    <div className="flex items-center justify-between mb-4">
+                      <label className="text-sm font-medium text-gray-700">
+                        Mostrar Respuestas
+                      </label>
+                      <div className="relative group">
+                        <div className="text-blue-500 cursor-help">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="absolute right-0 top-6 z-10 w-64 bg-gray-700 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" style={{ padding: '12px' }}>
+                          Elige cuándo quieres ver las respuestas correctas durante el test
+                        </div>
+                      </div>
+                    </div>
                     <div className="space-y-3">
-                      <div className="flex items-center p-3 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors">
-                        <input
-                          type="radio"
-                          name="showAnswers"
-                          value="immediate"
-                          checked={showAnswersMode === 'immediate'}
-                          onChange={(e) => setShowAnswersMode(e.target.value as ShowAnswersMode)}
-                          className="mr-3"
-                        />
+                      <div 
+                        className={`flex items-center p-3 border-2 rounded-lg hover:border-gray-300 transition-colors cursor-pointer ${
+                          showAnswersMode === 'immediate' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                        }`}
+                        onClick={() => setShowAnswersMode('immediate')}
+                      >
                         <div>
                           <span className="font-medium text-gray-700 block">
                             Inmediatamente
@@ -394,15 +383,12 @@ const StudyPage: React.FC = () => {
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center p-3 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors">
-                        <input
-                          type="radio"
-                          name="showAnswers"
-                          value="end"
-                          checked={showAnswersMode === 'end'}
-                          onChange={(e) => setShowAnswersMode(e.target.value as ShowAnswersMode)}
-                          className="mr-3"
-                        />
+                      <div 
+                        className={`flex items-center p-3 border-2 rounded-lg hover:border-gray-300 transition-colors cursor-pointer ${
+                          showAnswersMode === 'end' ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                        }`}
+                        onClick={() => setShowAnswersMode('end')}
+                      >
                         <div>
                           <span className="font-medium text-gray-700 block">
                             Al finalizar
@@ -416,9 +402,21 @@ const StudyPage: React.FC = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-4">
-                      Límite de Tiempo (opcional)
-                    </label>
+                    <div className="flex items-center justify-between mb-4">
+                      <label className="text-sm font-medium text-gray-700">
+                        Límite de Tiempo (opcional)
+                      </label>
+                      <div className="relative group">
+                        <div className="text-blue-500 cursor-help">
+                          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="absolute right-0 top-6 z-10 w-64 bg-gray-700 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" style={{ padding: '12px' }}>
+                          Establece un tiempo límite para completar el test. Deja vacío para tiempo ilimitado
+                        </div>
+                      </div>
+                    </div>
                     <div className="p-4 border border-gray-200 rounded-lg">
                       <div className="flex items-center space-x-3 mb-2">
                         <input
@@ -436,9 +434,6 @@ const StudyPage: React.FC = () => {
                         />
                         <span className="text-gray-500 text-sm font-medium">minutos</span>
                       </div>
-                      <p className="text-xs text-gray-500">
-                        Deja vacío para tiempo ilimitado
-                      </p>
                     </div>
                   </div>
                 </div>
