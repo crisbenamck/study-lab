@@ -3,13 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
-import { useConfirm } from '../hooks/useConfirm';
 
-const StudyTestPage: React.FC = () => {
+interface StudyTestPageProps {
+  showConfirm: (message: string, onConfirm: () => void) => void;
+}
+
+const StudyTestPage: React.FC<StudyTestPageProps> = ({ showConfirm }) => {
   const navigate = useNavigate();
   const { questions } = useLocalStorage();
   const { currentSession, completeSession, updateCurrentSession, isLoaded } = useStudyStorage();
-  const { showConfirm } = useConfirm();
 
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);

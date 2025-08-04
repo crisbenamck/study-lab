@@ -159,11 +159,11 @@ function App() {
             />
             <Route 
               path="/study/flashcards" 
-              element={<StudyFlashCardsPage />} 
+              element={<StudyFlashCardsPage showConfirm={showConfirm} />} 
             />
             <Route 
               path="/study/test" 
-              element={<StudyTestPage />} 
+              element={<StudyTestPage showConfirm={showConfirm} />} 
             />
             <Route 
               path="/study/results" 

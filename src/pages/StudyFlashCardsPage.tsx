@@ -3,14 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
-import { useConfirm } from '../hooks/useConfirm';
 import FlashCard from '../components/study/FlashCard';
 
-const StudyFlashCardsPage: React.FC = () => {
+interface StudyFlashCardsPageProps {
+  showConfirm: (message: string, onConfirm: () => void) => void;
+}
+
+const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }) => {
   const navigate = useNavigate();
   const { questions } = useLocalStorage();
   const { currentSession, completeSession, abandonSession, isLoaded } = useStudyStorage();
-  const { showConfirm } = useConfirm();
   const [hasCheckedSession, setHasCheckedSession] = useState(false);
 
   const {
@@ -133,13 +135,13 @@ const StudyFlashCardsPage: React.FC = () => {
               </p>
             </div>
             
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-4">
               <div className="text-sm text-gray-600">
                 {progress.current} / {progress.total}
               </div>
               <button
                 onClick={handleExit}
-                className="px-3 py-1 text-gray-600 hover:text-gray-800 text-sm border border-gray-300 rounded hover:border-gray-400 transition-colors"
+                className="px-4 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 text-sm border border-red-300 rounded-lg hover:border-red-400 transition-colors font-medium"
               >
                 Salir
               </button>
@@ -176,14 +178,6 @@ const StudyFlashCardsPage: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
-
-      {/* Ayuda flotante */}
-      <div className="fixed bottom-4 right-4 bg-blue-600 text-white p-3 rounded-lg shadow-lg max-w-xs">
-        <div className="text-sm">
-          <p className="font-medium mb-1">💡 Consejo:</p>
-          <p>Haz click en la tarjeta para voltearla y ver las respuestas.</p>
-        </div>
       </div>
     </div>
   );
