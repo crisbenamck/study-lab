@@ -24,14 +24,14 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      <div className="container py-4">
+      <div className="container py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className="mr-16">
               <img 
                 src="/icons/study-lab-azul-nocturno-optimized.svg" 
                 alt="Study Lab" 
-                className="w-20 h-20 drop-shadow-md"
+                className="w-16 h-16 drop-shadow-md"
               />
             </div>
             <div style={{ marginLeft: '16px' }}>
