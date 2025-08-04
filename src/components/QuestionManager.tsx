@@ -202,7 +202,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
         <div className="flex items-center space-x-3">
           <button
             onClick={handleDownload}
-            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
             disabled={questions.length === 0}
             style={{
               backgroundColor: questions.length > 0 ? '#2563eb' : '#e5e7eb',
@@ -233,7 +233,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
 
           <button
             onClick={handleClearAll}
-            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
             disabled={questions.length === 0}
             style={{
               backgroundColor: questions.length > 0 ? '#ef4444' : '#e5e7eb',
@@ -278,14 +278,14 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
               )}
               <button
                 onClick={() => handleEditQuestion(question)}
-                className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
+                className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
                 title="Editar pregunta"
                 style={{
                   backgroundColor: '#2563eb',
                   color: '#ffffff',
                   border: '1px solid #2563eb',
                   boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                  minWidth: '120px'
+                  minWidth: '90px'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#1d4ed8';
@@ -304,14 +304,14 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
               </button>
               <button
                 onClick={() => handleRemoveQuestion(question.question_number)}
-                className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
+                className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
                 title="Eliminar pregunta"
                 style={{
                   backgroundColor: '#ef4444',
                   color: '#ffffff',
                   border: '1px solid #ef4444',
                   boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                  minWidth: '120px'
+                  minWidth: '90px'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = '#dc2626';

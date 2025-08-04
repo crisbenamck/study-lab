@@ -183,7 +183,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               <button
                 type="button"
                 onClick={handleClearForm}
-                className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
                 style={{
                   backgroundColor: '#ef4444',
                   color: '#ffffff',
@@ -213,7 +213,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             <button
               type="button"
               onClick={handleClearForm}
-              className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
               style={{
                 backgroundColor: '#ef4444',
                 color: '#ffffff',
