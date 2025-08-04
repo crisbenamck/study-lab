@@ -43,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
             </div>
           </div>
           
-          <nav className="flex items-center space-x-8">
+          <nav className="flex items-center gap-6">
             {navItems.map((item) => {
               const isActive = location.pathname === item.path;
               const isQuestionsPage = item.path === '/questions';
