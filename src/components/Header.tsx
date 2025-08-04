@@ -53,7 +53,10 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
           <nav className="flex items-center gap-6">
             {/* Enlaces de navegación normales */}
             {navItems.map((item) => {
-              const isActive = location.pathname === item.path;
+              // Para el menú "Estudiar", verificar si la ruta actual comienza con "/study"
+              const isActive = item.path === '/study' 
+                ? location.pathname.startsWith('/study')
+                : location.pathname === item.path;
               
               return (
                 <div key={item.path} className="relative inline-block">
