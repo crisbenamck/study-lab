@@ -1,4 +1,5 @@
 import React from 'react';
+import { InfoIcon } from '../icons';
 import type { StudyScope } from '../../types/StudySession';
 
 interface QuestionScopeSelectorProps {
@@ -66,9 +67,7 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
               <h3 style={{ fontSize: 'var(--font-size-base)', fontWeight: 'var(--font-weight-semibold)' }}>
                 Rango específico
               </h3>
-              <svg className="w-4 h-4 text-blue-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <InfoIcon className="text-blue-500 mt-0.5" size="sm" />
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-xs)' }}>
               Ingresa el rango de preguntas a estudiar
@@ -115,9 +114,7 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
               <h3 style={{ fontSize: 'var(--font-size-base)', fontWeight: 'var(--font-weight-semibold)' }}>
                 Preguntas aleatorias
               </h3>
-              <svg className="w-4 h-4 text-blue-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <InfoIcon className="text-blue-500 mt-0.5" size="sm" />
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-xs)' }}>
               Selecciona cuántas preguntas aleatorias quieres estudiar
