@@ -5,7 +5,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useTheme } from '../hooks/useTheme';
 import type { Question } from '../types/Question';
 import Button from '../components/common/Button';
-import { SunIcon, MoonIcon, BookIcon, RefreshIcon, ClipboardIcon, PlusIcon, CloseIcon } from '../components/icons';
+import { SunIcon, MoonIcon, BookIcon, RefreshIcon, ClipboardIcon, PlusIcon, CloseIcon } from '../icons';
 
 const StudyResultsPage: React.FC = () => {
   const navigate = useNavigate();

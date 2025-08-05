@@ -2,7 +2,7 @@ import React from 'react';
 import type { Question } from '../types/Question';
 import { formatQuestionNumber } from '../utils/downloadUtils';
 import Button from './common/Button';
-import { TrashIcon } from './icons';
+import { TrashIcon } from '../icons';
 
 interface QuestionListProps {
   questions: Question[];

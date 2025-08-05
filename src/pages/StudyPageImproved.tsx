@@ -5,7 +5,7 @@ import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useAlert } from '../hooks/useAlert';
 import Layout from '../components/Layout';
 import Button from '../components/common/Button';
-import { PlusIcon, UploadIcon, TargetIcon } from '../components/icons';
+import { PlusIcon, UploadIcon, TargetIcon } from '../icons';
 import type { StudySessionConfig, StudyMode, StudyScope, ShowAnswersMode } from '../types/StudySession';
 
 const StudyPageImproved: React.FC = () => {

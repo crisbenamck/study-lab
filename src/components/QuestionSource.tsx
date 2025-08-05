@@ -1,5 +1,5 @@
 import React from 'react';
-import { LinkIcon } from './icons';
+import { LinkIcon } from '../icons';
 
 interface QuestionSourceProps {
   link: string;

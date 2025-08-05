@@ -9,7 +9,7 @@ import {
   TrashIcon,
   CheckIcon,
   CloseIcon
-} from './icons';
+} from '../icons';
 
 interface QuestionCardProps {
   question: Question;

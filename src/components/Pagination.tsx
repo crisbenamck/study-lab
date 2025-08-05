@@ -5,7 +5,7 @@ import {
   ChevronRightIcon,
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon
-} from './icons';
+} from '../icons';
 
 interface PaginationProps {
   currentPage: number;

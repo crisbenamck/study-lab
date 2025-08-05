@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import type { QuestionFormData } from '../types/Question';
 import Button from './common/Button';
-import { SaveIcon, CloseIcon, CheckIcon, PlusIcon, MinusIcon, EraserIcon } from './icons';
+import { SaveIcon, CloseIcon, CheckIcon, PlusIcon, MinusIcon, EraserIcon } from '../icons';
 
 interface QuestionFormProps {
   onSubmit: (data: QuestionFormData) => void;

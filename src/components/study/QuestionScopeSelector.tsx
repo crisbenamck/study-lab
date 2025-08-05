@@ -1,5 +1,5 @@
 import React from 'react';
-import { InfoIcon } from '../icons';
+import { InfoIcon } from '../../icons';
 import type { StudyScope } from '../../types/StudySession';
 
 interface QuestionScopeSelectorProps {

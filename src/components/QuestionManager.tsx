@@ -16,7 +16,7 @@ import {
   PlusIcon,
   UploadIcon,
   EditIcon
-} from './icons';
+} from '../icons';
 
 interface QuestionManagerProps {
   questions: Question[];

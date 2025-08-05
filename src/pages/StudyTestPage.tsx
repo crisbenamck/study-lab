@@ -4,7 +4,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
 import Button from '../components/common/Button';
-import { CloseIcon, ArrowLeftIcon, ArrowRightIcon, FileTextIcon, ClipboardIcon } from '../components/icons';
+import { CloseIcon, ArrowLeftIcon, ArrowRightIcon, FileTextIcon, ClipboardIcon } from '../icons';
 
 const StudyTestPage: React.FC = () => {
   const navigate = useNavigate();

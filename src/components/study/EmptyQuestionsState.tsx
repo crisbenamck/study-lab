@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../common/Button';
-import { PlusIcon, UploadIcon } from '../icons';
+import { PlusIcon, UploadIcon } from '../../icons';
 
 const EmptyQuestionsState: React.FC = () => {
   const navigate = useNavigate();

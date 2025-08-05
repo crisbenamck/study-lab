@@ -5,7 +5,7 @@ import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
 import FlashCard from '../components/study/FlashCard';
 import Button from '../components/common/Button';
-import { CloseIcon, CheckIcon } from '../components/icons';
+import { CloseIcon, CheckIcon } from '../icons';
 
 interface StudyFlashCardsPageProps {
   showConfirm: (message: string, onConfirm: () => void) => void;

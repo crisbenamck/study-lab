@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../common/Button';
-import { TargetIcon } from '../icons';
+import { TargetIcon } from '../../icons';
 import type { StudyMode } from '../../types/StudySession';
 
 interface StartStudyButtonProps {
