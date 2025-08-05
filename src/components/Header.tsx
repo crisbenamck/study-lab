@@ -27,24 +27,22 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
 
   return (
     <div 
-      className={`header fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out shadow-lg header-gradient ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out shadow-lg bg-gradient-to-r from-blue-50 via-white to-blue-50 border-b border-blue-100 ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      <div className="container py-3">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <div className="mr-16">
+            <div className="mr-4">
               <img 
                 src="/icons/study-lab-azul-nocturno-optimized.svg" 
                 alt="Study Lab" 
                 className="w-16 h-16 drop-shadow-md"
               />
             </div>
-            <div style={{ marginLeft: '16px' }}>
-              <h1 className="text-3xl font-bold text-slate-800" style={{ 
-                textShadow: '0 1px 2px rgba(255, 255, 255, 0.3)'
-              }}>
+            <div className="ml-4">
+              <h1 className="text-3xl font-bold text-slate-800 drop-shadow-sm">
                 Study Lab
               </h1>
             </div>
@@ -62,8 +60,10 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
                 <div key={item.path} className="relative inline-block">
                   <Link
                     to={item.path}
-                    className={`nav-link py-2 px-4 text-sm font-medium rounded-md inline-block ${
-                      isActive ? 'nav-link-active' : 'nav-link-inactive'
+                    className={`py-2 px-4 text-sm font-medium rounded-md inline-block transition-all duration-200 ${
+                      isActive 
+                        ? 'bg-blue-600 text-white shadow-md hover:bg-blue-700' 
+                        : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
                     }`}
                   >
                     {item.label}
@@ -73,16 +73,18 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
             })}
 
             {/* Dropdown de Gestor de Preguntas */}
-            <div className="relative group dropdown-container">
+            <div className="relative group">
               <div className="relative inline-block">
                 <div
-                  className={`nav-link py-2 px-4 text-sm font-medium rounded-md cursor-pointer ${
-                    isQuestionManagerActive ? 'nav-link-active' : 'nav-link-inactive'
+                  className={`py-2 px-4 text-sm font-medium rounded-md cursor-pointer transition-all duration-200 flex items-center ${
+                    isQuestionManagerActive 
+                      ? 'bg-blue-600 text-white shadow-md hover:bg-blue-700' 
+                      : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
                   }`}
                 >
                   Gestor de Preguntas
                   <svg 
-                    className="w-4 h-4 ml-1 inline-block transform transition-transform group-hover:rotate-180" 
+                    className="w-4 h-4 ml-1 transform transition-transform group-hover:rotate-180" 
                     fill="none" 
                     stroke="currentColor" 
                     viewBox="0 0 24 24"
@@ -93,14 +95,14 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
                 
                 {/* Badge de notificación para Ver Preguntas */}
                 {questions.length > 0 && (
-                  <div className="badge-notification">
+                  <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold shadow-lg">
                     {questions.length}
                   </div>
                 )}
               </div>
 
               {/* Dropdown Menu */}
-              <div className="dropdown-menu absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50">
+              <div className="absolute right-0 mt-1 w-48 bg-white rounded-md shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                 {questionManagerItems.map((item) => {
                   const isActive = location.pathname === item.path;
                   const isQuestionsPage = item.path === '/questions';
