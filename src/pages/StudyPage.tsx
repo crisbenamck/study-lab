@@ -168,6 +168,16 @@ const StudyPage: React.FC = () => {
     <Layout>
       <div className="py-16">
         <div className="max-w-4xl mx-auto px-4">
+          {/* Título y descripción */}
+          <div className="mb-12 text-left">
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">
+              Configurar Sesión de Estudio
+            </h1>
+            <p className="text-lg text-gray-600 max-w-3xl">
+              Personaliza tu experiencia de estudio seleccionando el modo de práctica, 
+              el alcance de las preguntas y las configuraciones que mejor se adapten a tus necesidades.
+            </p>
+          </div>
           
           <StudyModeSelector 
             mode={mode} 
