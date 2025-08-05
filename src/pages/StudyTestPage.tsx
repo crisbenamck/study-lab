@@ -13,6 +13,7 @@ const StudyTestPage: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
   const [startTime, setStartTime] = useState<Date>(new Date());
   const [showAnswers, setShowAnswers] = useState(false);
+  const [showExplanation, setShowExplanation] = useState(false);
   const [hasCheckedSession, setHasCheckedSession] = useState(false);
 
   const {
@@ -84,6 +85,7 @@ const StudyTestPage: React.FC = () => {
       if (sessionQuestion) {
         setSelectedAnswers(sessionQuestion.selectedOptions);
         setShowAnswers(sessionQuestion.answered && currentSession.config.showAnswersMode === 'immediate');
+        setShowExplanation(false); // Ocultar explicación al cambiar de pregunta
       }
     }
   }, [currentQuestionIndex, currentSession]);
@@ -162,6 +164,7 @@ const StudyTestPage: React.FC = () => {
     if (canGoNext()) {
       setSelectedAnswers([]);
       setShowAnswers(false);
+      setShowExplanation(false);
       setStartTime(new Date());
       goToNext();
     } else {
@@ -177,6 +180,7 @@ const StudyTestPage: React.FC = () => {
   const handlePrevious = () => {
     if (canGoPrevious()) {
       setShowAnswers(false);
+      setShowExplanation(false);
       goToPrevious();
     }
   };
@@ -207,6 +211,7 @@ const StudyTestPage: React.FC = () => {
     if (canGoNext()) {
       setSelectedAnswers([]);
       setShowAnswers(false);
+      setShowExplanation(false);
       setStartTime(new Date());
       goToNext();
     } else {
@@ -358,18 +363,33 @@ const StudyTestPage: React.FC = () => {
 
         {/* Controles */}
         <div className="bg-white rounded-lg shadow-lg p-6">
-          {/* Botón de marcar para revisión */}
+          {/* Botón de marcar para revisión y explicación */}
           <div className="mb-4 pb-4 border-b border-gray-200">
-            <button
-              onClick={handleMarkForReview}
-              className={`px-3 py-1 rounded-md text-sm transition-colors ${
-                currentSessionQuestion?.markedForReview
-                  ? 'bg-yellow-100 text-yellow-800 border border-yellow-300'
-                  : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
-              }`}
-            >
-              {currentSessionQuestion?.markedForReview ? '🔖 Marcada para revisión' : '🔖 Marcar para revisión'}
-            </button>
+            <div className="flex space-x-3">
+              <button
+                onClick={handleMarkForReview}
+                className={`px-3 py-1 rounded-md text-sm transition-colors ${
+                  currentSessionQuestion?.markedForReview
+                    ? 'bg-yellow-100 text-yellow-800 border border-yellow-300'
+                    : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
+                }`}
+              >
+                {currentSessionQuestion?.markedForReview ? '🔖 Marcada para revisión' : '🔖 Marcar para revisión'}
+              </button>
+              
+              {currentQuestion.explanation && (
+                <button
+                  onClick={() => setShowExplanation(!showExplanation)}
+                  className={`px-3 py-1 rounded-md text-sm transition-colors ${
+                    showExplanation
+                      ? 'bg-blue-100 text-blue-800 border border-blue-300'
+                      : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
+                  }`}
+                >
+                  {showExplanation ? '📖 Ocultar explicación' : '📖 Ver explicación'}
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="flex justify-between items-center">
@@ -399,9 +419,33 @@ const StudyTestPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Explicación (solo si se muestran respuestas) */}
-        {showAnswers && currentQuestion.explanation && (
-          <div className="bg-white rounded-lg shadow-lg p-6">
+        {/* Explicación (solo cuando el usuario la solicite) */}
+        {showExplanation && currentQuestion.explanation && (
+          <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
+            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <h4 className="font-semibold text-blue-800 mb-2">Explicación:</h4>
+              <p className="text-blue-700">{currentQuestion.explanation}</p>
+            </div>
+
+            {/* Link de referencia */}
+            {currentQuestion.link && (
+              <div className="mt-4">
+                <a
+                  href={currentQuestion.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-800 underline text-sm"
+                >
+                  📚 Ver referencia
+                </a>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Explicación con respuestas (solo si se muestran respuestas automáticamente) */}
+        {showAnswers && !showExplanation && currentQuestion.explanation && (
+          <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <h4 className="font-semibold text-blue-800 mb-2">Explicación:</h4>
               <p className="text-blue-700">{currentQuestion.explanation}</p>
