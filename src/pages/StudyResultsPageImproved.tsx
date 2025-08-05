@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useTheme } from '../hooks/useTheme';
 import type { Question } from '../types/Question';
 
 const StudyResultsPage: React.FC = () => {
   const navigate = useNavigate();
   const { sessions } = useStudyStorage();
   const { questions } = useLocalStorage();
+  const { theme, toggleTheme } = useTheme();
   const [selectedQuestionId, setSelectedQuestionId] = useState<number | null>(null);
 
   // Obtener la última sesión completada
@@ -264,7 +266,14 @@ const StudyResultsPage: React.FC = () => {
             {/* HEADER CON SCORE */}
             <div className="text-center section-spacing">
               <div className="mb-6">
-                <div className="mb-4">
+                <div className="inline-flex items-center gap-4 mb-4">
+                  <button
+                    onClick={toggleTheme}
+                    className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    title={`Cambiar a modo ${theme === 'light' ? 'oscuro' : 'claro'}`}
+                  >
+                    {theme === 'light' ? '🌙' : '☀️'}
+                  </button>
                   <h1 style={{ fontSize: 'var(--font-size-4xl)', fontWeight: 'var(--font-weight-bold)' }}>
                     Sesión Completada
                   </h1>

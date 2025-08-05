@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Eye, Zap, AlertCircle } from 'lucide-react';
+import { Send, Eye, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 interface RequestInfo {
@@ -28,48 +28,15 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
   const [error, setError] = useState('');
   const [requestInfo, setRequestInfo] = useState<RequestInfo | null>(null);
   const [model, setModel] = useState('gemini-2.5-flash');
-  // const [availableModels, setAvailableModels] = useState<string[]>([]);
+  const [isDocumentationExpanded, setIsDocumentationExpanded] = useState(false);
 
   const testModels = [
     'gemini-2.5-flash',
     'gemini-2.5-pro', 
     'gemini-2.5-flash-lite',
-    'gemini-2.0-flash',
-    'gemini-2.0-flash-lite',
     'gemini-1.5-flash',
-    'gemini-1.5-flash-8b',
     'gemini-1.5-pro'
   ];
-
-  // const listAvailableModels = async () => {
-  //   if (!geminiApiKey.trim()) {
-  //     setError('Por favor ingresa tu API key para listar modelos');
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models', {
-  //       headers: {
-  //         'X-goog-api-key': geminiApiKey
-  //       }
-  //     });
-
-  //     if (response.ok) {
-  //       const data = await response.json();
-  //       const modelNames = data.models
-  //         ?.filter((model: { supportedGenerationMethods?: string[] }) => 
-  //           model.supportedGenerationMethods?.includes('generateContent'))
-  //         ?.map((model: { name: string }) => model.name.replace('models/', '')) || [];
-        
-  //       setAvailableModels(modelNames);
-  //       console.log('📋 Modelos disponibles:', modelNames);
-  //     } else {
-  //       console.error('Error listando modelos:', response.status, response.statusText);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error conectando para listar modelos:', error);
-  //   }
-  // };
 
   const samplePrompts = [
     'Explain how AI works in a few words',
@@ -80,12 +47,12 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
 
   const testGeminiDirect = async () => {
     if (!geminiApiKey.trim()) {
-      setError('Por favor ingresa tu API key');
+      setError('Por favor ingresa tu API key para continuar');
       return;
     }
 
     if (!prompt.trim()) {
-      setError('Por favor ingresa un prompt');
+      setError('Por favor ingresa un prompt para probar');
       return;
     }
 
@@ -97,20 +64,13 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
     const startTime = Date.now();
 
     try {
-      console.log('🧪 Testing Gemini Direct API...');
-      console.log('📡 Modelo:', model);
-      console.log('📝 Prompt:', prompt);
-
       const genAI = new GoogleGenerativeAI(geminiApiKey);
-      const aiModel = genAI.getGenerativeModel({ model });
-
-      const result = await aiModel.generateContent(prompt);
-      const responseData = await result.response;
-      const responseText = responseData.text();
-
-      const endTime = Date.now();
-      const duration = endTime - startTime;
-
+      const model_instance = genAI.getGenerativeModel({ model });
+      const result = await model_instance.generateContent(prompt);
+      
+      const duration = Date.now() - startTime;
+      const responseText = result.response.text();
+      
       setResponse(responseText);
       setRequestInfo({
         model,
@@ -120,14 +80,14 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
         success: true
       });
 
-      console.log('✅ Respuesta recibida:', responseText);
-      console.log('⏱️ Duración:', duration + 'ms');
+      showAlert('Respuesta generada exitosamente', {
+        title: '✅ Éxito',
+        type: 'success',
+        buttonText: 'Perfecto'
+      });
 
-    } catch (err: unknown) {
-      const endTime = Date.now();
-      const duration = endTime - startTime;
-      
-      console.error('❌ Error en test:', err);
+    } catch (err) {
+      const duration = Date.now() - startTime;
       
       const errorMsg = err instanceof Error ? err.message : 'Error desconocido';
       setError(errorMsg);
@@ -155,7 +115,6 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
   }'`;
 
     navigator.clipboard.writeText(curlCommand);
-    console.log('📋 Comando cURL copiado al portapapeles');
     showAlert('Comando cURL copiado al portapapeles', {
       title: 'Copiado',
       type: 'success',
@@ -164,199 +123,402 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-          <Zap className="w-6 h-6 text-yellow-500" />
-          Test de API Gemini
-        </h2>
+    <div className="max-w-4xl mx-auto px-6 py-8 space-y-12">
+      {/* Configuración de API */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <label 
+            htmlFor="api-key-input"
+            className="block text-sm font-semibold mb-4"
+            style={{ color: 'var(--secondary-900)' }}
+          >
+            API Key
+          </label>
+          <input
+            id="api-key-input"
+            type="password"
+            value={geminiApiKey}
+            onChange={(e) => saveGeminiApiKey(e.target.value)}
+            placeholder="Ingresa tu API key de Google AI Studio"
+            className="w-full px-4 py-4 rounded-lg border-2 focus:outline-none focus:border-blue-500 transition-all"
+            style={{
+              backgroundColor: 'white',
+              borderColor: geminiApiKey.trim() ? 'var(--success-400)' : 'var(--secondary-300)',
+              color: 'var(--secondary-900)',
+              fontSize: '14px',
+              boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)'
+            }}
+          />
+          <p 
+            className="mt-3 text-xs"
+            style={{ color: 'var(--secondary-600)' }}
+          >
+            Obtén tu clave en Google AI Studio
+          </p>
+        </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <label className="block text-sm font-medium mb-2">API Key</label>
-            <input
-              type="password"
-              value={geminiApiKey}
-              onChange={(e) => saveGeminiApiKey(e.target.value)}
-              placeholder="Ingresa tu API key de Google AI Studio"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-            />
+        <div>
+          <label 
+            htmlFor="model-select"
+            className="block text-sm font-semibold mb-4"
+            style={{ color: 'var(--secondary-900)' }}
+          >
+            Modelo
+          </label>
+          <select
+            id="model-select"
+            value={model}
+            onChange={(e) => setModel(e.target.value)}
+            className="w-full p-4 rounded-lg border-2 focus:outline-none focus:border-blue-500 transition-all appearance-none"
+            style={{
+              backgroundColor: 'white',
+              borderColor: 'var(--secondary-300)',
+              color: 'var(--secondary-900)',
+              fontSize: '14px',
+              boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)',
+              backgroundImage: 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")',
+              backgroundPosition: 'right 0.75rem center',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: '1.25em 1.25em',
+              paddingRight: '2.5rem'
+            }}
+          >
+            {testModels.map(m => (
+              <option key={m} value={m}>{m}</option>
+            ))}
+          </select>
+          <p 
+            className="mt-3 text-xs"
+            style={{ color: 'var(--secondary-600)' }}
+          >
+            Selecciona el modelo a usar
+          </p>
+        </div>
+      </div>
+
+      {/* Prompt */}
+      <div className="space-y-6">
+        <div>
+          <label 
+            htmlFor="prompt-textarea"
+            className="block text-sm font-semibold mb-4"
+            style={{ color: 'var(--secondary-900)' }}
+          >
+            Prompt de prueba
+          </label>
+          
+          <div className="mb-6">
+            <p 
+              className="text-sm font-medium mb-4"
+              style={{ color: 'var(--secondary-900)' }}
+            >
+              Prueba con estos ejemplos:
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {samplePrompts.map((sample, index) => (
+                <button
+                  key={index}
+                  onClick={() => setPrompt(sample)}
+                  className="text-sm px-4 py-3 rounded-lg border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
+                  style={{
+                    backgroundColor: 'white',
+                    borderColor: 'var(--secondary-300)',
+                    color: 'var(--secondary-900)'
+                  }}
+                  onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.currentTarget.style.borderColor = 'var(--primary-400)';
+                    e.currentTarget.style.backgroundColor = 'var(--primary-50)';
+                  }}
+                  onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.currentTarget.style.borderColor = 'var(--secondary-300)';
+                    e.currentTarget.style.backgroundColor = 'white';
+                  }}
+                >
+                  {sample.length > 50 ? `${sample.substring(0, 50)}...` : sample}
+                </button>
+              ))}
+            </div>
           </div>
           
-          <div>
-            <label className="block text-sm font-medium mb-2">Modelo</label>
-            <select
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              className="w-full p-2 border rounded-md"
-            >
-              {testModels.map(m => (
-                <option key={m} value={m}>{m}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Prompt de prueba</label>
-          <div className="mb-2 flex flex-wrap" style={{ gap: '8px' }}>
-            {samplePrompts.map((sample, index) => (
-              <button
-                key={index}
-                onClick={() => setPrompt(sample)}
-                className="text-xs px-3 py-2 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 mb-2"
-                style={{
-                  backgroundColor: '#e0e7ff',
-                  color: '#3730a3',
-                  border: '1px solid #c7d2fe',
-                  boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#c7d2fe';
-                  e.currentTarget.style.borderColor = '#a5b4fc';
-                  e.currentTarget.style.boxShadow = '0 2px 4px 0 rgba(0, 0, 0, 0.1)';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#e0e7ff';
-                  e.currentTarget.style.borderColor = '#c7d2fe';
-                  e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                📝 Ejemplo {index + 1}
-              </button>
-            ))}
-          </div>
           <textarea
+            id="prompt-textarea"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Escribe tu prompt aquí..."
-            className="w-full p-3 border rounded-md h-24"
+            placeholder="Escribe tu prompt aquí... Por ejemplo: 'Explica cómo funciona la IA'"
+            rows={6}
+            className="w-full px-4 py-4 rounded-lg border-2 focus:outline-none focus:border-blue-500 transition-all resize-y"
+            style={{
+              backgroundColor: 'white',
+              borderColor: prompt.trim() ? 'var(--success-400)' : 'var(--secondary-300)',
+              color: 'var(--secondary-900)',
+              fontSize: '14px',
+              lineHeight: '1.6',
+              boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)',
+              fontFamily: 'ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace'
+            }}
           />
-        </div>
-
-        <div className="flex mb-6" style={{ gap: '8px' }}>
-          <button
-            onClick={testGeminiDirect}
-            disabled={isLoading}
-            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
-            style={{
-              backgroundColor: isLoading ? '#e5e7eb' : '#2563eb',
-              color: isLoading ? '#9ca3af' : '#ffffff',
-              border: `1px solid ${isLoading ? '#e5e7eb' : '#2563eb'}`,
-              boxShadow: isLoading ? 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-              cursor: isLoading ? 'not-allowed' : 'pointer'
-            }}
-            onMouseEnter={(e) => {
-              if (!isLoading) {
-                e.currentTarget.style.backgroundColor = '#1d4ed8';
-                e.currentTarget.style.borderColor = '#1d4ed8';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isLoading) {
-                e.currentTarget.style.backgroundColor = '#2563eb';
-                e.currentTarget.style.borderColor = '#2563eb';
-                e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }
-            }}
+          <p 
+            className="mt-3 text-xs"
+            style={{ color: 'var(--secondary-600)' }}
           >
-            {isLoading ? (
-              <div className="w-4 h-4 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <Send className="w-4 h-4" />
-            )}
-            {isLoading ? 'Enviando...' : 'Enviar a Gemini'}
-          </button>
-          
-          <button
-            onClick={testWithCurl}
-            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
-            style={{
-              backgroundColor: '#374151',
-              color: '#ffffff',
-              border: '1px solid #374151',
-              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#1f2937';
-              e.currentTarget.style.borderColor = '#1f2937';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(55, 65, 81, 0.3)';
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#374151';
-              e.currentTarget.style.borderColor = '#374151';
-              e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            <Eye className="w-4 h-4" />
-            Copiar como cURL
-          </button>
+            Escribe una pregunta o instrucción para Gemini
+          </p>
         </div>
+      </div>
 
-        {requestInfo && (
-          <div className="mb-4 p-3 bg-gray-50 rounded-md">
-            <h4 className="font-medium mb-2">Información de la petición:</h4>
-            <div className="text-sm space-y-1">
-              <div><strong>Modelo:</strong> {requestInfo.model}</div>
-              <div><strong>Duración:</strong> {requestInfo.duration}</div>
-              <div><strong>Timestamp:</strong> {requestInfo.timestamp}</div>
-              <div><strong>Estado:</strong> 
-                <span className={requestInfo.success ? 'text-green-600' : 'text-red-600'}>
-                  {requestInfo.success ? ' ✅ Éxito' : ' ❌ Error'}
-                </span>
+      {/* Botones de acción con mejor espaciado */}
+      <div className="flex flex-col sm:flex-row gap-6 justify-center">
+        <button
+          onClick={testGeminiDirect}
+          disabled={isLoading || !geminiApiKey.trim() || !prompt.trim()}
+          className="flex items-center justify-center gap-3 px-8 py-4 rounded-lg border-2 font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            backgroundColor: isLoading ? 'var(--secondary-100)' : 'var(--primary-500)',
+            borderColor: isLoading ? 'var(--secondary-300)' : 'var(--primary-500)',
+            color: isLoading ? 'var(--secondary-500)' : 'white',
+            boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)'
+          }}
+        >
+          <Send size={18} />
+          {isLoading ? 'Enviando...' : 'Enviar a Gemini'}
+        </button>
+
+        <button
+          onClick={testWithCurl}
+          disabled={!geminiApiKey.trim() || !prompt.trim()}
+          className="flex items-center justify-center gap-3 px-8 py-4 rounded-lg border-2 font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{
+            backgroundColor: 'white',
+            borderColor: 'var(--secondary-300)',
+            color: 'var(--secondary-700)',
+            boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)'
+          }}
+          onMouseEnter={(e) => {
+            if (!e.currentTarget.disabled) {
+              e.currentTarget.style.backgroundColor = 'var(--secondary-50)';
+              e.currentTarget.style.borderColor = 'var(--secondary-400)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!e.currentTarget.disabled) {
+              e.currentTarget.style.backgroundColor = 'white';
+              e.currentTarget.style.borderColor = 'var(--secondary-300)';
+            }
+          }}
+        >
+          <Eye size={18} />
+          Generar cURL
+        </button>
+      </div>
+
+      {/* Información de la petición con mejor espaciado */}
+      {requestInfo && (
+        <div 
+          className="p-6 rounded-lg border-l-4"
+          style={{
+            backgroundColor: requestInfo.success ? 'var(--success-50)' : 'var(--error-50)',
+            borderLeftColor: requestInfo.success ? 'var(--success-400)' : 'var(--error-400)',
+            borderWidth: '1px',
+            borderLeftWidth: '4px',
+            borderColor: requestInfo.success ? 'var(--success-200)' : 'var(--error-200)'
+          }}
+        >
+          <div className="space-y-3">
+            <h3 
+              className="font-semibold text-sm flex items-center gap-2"
+              style={{ 
+                color: requestInfo.success ? 'var(--success-700)' : 'var(--error-700)' 
+              }}
+            >
+              <AlertCircle size={16} />
+              {requestInfo.success ? 'Petición exitosa' : 'Error en la petición'}
+            </h3>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+              <div>
+                <span style={{ color: 'var(--secondary-600)' }}>Modelo:</span>
+                <div style={{ color: 'var(--secondary-900)' }} className="font-mono mt-1">
+                  {requestInfo.model}
+                </div>
+              </div>
+              <div>
+                <span style={{ color: 'var(--secondary-600)' }}>Duración:</span>
+                <div style={{ color: 'var(--secondary-900)' }} className="font-mono mt-1">
+                  {requestInfo.duration}
+                </div>
+              </div>
+              <div>
+                <span style={{ color: 'var(--secondary-600)' }}>Hora:</span>
+                <div style={{ color: 'var(--secondary-900)' }} className="font-mono mt-1">
+                  {requestInfo.timestamp}
+                </div>
               </div>
               {requestInfo.responseLength && (
-                <div><strong>Longitud respuesta:</strong> {requestInfo.responseLength} caracteres</div>
+                <div>
+                  <span style={{ color: 'var(--secondary-600)' }}>Caracteres:</span>
+                  <div style={{ color: 'var(--secondary-900)' }} className="font-mono mt-1">
+                    {requestInfo.responseLength}
+                  </div>
+                </div>
               )}
             </div>
           </div>
-        )}
-
-        {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-            <div className="flex items-center gap-2 text-red-700">
-              <AlertCircle className="w-4 h-4" />
-              <strong>Error:</strong>
-            </div>
-            <div className="text-red-600 mt-1 text-sm font-mono">{error}</div>
-          </div>
-        )}
-
-        {response && (
-          <div className="p-4 bg-green-50 border border-green-200 rounded-md">
-            <h4 className="font-medium text-green-800 mb-2">Respuesta de Gemini:</h4>
-            <div className="text-sm bg-white p-3 rounded border">
-              <pre className="whitespace-pre-wrap font-mono">{response}</pre>
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-bold mb-3">Información técnica</h3>
-        <div className="text-sm space-y-2">
-          <div><strong>Librería:</strong> @google/generative-ai</div>
-          <div><strong>Endpoint:</strong> https://generativelanguage.googleapis.com/v1beta/models/[model]:generateContent</div>
-          <div><strong>Método:</strong> POST</div>
-          <div><strong>Headers:</strong> Content-Type: application/json, X-goog-api-key</div>
         </div>
-        
-        <div className="mt-4">
-          <h4 className="font-medium mb-2">Modelos recomendados:</h4>
-          <div className="text-sm space-y-1">
-            <div><span className="font-medium text-green-600">gemini-2.5-flash:</span> Más reciente, pensamiento adaptativo y eficiencia de costos</div>
-            <div><span className="font-medium text-blue-600">gemini-2.5-pro:</span> Máxima precisión, ideal para tareas complejas</div>
-            <div><span className="font-medium text-orange-600">gemini-2.5-flash-lite:</span> Más rentable, alta velocidad</div>
-            <div><span className="font-medium text-gray-600">gemini-1.5-flash:</span> Estable pero obsoleto</div>
+      )}
+
+      {/* Respuesta con mejor espaciado */}
+      {response && (
+        <div 
+          className="p-6 rounded-lg border-l-4"
+          style={{
+            backgroundColor: 'var(--success-50)',
+            borderLeftColor: 'var(--success-400)',
+            borderWidth: '1px',
+            borderLeftWidth: '4px',
+            borderColor: 'var(--success-200)'
+          }}
+        >
+          <h3 
+            className="font-semibold text-sm mb-4 flex items-center gap-2"
+            style={{ color: 'var(--success-700)' }}
+          >
+            <Send size={16} />
+            Respuesta de Gemini
+          </h3>
+          <div 
+            className="text-sm leading-relaxed whitespace-pre-wrap font-mono"
+            style={{ 
+              color: 'var(--secondary-900)',
+              lineHeight: '1.7'
+            }}
+          >
+            {response}
           </div>
         </div>
+      )}
+
+      {/* Error con mejor espaciado y word-wrap arreglado */}
+      {error && (
+        <div 
+          className="p-6 rounded-lg border-l-4"
+          style={{
+            backgroundColor: 'var(--error-50)',
+            borderLeftColor: 'var(--error-400)',
+            borderWidth: '1px',
+            borderLeftWidth: '4px',
+            borderColor: 'var(--error-200)'
+          }}
+        >
+          <h3 
+            className="font-semibold text-sm mb-4 flex items-center gap-2"
+            style={{ color: 'var(--error-700)' }}
+          >
+            <AlertCircle size={16} />
+            Error
+          </h3>
+          <div 
+            className="text-sm leading-relaxed font-mono break-words overflow-hidden"
+            style={{ 
+              color: 'var(--error-600)',
+              lineHeight: '1.7',
+              wordBreak: 'break-all',
+              overflowWrap: 'anywhere'
+            }}
+          >
+            {error}
+          </div>
+        </div>
+      )}
+
+      {/* Separador visual adicional antes de documentación */}
+      <div className="py-4"></div>
+
+      {/* Documentación colapsible */}
+      <div 
+        className="border rounded-lg"
+        style={{ 
+          borderColor: 'var(--secondary-300)',
+          backgroundColor: 'var(--secondary-50)'
+        }}
+      >
+        <button
+          onClick={() => setIsDocumentationExpanded(!isDocumentationExpanded)}
+          className="w-full p-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+        >
+          <span 
+            className="font-medium text-sm"
+            style={{ color: 'var(--secondary-900)' }}
+          >
+            📖 Documentación y Ayuda
+          </span>
+          {isDocumentationExpanded ? (
+            <ChevronUp size={20} style={{ color: 'var(--secondary-600)' }} />
+          ) : (
+            <ChevronDown size={20} style={{ color: 'var(--secondary-600)' }} />
+          )}
+        </button>
+
+        {isDocumentationExpanded && (
+          <div 
+            className="p-6 border-t space-y-4"
+            style={{ borderTopColor: 'var(--secondary-300)' }}
+          >
+            <div>
+              <h4 
+                className="font-semibold text-sm mb-2"
+                style={{ color: 'var(--secondary-900)' }}
+              >
+                🔑 Cómo obtener tu API Key
+              </h4>
+              <p 
+                className="text-xs leading-relaxed"
+                style={{ color: 'var(--secondary-600)' }}
+              >
+                1. Ve a <strong>Google AI Studio</strong><br />
+                2. Inicia sesión con tu cuenta de Google<br />
+                3. Crea un nuevo proyecto o selecciona uno existente<br />
+                4. Ve a "API Keys" y genera una nueva clave<br />
+                5. Copia la clave y pégala en el campo de arriba
+              </p>
+            </div>
+
+            <div>
+              <h4 
+                className="font-semibold text-sm mb-2"
+                style={{ color: 'var(--secondary-900)' }}
+              >
+                🤖 Modelos disponibles
+              </h4>
+              <div 
+                className="text-xs leading-relaxed space-y-1"
+                style={{ color: 'var(--secondary-600)' }}
+              >
+                <div><strong>gemini-2.5-flash:</strong> Rápido y eficiente</div>
+                <div><strong>gemini-2.5-pro:</strong> Máximo rendimiento</div>
+                <div><strong>gemini-1.5-flash:</strong> Versión estable rápida</div>
+                <div><strong>gemini-1.5-pro:</strong> Versión estable completa</div>
+              </div>
+            </div>
+
+            <div>
+              <h4 
+                className="font-semibold text-sm mb-2"
+                style={{ color: 'var(--secondary-900)' }}
+              >
+                💡 Consejos de uso
+              </h4>
+              <p 
+                className="text-xs leading-relaxed"
+                style={{ color: 'var(--secondary-600)' }}
+              >
+                • Usa prompts claros y específicos<br />
+                • El modelo Flash es más rápido para tareas simples<br />
+                • El modelo Pro es mejor para tareas complejas<br />
+                • Puedes generar comandos cURL para testing externo
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
