@@ -4,6 +4,8 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
 import FlashCard from '../components/study/FlashCard';
+import Button from '../components/Button';
+import { CloseIcon, CheckIcon } from '../components/icons';
 
 interface StudyFlashCardsPageProps {
   showConfirm: (message: string, onConfirm: () => void) => void;
@@ -161,12 +163,16 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
               <div className="text-sm text-gray-600">
                 {progress.current} / {progress.total}
               </div>
-              <button
+              <Button
                 onClick={handleExit}
-                className="px-4 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 text-sm border border-red-300 rounded-lg hover:border-red-400 transition-colors font-medium"
+                variant="danger"
+                buttonType="outline"
+                size="sm"
+                icon={<CloseIcon />}
+                iconPosition="left"
               >
                 Salir
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -191,12 +197,15 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
               <p className="text-green-800 mb-3">
                 🎉 ¡Has llegado al final de las flash cards!
               </p>
-              <button
+              <Button
                 onClick={handleComplete}
-                className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition-colors"
+                variant="success"
+                size="md"
+                icon={<CheckIcon />}
+                iconPosition="left"
               >
                 Completar Sesión
-              </button>
+              </Button>
             </div>
           </div>
         )}

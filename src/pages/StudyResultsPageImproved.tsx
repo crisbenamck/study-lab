@@ -4,6 +4,8 @@ import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useTheme } from '../hooks/useTheme';
 import type { Question } from '../types/Question';
+import Button from '../components/Button';
+import { SunIcon, MoonIcon, BookIcon, RefreshIcon, ClipboardIcon, PlusIcon, CloseIcon } from '../components/icons';
 
 const StudyResultsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -35,15 +37,15 @@ const StudyResultsPage: React.FC = () => {
                 No se encontraron sesiones de estudio completadas.
               </p>
             </div>
-            <button
+            <Button
               onClick={() => navigate('/study')}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              variant="primary"
+              size="lg"
+              icon={<PlusIcon />}
+              className="shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
               Iniciar Nueva Sesión
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -159,13 +161,14 @@ const StudyResultsPage: React.FC = () => {
               <h3 style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 'var(--font-weight-semibold)' }}>
                 Pregunta {question.question_number}
               </h3>
-              <button
+              <Button
                 onClick={closeQuestionModal}
-                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
-                style={{ color: 'var(--text-tertiary)' }}
-              >
-                ×
-              </button>
+                variant="secondary"
+                size="sm"
+                buttonType="ghost"
+                icon={<CloseIcon />}
+                className="w-8 h-8"
+              />
             </div>
 
             <div className="element-spacing">
@@ -242,12 +245,13 @@ const StudyResultsPage: React.FC = () => {
             </div>
 
             <div className="flex justify-center pt-4 border-t" style={{ borderColor: 'var(--border-light)' }}>
-              <button
+              <Button
                 onClick={closeQuestionModal}
-                className="px-6 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors"
+                variant="secondary"
+                size="md"
               >
                 Cerrar
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -267,13 +271,14 @@ const StudyResultsPage: React.FC = () => {
             <div className="text-center section-spacing">
               <div className="mb-6">
                 <div className="inline-flex items-center gap-4 mb-4">
-                  <button
+                  <Button
                     onClick={toggleTheme}
-                    className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    variant="secondary"
+                    size="sm"
+                    buttonType="ghost"
+                    icon={theme === 'light' ? <MoonIcon /> : <SunIcon />}
                     title={`Cambiar a modo ${theme === 'light' ? 'oscuro' : 'claro'}`}
-                  >
-                    {theme === 'light' ? '🌙' : '☀️'}
-                  </button>
+                  />
                   <h1 style={{ fontSize: 'var(--font-size-4xl)', fontWeight: 'var(--font-weight-bold)' }}>
                     Sesión Completada
                   </h1>
@@ -397,28 +402,25 @@ const StudyResultsPage: React.FC = () => {
                   const question = getQuestionById(sessionQuestion.questionId);
                   if (!question) return null;
 
-                  let statusClass = 'bg-gray-100 hover:bg-gray-200 border-gray-300 text-gray-700';
-
-                  if (sessionQuestion.skipped) {
-                    statusClass = 'bg-yellow-100 hover:bg-yellow-200 border-yellow-300 text-yellow-800';
-                  } else if (sessionQuestion.answered && sessionQuestion.isCorrect) {
-                    statusClass = 'bg-green-100 hover:bg-green-200 border-green-300 text-green-800';
-                  } else if (sessionQuestion.answered && !sessionQuestion.isCorrect) {
-                    statusClass = 'bg-red-100 hover:bg-red-200 border-red-300 text-red-800';
-                  }
-
                   return (
-                    <button
+                    <Button
                       key={sessionQuestion.questionId}
                       onClick={() => showQuestionModal(sessionQuestion.questionId)}
-                      className={`${statusClass} p-2 rounded-lg border font-medium transition-all duration-200 cursor-pointer min-h-[2.5rem] flex items-center justify-center hover:shadow-sm text-sm`}
+                      variant={
+                        sessionQuestion.skipped ? 'warning' : 
+                        sessionQuestion.answered && sessionQuestion.isCorrect ? 'success' : 
+                        sessionQuestion.answered && !sessionQuestion.isCorrect ? 'danger' : 'secondary'
+                      }
+                      size="sm"
+                      buttonType="outline"
+                      className="min-h-[2.5rem] text-sm"
                       title={`Pregunta ${question.question_number} - ${
                         sessionQuestion.skipped ? 'Saltada' : 
                         sessionQuestion.isCorrect ? 'Correcta' : 'Incorrecta'
                       }`}
                     >
                       {question.question_number}
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
@@ -446,36 +448,35 @@ const StudyResultsPage: React.FC = () => {
 
             {/* ACCIONES */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 border-t" style={{ borderColor: 'var(--border-light)' }}>
-              <button
+              <Button
                 onClick={() => navigate('/study')}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                variant="primary"
+                size="lg"
+                icon={<BookIcon />}
+                className="shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.168 18.477 18.582 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
                 Ir a Estudiar
-              </button>
+              </Button>
               
-              <button
+              <Button
                 onClick={startNewSession}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all duration-200"
+                variant="secondary"
+                size="lg"
+                icon={<RefreshIcon />}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
                 Repetir Test
-              </button>
+              </Button>
               
               {failedQuestions.length > 0 && (
-                <button
+                <Button
                   onClick={practiceFailedQuestions}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-medium rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                  variant="warning"
+                  size="lg"
+                  icon={<ClipboardIcon />}
+                  className="shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                  </svg>
                   Practicar Falladas ({failedQuestions.length})
-                </button>
+                </Button>
               )}
             </div>
 

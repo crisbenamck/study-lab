@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import type { Question } from '../../types/Question';
+import Button from '../Button';
+import { ArrowLeftIcon, ArrowRightIcon, EyeIcon } from '../icons';
 
 interface FlashCardProps {
   question: Question;
@@ -147,36 +149,42 @@ const FlashCard: React.FC<FlashCardProps> = ({
 
       {/* Controles de navegación */}
       <div className="flex justify-between items-center w-full mb-6">
-        <button
+        <Button
           onClick={handlePrevious}
           disabled={!canGoPrevious}
-          className="flex items-center px-4 py-2 text-gray-600 hover:text-gray-800 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+          variant="secondary"
+          buttonType="ghost"
+          size="md"
+          icon={<ArrowLeftIcon />}
+          iconPosition="left"
         >
-          <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
           Anterior
-        </button>
+        </Button>
 
         <div className="flex space-x-2">
-          <button
+          <Button
             onClick={handleFlip}
-            className="px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg transition-colors"
+            variant="info"
+            buttonType="outline"
+            size="md"
+            icon={<EyeIcon />}
+            iconPosition="left"
           >
             {isFlipped ? 'Ver Pregunta' : 'Ver Respuesta'}
-          </button>
+          </Button>
         </div>
 
-        <button
+        <Button
           onClick={handleNext}
           disabled={!canGoNext}
-          className="flex items-center px-4 py-2 text-gray-600 hover:text-gray-800 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors"
+          variant="secondary"
+          buttonType="ghost"
+          size="md"
+          icon={<ArrowRightIcon />}
+          iconPosition="right"
         >
           Siguiente
-          <svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+        </Button>
       </div>
 
       {/* Información adicional abajo de los botones */}

@@ -22,7 +22,7 @@ const CreateQuestionPage: React.FC<CreateQuestionPageProps> = ({
           Crear Nueva Pregunta
         </h1>
         <p className="text-gray-600">
-          Completa el formulario para crear una nueva pregunta de examen
+          Diseña preguntas efectivas para tus exámenes con opciones múltiples, explicaciones y referencias educativas
         </p>
       </div>
       

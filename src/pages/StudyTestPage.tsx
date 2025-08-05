@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
+import Button from '../components/Button';
+import { CloseIcon, ArrowLeftIcon, ArrowRightIcon, FileTextIcon, ClipboardIcon } from '../components/icons';
 
 const StudyTestPage: React.FC = () => {
   const navigate = useNavigate();
@@ -298,12 +300,16 @@ const StudyTestPage: React.FC = () => {
                   Correctas: {sessionStats.correct} / {sessionStats.answered}
                 </div>
               </div>
-              <button
+              <Button
                 onClick={handleExit}
-                className="px-4 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 text-sm border border-red-300 rounded-lg hover:border-red-400 transition-colors font-medium"
+                variant="danger"
+                buttonType="outline"
+                size="sm"
+                icon={<CloseIcon />}
+                iconPosition="left"
               >
                 Salir
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -388,55 +394,64 @@ const StudyTestPage: React.FC = () => {
           {/* Botón de marcar para revisión y explicación */}
           <div className="mb-4 pb-4 border-b border-gray-200">
             <div className="flex space-x-3">
-              <button
+              <Button
                 onClick={handleMarkForReview}
-                className={`px-3 py-1 rounded-md text-sm transition-colors ${
-                  currentSessionQuestion?.markedForReview
-                    ? 'bg-yellow-100 text-yellow-800 border border-yellow-300'
-                    : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
-                }`}
+                variant={currentSessionQuestion?.markedForReview ? "warning" : "secondary"}
+                buttonType="outline"
+                size="sm"
+                icon={<ClipboardIcon />}
+                iconPosition="left"
               >
-                {currentSessionQuestion?.markedForReview ? '🔖 Marcada para revisión' : '🔖 Marcar para revisión'}
-              </button>
+                {currentSessionQuestion?.markedForReview ? 'Marcada para revisión' : 'Marcar para revisión'}
+              </Button>
               
               {currentQuestion.explanation && (
-                <button
+                <Button
                   onClick={() => setShowExplanation(!showExplanation)}
-                  className={`px-3 py-1 rounded-md text-sm transition-colors ${
-                    showExplanation
-                      ? 'bg-blue-100 text-blue-800 border border-blue-300'
-                      : 'bg-gray-100 text-gray-600 border border-gray-300 hover:bg-gray-200'
-                  }`}
+                  variant={showExplanation ? "info" : "secondary"}
+                  buttonType="outline"
+                  size="sm"
+                  icon={<FileTextIcon />}
+                  iconPosition="left"
                 >
-                  {showExplanation ? '📖 Ocultar explicación' : '📖 Ver explicación'}
-                </button>
+                  {showExplanation ? 'Ocultar explicación' : 'Ver explicación'}
+                </Button>
               )}
             </div>
           </div>
 
           <div className="flex justify-between items-center">
-            <button
+            <Button
               onClick={handlePrevious}
               disabled={!canGoPrevious()}
-              className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+              variant="secondary"
+              buttonType="outline"
+              size="md"
+              icon={<ArrowLeftIcon />}
+              iconPosition="left"
             >
-              ← Anterior
-            </button>
+              Anterior
+            </Button>
 
             <div className="flex space-x-3">
-              <button
+              <Button
                 onClick={handleSkip}
-                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+                variant="secondary"
+                buttonType="outline"
+                size="md"
               >
                 Saltar
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={handleNext}
                 disabled={selectedAnswers.length === 0 && !isAnswered}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+                variant="primary"
+                size="md"
+                icon={<ArrowRightIcon />}
+                iconPosition="right"
               >
-                {canGoNext() ? 'Siguiente →' : 'Finalizar Test'}
-              </button>
+                {canGoNext() ? 'Siguiente' : 'Finalizar Test'}
+              </Button>
             </div>
           </div>
         </div>

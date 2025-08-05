@@ -1,6 +1,8 @@
 import React from 'react';
 import type { Question } from '../types/Question';
 import { formatQuestionNumber } from '../utils/downloadUtils';
+import Button from './Button';
+import { TrashIcon } from './icons';
 
 interface QuestionListProps {
   questions: Question[];
@@ -34,31 +36,13 @@ const QuestionList: React.FC<QuestionListProps> = ({ questions, onRemoveQuestion
                   Múltiples respuestas
                 </span>
               )}
-              <button
+              <Button
                 onClick={() => onRemoveQuestion(question.question_number)}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
+                variant="danger"
+                size="sm"
+                icon={<TrashIcon />}
                 title="Eliminar pregunta"
-                style={{
-                  backgroundColor: '#ef4444',
-                  color: '#ffffff',
-                  border: '1px solid #ef4444',
-                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#dc2626';
-                  e.currentTarget.style.borderColor = '#dc2626';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#ef4444';
-                  e.currentTarget.style.borderColor = '#ef4444';
-                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                🗑️
-              </button>
+              />
             </div>
           </div>
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from './Modal';
+import Button from './Button';
 
 interface AlertModalProps {
   isOpen: boolean;
@@ -38,32 +39,15 @@ const AlertModal: React.FC<AlertModalProps> = ({
         </div>
         
         <div className="flex justify-center pt-2">
-          <button
+          <Button
             onClick={onClose}
             onKeyDown={handleKeyDown}
             autoFocus
-            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
-            style={{
-              backgroundColor: '#2563eb',
-              color: '#ffffff',
-              border: '1px solid #2563eb',
-              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#1d4ed8';
-              e.currentTarget.style.borderColor = '#1d4ed8';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#2563eb';
-              e.currentTarget.style.borderColor = '#2563eb';
-              e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
+            variant="primary"
+            size="lg"
           >
             {buttonText}
-          </button>
+          </Button>
         </div>
       </div>
     </Modal>

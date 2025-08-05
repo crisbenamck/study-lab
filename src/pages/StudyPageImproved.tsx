@@ -4,6 +4,8 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useAlert } from '../hooks/useAlert';
 import Layout from '../components/Layout';
+import Button from '../components/Button';
+import { PlusIcon, UploadIcon, TargetIcon } from '../components/icons';
 import type { StudySessionConfig, StudyMode, StudyScope, ShowAnswersMode } from '../types/StudySession';
 
 const StudyPageImproved: React.FC = () => {
@@ -156,24 +158,25 @@ const StudyPageImproved: React.FC = () => {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button
+              <Button
                 onClick={() => navigate('/create')}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                variant="primary"
+                size="lg"
+                icon={<PlusIcon />}
+                iconPosition="left"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
                 Crear Preguntas
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => navigate('/import')}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all duration-200"
+                variant="secondary"
+                buttonType="outline"
+                size="lg"
+                icon={<UploadIcon />}
+                iconPosition="left"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-                </svg>
                 Importar PDF
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -491,15 +494,15 @@ const StudyPageImproved: React.FC = () => {
 
             {/* BOTÓN DE INICIO */}
             <div className="flex justify-center pt-6 border-t" style={{ borderColor: 'var(--border-light)' }}>
-              <button
+              <Button
                 onClick={startStudySession}
-                className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-lg"
+                variant="primary"
+                size="xl"
+                icon={<TargetIcon />}
+                iconPosition="left"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
                 Iniciar {mode === 'flashcards' ? 'Flash Cards' : 'Test'}
-              </button>
+              </Button>
             </div>
 
           </div>

@@ -259,7 +259,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
               }
             }}
           >
-            🗑️ Borrar todas las preguntas
+            Borrar todas las preguntas
           </button>
         </div>
       </div>
@@ -326,7 +326,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
                   e.currentTarget.style.transform = 'translateY(0)';
                 }}
               >
-                🗑️ Eliminar
+                Eliminar
               </button>
             </div>
           </div>

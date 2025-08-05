@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import type { QuestionFormData } from '../types/Question';
+import Button from './Button';
+import { SaveIcon, CloseIcon, CheckIcon, PlusIcon, MinusIcon, EraserIcon } from './icons';
 
 interface QuestionFormProps {
   onSubmit: (data: QuestionFormData) => void;
@@ -128,9 +130,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Nueva Pregunta #{nextQuestionNumber.toString().padStart(4, '0')}
             </h2>
-            <p className="text-gray-600">
-              Completa todos los campos para agregar una nueva pregunta
-            </p>
           </div>
           
           {/* Campo compacto para número inicial - solo si no hay preguntas */}
@@ -149,92 +148,42 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                     className="form-input w-20 text-sm"
                     placeholder="0001"
                   />
-                  <button
+                  <Button
                     type="button"
                     onClick={() => onSetInitialNumber && onSetInitialNumber(customNumber)}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300 text-xs"
-                    style={{
-                      backgroundColor: '#10b981',
-                      color: '#ffffff',
-                      border: '1px solid #10b981',
-                      boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#059669';
-                      e.currentTarget.style.borderColor = '#059669';
-                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
-                      e.currentTarget.style.transform = 'translateY(-1px)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '#10b981';
-                      e.currentTarget.style.borderColor = '#10b981';
-                      e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    ✓
-                  </button>
+                    variant="primary"
+                    size="sm"
+                    icon={<CheckIcon />}
+                  />
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
                   Solo primera pregunta
                 </p>
               </div>
               
-              <button
+              <Button
                 type="button"
                 onClick={handleClearForm}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
-                style={{
-                  backgroundColor: '#ef4444',
-                  color: '#ffffff',
-                  border: '1px solid #ef4444',
-                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#dc2626';
-                  e.currentTarget.style.borderColor = '#dc2626';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#ef4444';
-                  e.currentTarget.style.borderColor = '#ef4444';
-                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
+                variant="secondary"
+                size="md"
+                icon={<EraserIcon />}
               >
-                🧹 Limpiar Formulario
-              </button>
+                Limpiar Formulario
+              </Button>
             </div>
           )}
           
           {/* Si no estamos editando, mostrar el botón limpiar */}
           {!isEditing && (
-            <button
+            <Button
               type="button"
               onClick={handleClearForm}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
-              style={{
-                backgroundColor: '#ef4444',
-                color: '#ffffff',
-                border: '1px solid #ef4444',
-                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#dc2626';
-                e.currentTarget.style.borderColor = '#dc2626';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#ef4444';
-                e.currentTarget.style.borderColor = '#ef4444';
-                e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
+              variant="secondary"
+              size="md"
+              icon={<EraserIcon />}
             >
-              🧹 Limpiar Formulario
-            </button>
+              Limpiar Formulario
+            </Button>
           )}
         </div>
       </div>
@@ -275,69 +224,27 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               Opciones de respuesta *
             </label>
             <div className="flex items-center" style={{ gap: '8px' }}>
-              <button
+              <Button
                 type="button"
                 onClick={addOption}
                 disabled={fields.length >= 5}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300 text-sm"
-                style={{
-                  backgroundColor: fields.length >= 5 ? '#e5e7eb' : '#10b981',
-                  color: fields.length >= 5 ? '#9ca3af' : '#ffffff',
-                  border: `1px solid ${fields.length >= 5 ? '#e5e7eb' : '#10b981'}`,
-                  boxShadow: fields.length >= 5 ? 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                  cursor: fields.length >= 5 ? 'not-allowed' : 'pointer'
-                }}
-                onMouseEnter={(e) => {
-                  if (fields.length < 5) {
-                    e.currentTarget.style.backgroundColor = '#059669';
-                    e.currentTarget.style.borderColor = '#059669';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (fields.length < 5) {
-                    e.currentTarget.style.backgroundColor = '#10b981';
-                    e.currentTarget.style.borderColor = '#10b981';
-                    e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }
-                }}
+                variant="primary"
+                size="sm"
+                icon={<PlusIcon />}
               >
-                ➕ Agregar opción
-              </button>
+                Agregar
+              </Button>
               
-              <button
+              <Button
                 type="button"
                 onClick={() => remove(fields.length - 1)}
                 disabled={fields.length <= 2}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 text-sm"
-                style={{
-                  backgroundColor: fields.length <= 2 ? '#e5e7eb' : '#ef4444',
-                  color: fields.length <= 2 ? '#9ca3af' : '#ffffff',
-                  border: `1px solid ${fields.length <= 2 ? '#e5e7eb' : '#ef4444'}`,
-                  boxShadow: fields.length <= 2 ? 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                  cursor: fields.length <= 2 ? 'not-allowed' : 'pointer'
-                }}
-                onMouseEnter={(e) => {
-                  if (fields.length > 2) {
-                    e.currentTarget.style.backgroundColor = '#dc2626';
-                    e.currentTarget.style.borderColor = '#dc2626';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
-                    e.currentTarget.style.transform = 'translateY(-1px)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (fields.length > 2) {
-                    e.currentTarget.style.backgroundColor = '#ef4444';
-                    e.currentTarget.style.borderColor = '#ef4444';
-                    e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }
-                }}
+                variant="warning"
+                size="sm"
+                icon={<MinusIcon />}
               >
-                🗑️ Eliminar opción
-              </button>
+                Eliminar
+              </Button>
             </div>
           </div>
 
@@ -423,57 +330,27 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
         {/* Botones de envío */}
         <div className={`${isEditing ? 'flex' : 'flex justify-start'}`} style={{ gap: isEditing ? '8px' : '0' }}>
-          <button
+          <Button
             type="submit"
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 text-sm`}
-            style={{
-              backgroundColor: '#2563eb',
-              color: '#ffffff',
-              border: '1px solid #2563eb',
-              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#1d4ed8';
-              e.currentTarget.style.borderColor = '#1d4ed8';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#2563eb';
-              e.currentTarget.style.borderColor = '#2563eb';
-              e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
+            variant="success"
+            size="md"
+            icon={<SaveIcon />}
+            iconPosition="left"
           >
-            💾 {isEditing ? 'Guardar Cambios' : 'Guardar Pregunta'}
-          </button>
+            {isEditing ? 'Guardar Cambios' : 'Guardar Pregunta'}
+          </Button>
           
           {isEditing && onCancel && (
-            <button
+            <Button
               type="button"
               onClick={onCancel}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 text-sm"
-              style={{
-                backgroundColor: '#6b7280',
-                color: '#ffffff',
-                border: '1px solid #6b7280',
-                boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#4b5563';
-                e.currentTarget.style.borderColor = '#4b5563';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(107, 114, 128, 0.3)';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#6b7280';
-                e.currentTarget.style.borderColor = '#6b7280';
-                e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
+              variant="secondary"
+              size="md"
+              icon={<CloseIcon />}
+              iconPosition="left"
             >
-              ❌ Cancelar
-            </button>
+              Cancelar
+            </Button>
           )}
         </div>
       </form>
