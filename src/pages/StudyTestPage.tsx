@@ -7,7 +7,7 @@ import { useStudySession } from '../hooks/useStudySession';
 const StudyTestPage: React.FC = () => {
   const navigate = useNavigate();
   const { questions } = useLocalStorage();
-  const { currentSession, completeSession, updateCurrentSession, isLoaded } = useStudyStorage();
+  const { currentSession, completeSession, updateCurrentSession, isLoaded, createStudySession } = useStudyStorage();
 
   const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
@@ -41,21 +41,43 @@ const StudyTestPage: React.FC = () => {
     if (!hasCheckedSession) {
       setHasCheckedSession(true);
       
-      // Dar un pequeño delay para asegurar que la sesión se haya creado
-      setTimeout(() => {
-        if (!currentSession || currentSession.config.mode !== 'test') {
-          console.log('❌ No hay sesión válida, redirigiendo a /study');
+      // Verificar si hay una configuración guardada para repetir test
+      const repeatConfig = localStorage.getItem('repeat-session-config');
+      
+      if (repeatConfig && !currentSession) {
+        try {
+          const config = JSON.parse(repeatConfig);
+          console.log('🔄 Configuración para repetir encontrada:', config);
+          
+          // Crear nueva sesión con la configuración guardada
+          const newSession = createStudySession(config, questions);
+          console.log('✅ Nueva sesión creada para repetir test');
+          
+          // Limpiar la configuración temporal
+          localStorage.removeItem('repeat-session-config');
+          
+        } catch (error) {
+          console.error('❌ Error al crear sesión para repetir:', error);
+          localStorage.removeItem('repeat-session-config');
           navigate('/study');
-        } else {
-          console.log('✅ Sesión válida encontrada');
-          // Configurar timer si hay límite de tiempo
-          if (currentSession.config.timeLimit) {
-            setTimeLeft(currentSession.config.timeLimit * 60); // convertir a segundos
-          }
         }
-      }, 100);
+      } else {
+        // Dar un pequeño delay para asegurar que la sesión se haya creado
+        setTimeout(() => {
+          if (!currentSession || currentSession.config.mode !== 'test') {
+            console.log('❌ No hay sesión válida, redirigiendo a /study');
+            navigate('/study');
+          } else {
+            console.log('✅ Sesión válida encontrada');
+            // Configurar timer si hay límite de tiempo
+            if (currentSession.config.timeLimit) {
+              setTimeLeft(currentSession.config.timeLimit * 60); // convertir a segundos
+            }
+          }
+        }, 100);
+      }
     }
-  }, [currentSession, navigate, isLoaded, hasCheckedSession]);
+  }, [currentSession, navigate, isLoaded, hasCheckedSession, createStudySession, questions]);
 
   // Timer countdown
   useEffect(() => {

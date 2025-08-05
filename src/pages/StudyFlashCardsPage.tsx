@@ -12,7 +12,7 @@ interface StudyFlashCardsPageProps {
 const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }) => {
   const navigate = useNavigate();
   const { questions } = useLocalStorage();
-  const { currentSession, completeSession, abandonSession, isLoaded } = useStudyStorage();
+  const { currentSession, completeSession, abandonSession, isLoaded, createStudySession } = useStudyStorage();
   const [hasCheckedSession, setHasCheckedSession] = useState(false);
 
   const {
@@ -38,17 +38,39 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
     if (!hasCheckedSession) {
       setHasCheckedSession(true);
       
-      // Dar un pequeño delay para asegurar que la sesión se haya creado
-      setTimeout(() => {
-        if (!currentSession || currentSession.config.mode !== 'flashcards') {
-          console.log('❌ No hay sesión válida, redirigiendo a /study');
+      // Verificar si hay una configuración guardada para repetir flashcards
+      const repeatConfig = localStorage.getItem('repeat-session-config');
+      
+      if (repeatConfig && !currentSession) {
+        try {
+          const config = JSON.parse(repeatConfig);
+          console.log('🔄 Configuración para repetir encontrada:', config);
+          
+          // Crear nueva sesión con la configuración guardada
+          const newSession = createStudySession(config, questions);
+          console.log('✅ Nueva sesión creada para repetir flashcards');
+          
+          // Limpiar la configuración temporal
+          localStorage.removeItem('repeat-session-config');
+          
+        } catch (error) {
+          console.error('❌ Error al crear sesión para repetir:', error);
+          localStorage.removeItem('repeat-session-config');
           navigate('/study');
-        } else {
-          console.log('✅ Sesión válida encontrada');
         }
-      }, 100);
+      } else {
+        // Dar un pequeño delay para asegurar que la sesión se haya creado
+        setTimeout(() => {
+          if (!currentSession || currentSession.config.mode !== 'flashcards') {
+            console.log('❌ No hay sesión válida, redirigiendo a /study');
+            navigate('/study');
+          } else {
+            console.log('✅ Sesión válida encontrada');
+          }
+        }, 100);
+      }
     }
-  }, [currentSession, navigate, isLoaded, hasCheckedSession]);
+  }, [currentSession, navigate, isLoaded, hasCheckedSession, createStudySession, questions]);
 
   // Manejar navegación hacia siguiente
   const handleNext = () => {
