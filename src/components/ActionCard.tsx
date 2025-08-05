@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from './Button';
+import Button from './common/Button';
 
 interface ActionCardProps {
   icon: React.ReactNode;

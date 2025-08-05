@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
-import Button from '../components/Button';
+import Button from '../components/common/Button';
 import { CloseIcon, ArrowLeftIcon, ArrowRightIcon, FileTextIcon, ClipboardIcon } from '../components/icons';
 
 const StudyTestPage: React.FC = () => {

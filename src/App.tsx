@@ -6,7 +6,7 @@ import CreateQuestionPage from './pages/CreateQuestionPage';
 import ViewQuestionsPage from './pages/ViewQuestionsPage';
 import ImportPDFPage from './pages/ImportPDFPage';
 import TestAPIPage from './pages/TestAPIPage';
-import StudyPage from './pages/StudyPage';
+import StudyPage from './pages/StudyPageNew';
 import StudyFlashCardsPage from './pages/StudyFlashCardsPage';
 import StudyTestPage from './pages/StudyTestPage';
 import StudyResultsPage from './pages/StudyResultsPage';

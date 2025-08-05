@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Question } from '../types/Question';
 import { formatQuestionNumber } from '../utils/downloadUtils';
-import Button from './Button';
+import Button from './common/Button';
 import QuestionExplanation from './QuestionExplanation';
 import QuestionSource from './QuestionSource';
 import {

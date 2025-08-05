@@ -4,7 +4,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
 import FlashCard from '../components/study/FlashCard';
-import Button from '../components/Button';
+import Button from '../components/common/Button';
 import { CloseIcon, CheckIcon } from '../components/icons';
 
 interface StudyFlashCardsPageProps {

@@ -4,7 +4,7 @@ import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useTheme } from '../hooks/useTheme';
 import type { Question } from '../types/Question';
-import Button from '../components/Button';
+import Button from '../components/common/Button';
 import { SunIcon, MoonIcon, BookIcon, RefreshIcon, ClipboardIcon, PlusIcon, CloseIcon } from '../components/icons';
 
 const StudyResultsPage: React.FC = () => {

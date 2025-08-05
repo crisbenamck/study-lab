@@ -5,7 +5,7 @@ import QuestionForm from './QuestionForm';
 import ConfirmModal from './ConfirmModal';
 import QuestionCard from './QuestionCard';
 import Pagination from './Pagination';
-import Button from './Button';
+import Button from './common/Button';
 import ActionCard from './ActionCard';
 import { useConfirm } from '../hooks/useConfirm';
 import {

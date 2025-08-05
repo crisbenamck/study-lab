@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Question } from '../../types/Question';
-import Button from '../Button';
+import Button from '../common/Button';
 import { ArrowLeftIcon, ArrowRightIcon, EyeIcon } from '../icons';
 
 interface FlashCardProps {
