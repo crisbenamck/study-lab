@@ -10,6 +10,8 @@ import StudyPage from './pages/StudyPage';
 import StudyFlashCardsPage from './pages/StudyFlashCardsPage';
 import StudyTestPage from './pages/StudyTestPage';
 import StudyResultsPage from './pages/StudyResultsPage';
+import ButtonDemoPage from './pages/ButtonDemoPage';
+import IconPreviewPage from './pages/IconPreviewPage';
 import AlertModal from './components/AlertModal';
 import ConfirmModal from './components/ConfirmModal';
 import { useLocalStorage } from './hooks/useLocalStorage';
@@ -145,6 +147,16 @@ function App() {
               } 
             />
             <Route 
+              path="/api-test" 
+              element={
+                <TestAPIPage
+                  appState={appState}
+                  showAlert={showAlert}
+                />
+              } 
+            />
+            {/* Mantener /test como alias para compatibilidad */}
+            <Route 
               path="/test" 
               element={
                 <TestAPIPage
@@ -162,12 +174,31 @@ function App() {
               element={<StudyFlashCardsPage showConfirm={showConfirm} />} 
             />
             <Route 
-              path="/study/test" 
-              element={<StudyTestPage showConfirm={showConfirm} />} 
+              path="/study/exam" 
+              element={<StudyTestPage />} 
             />
+            {/* Mantener /study/test como alias para compatibilidad */}
+            <Route 
+              path="/study/test" 
+              element={<StudyTestPage />} 
+            />
+            <Route 
+              path="/study/session-results" 
+              element={<StudyResultsPage />} 
+            />
+            {/* Mantener /study/results como alias para compatibilidad */}
             <Route 
               path="/study/results" 
               element={<StudyResultsPage />} 
+            />
+            {/* Rutas de desarrollo/demo */}
+            <Route 
+              path="/dev/buttons" 
+              element={<ButtonDemoPage />} 
+            />
+            <Route 
+              path="/dev/icons" 
+              element={<IconPreviewPage />} 
             />
           </Routes>
         </div>

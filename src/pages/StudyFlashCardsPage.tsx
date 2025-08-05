@@ -104,7 +104,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
           };
 
           completeSession(updatedSession);
-          navigate('/study/results');
+          navigate('/study/session-results');
         }
       );
     } catch {

@@ -134,7 +134,7 @@ const StudyPageImproved: React.FC = () => {
     console.log('✅ Sesión creada:', session);
 
     // Navegar a la página correspondiente
-    const targetPath = mode === 'flashcards' ? '/study/flashcards' : '/study/test';
+    const targetPath = mode === 'flashcards' ? '/study/flashcards' : '/study/exam';
     console.log('🎯 Navegando a', targetPath);
     navigate(targetPath);
   };

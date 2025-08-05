@@ -95,7 +95,7 @@ const StudyResultsPage: React.FC = () => {
     if (sessionConfig.mode === 'flashcards') {
       navigate('/study/flashcards');
     } else {
-      navigate('/study/test');
+      navigate('/study/exam');
     }
   };
 

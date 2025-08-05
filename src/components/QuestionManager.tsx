@@ -3,7 +3,20 @@ import type { Question, QuestionFormData } from '../types/Question';
 import { formatQuestionNumber, downloadQuestionsAsJSON } from '../utils/downloadUtils';
 import QuestionForm from './QuestionForm';
 import ConfirmModal from './ConfirmModal';
+import QuestionCard from './QuestionCard';
+import Pagination from './Pagination';
+import Button from './Button';
+import ActionCard from './ActionCard';
 import { useConfirm } from '../hooks/useConfirm';
+import {
+  DownloadIcon,
+  TrashIcon,
+  ArrowLeftIcon,
+  EyeIcon,
+  PlusIcon,
+  UploadIcon,
+  EditIcon
+} from './icons';
 
 interface QuestionManagerProps {
   questions: Question[];
@@ -23,6 +36,8 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
   showConfirmModal
 }) => {
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [questionsPerPage, setQuestionsPerPage] = useState(5);
   const { 
     isConfirmOpen, 
     confirmMessage, 
@@ -31,6 +46,24 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
     showConfirm, 
     hideConfirm 
   } = useConfirm();
+
+  // Cálculos de paginación
+  const totalPages = Math.ceil(questions.length / questionsPerPage);
+  const startIndex = (currentPage - 1) * questionsPerPage;
+  const endIndex = startIndex + questionsPerPage;
+  const currentQuestions = questions.slice(startIndex, endIndex);
+
+  // Función para cambiar de página
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Función para cambiar preguntas por página
+  const handleQuestionsPerPageChange = (perPage: number) => {
+    setQuestionsPerPage(perPage);
+    setCurrentPage(1); // Resetear a la primera página
+  };
 
   const handleRemoveQuestion = (questionNumber: number) => {
     const questionNumberFormatted = formatQuestionNumber(questionNumber);
@@ -134,11 +167,63 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
 
   if (questions.length === 0) {
     return (
-      <div className="question-card container">
-        <div className="text-center py-8">
-          <div className="text-gray-400 mb-4 text-2xl">📄</div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">No hay preguntas guardadas</h3>
-          <p className="text-gray-600">Crea preguntas manualmente o importa desde un PDF</p>
+      <div className="min-h-screen bg-white">
+        <div className="max-w-5xl mx-auto px-4 py-16">
+          {/* Header principal optimizado y centrado */}
+          <div className="text-center mb-24">
+            <h1 className="text-4xl font-bold text-gray-900 mb-8">
+              Gestión de Preguntas
+            </h1>
+            <div className="max-w-4xl mx-auto">
+              <p className="text-xl text-gray-600 leading-relaxed mb-12">
+                Organiza y gestiona tu biblioteca de preguntas de manera eficiente
+              </p>
+            </div>
+
+            {/* Mensaje de estado vacío unificado y centrado */}
+            <div className="max-w-3xl mx-auto mb-16">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+                Tu biblioteca está vacía
+              </h2>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                Comienza creando tu primera pregunta o importa contenido desde un archivo PDF para construir tu colección de estudio.
+              </p>
+            </div>
+
+            {/* Call to action claro */}
+            <div className="mb-16">
+              <h3 className="text-lg font-medium text-gray-700">
+                Elige cómo empezar
+              </h3>
+            </div>
+          </div>
+          
+          {/* Opciones de acción con componente ActionCard */}
+          <div className="max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Opción principal: Crear pregunta */}
+              <ActionCard
+                icon={<PlusIcon className="w-12 h-12 text-white" />}
+                title="Crear Primera Pregunta"
+                description="Diseña preguntas personalizadas usando nuestro formulario intuitivo"
+                buttonText="Empezar a Crear"
+                buttonIcon={<PlusIcon className="w-5 h-5" />}
+                onClick={() => window.location.href = '/create'}
+                variant="primary"
+              />
+
+              {/* Opción alternativa: Importar PDF */}
+              <ActionCard
+                icon={<UploadIcon className="w-12 h-12 text-white" />}
+                title="Importar desde PDF"
+                description="Deja que la IA extraiga preguntas automáticamente de tus documentos"
+                buttonText="Subir Documento"
+                buttonIcon={<UploadIcon className="w-5 h-5" />}
+                onClick={() => window.location.href = '/import'}
+                variant="primary"
+              />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -147,235 +232,141 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
   // Si estamos editando una pregunta, mostrar el formulario
   if (editingQuestion) {
     return (
-      <div className="container space-y-6">
-        <div className="question-card">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">
-              Editando Pregunta #{formatQuestionNumber(editingQuestion.question_number)}
-            </h2>
-            <button
-              onClick={handleCancelEdit}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 text-sm"
-              style={{
-                backgroundColor: '#f3f4f6',
-                color: '#374151',
-                border: '1px solid #d1d5db',
-                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#e5e7eb';
-                e.currentTarget.style.borderColor = '#9ca3af';
-                e.currentTarget.style.boxShadow = '0 2px 4px 0 rgba(0, 0, 0, 0.1)';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#f3f4f6';
-                e.currentTarget.style.borderColor = '#d1d5db';
-                e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              ← Volver a la lista
-            </button>
-          </div>
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Header con título y botón de regreso */}
+        <div className="mb-8">
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={handleCancelEdit}
+            className="mb-4"
+          >
+            <ArrowLeftIcon className="w-4 h-4" />
+            Volver a la lista
+          </Button>
           
-          <QuestionForm
-            onSubmit={handleSaveEdit}
-            nextQuestionNumber={editingQuestion.question_number}
-            showInitialNumberField={false}
-            initialData={questionToFormData(editingQuestion)}
-            isEditing={true}
-            onCancel={handleCancelEdit}
-          />
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <EditIcon className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Editando Pregunta #{formatQuestionNumber(editingQuestion.question_number)}
+                </h1>
+                <p className="text-gray-600">
+                  Modifica los campos necesarios y guarda los cambios
+                </p>
+              </div>
+            </div>
+            
+            <QuestionForm
+              onSubmit={handleSaveEdit}
+              nextQuestionNumber={editingQuestion.question_number}
+              showInitialNumberField={false}
+              initialData={questionToFormData(editingQuestion)}
+              isEditing={true}
+              onCancel={handleCancelEdit}
+            />
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container space-y-4">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">
-          Preguntas Guardadas ({questions.length})
-        </h2>
-        
-        <div className="flex items-center space-x-3">
-          <button
-            onClick={handleDownload}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
-            disabled={questions.length === 0}
-            style={{
-              backgroundColor: questions.length > 0 ? '#2563eb' : '#e5e7eb',
-              color: questions.length > 0 ? '#ffffff' : '#9ca3af',
-              border: `1px solid ${questions.length > 0 ? '#2563eb' : '#e5e7eb'}`,
-              boxShadow: questions.length > 0 ? '0 1px 3px 0 rgba(0, 0, 0, 0.1)' : 'none',
-              cursor: questions.length > 0 ? 'pointer' : 'not-allowed'
-            }}
-            onMouseEnter={(e) => {
-              if (questions.length > 0) {
-                e.currentTarget.style.backgroundColor = '#1d4ed8';
-                e.currentTarget.style.borderColor = '#1d4ed8';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (questions.length > 0) {
-                e.currentTarget.style.backgroundColor = '#2563eb';
-                e.currentTarget.style.borderColor = '#2563eb';
-                e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }
-            }}
-          >
-            ⬇️ Descargar JSON
-          </button>
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      {/* Header principal con título, descripción y estadísticas */}
+      <div className="mb-8">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            Gestión de Preguntas
+          </h1>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6 text-center">
+            Organiza y gestiona tu biblioteca de preguntas de manera eficiente. 
+            Edita, elimina y descarga tu contenido cuando lo necesites.
+          </p>
+          
+          {/* Estadísticas rápidas */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span>Total: {questions.length} preguntas</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span>Página {currentPage} de {totalPages}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span>Mostrando {Math.min(questionsPerPage, questions.length - startIndex)} elementos</span>
+            </div>
+          </div>
+        </div>
 
-          <button
-            onClick={handleClearAll}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
-            disabled={questions.length === 0}
-            style={{
-              backgroundColor: questions.length > 0 ? '#ef4444' : '#e5e7eb',
-              color: questions.length > 0 ? '#ffffff' : '#9ca3af',
-              border: `1px solid ${questions.length > 0 ? '#ef4444' : '#e5e7eb'}`,
-              boxShadow: questions.length > 0 ? '0 1px 3px 0 rgba(0, 0, 0, 0.1)' : 'none',
-              cursor: questions.length > 0 ? 'pointer' : 'not-allowed'
-            }}
-            onMouseEnter={(e) => {
-              if (questions.length > 0) {
-                e.currentTarget.style.backgroundColor = '#dc2626';
-                e.currentTarget.style.borderColor = '#dc2626';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (questions.length > 0) {
-                e.currentTarget.style.backgroundColor = '#ef4444';
-                e.currentTarget.style.borderColor = '#ef4444';
-                e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }
-            }}
-          >
-            Borrar todas las preguntas
-          </button>
+        {/* Barra de acciones */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                <EyeIcon className="w-5 h-5 text-blue-600" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Biblioteca de Preguntas
+                </h2>
+                <p className="text-sm text-gray-600">
+                  {questions.length} {questions.length === 1 ? 'pregunta guardada' : 'preguntas guardadas'}
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              <Button
+                variant="success"
+                size="md"
+                onClick={handleDownload}
+                disabled={questions.length === 0}
+              >
+                <DownloadIcon className="w-4 h-4" />
+                Descargar JSON
+              </Button>
+              
+              <Button
+                variant="warning"
+                size="md"
+                onClick={handleClearAll}
+                disabled={questions.length === 0}
+              >
+                <TrashIcon className="w-4 h-4" />
+                Eliminar Todo
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {questions.map((question, index) => (
-        <div key={`${question.question_number}-${index}`} className="question-card">
-          <div className="flex items-start justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">
-              Pregunta #{formatQuestionNumber(question.question_number)}
-            </h3>
-            <div className="flex items-center space-x-2">
-              {question.requires_multiple_answers && (
-                <span className="badge badge-blue">
-                  Múltiples respuestas
-                </span>
-              )}
-              <button
-                onClick={() => handleEditQuestion(question)}
-                className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
-                title="Editar pregunta"
-                style={{
-                  backgroundColor: '#2563eb',
-                  color: '#ffffff',
-                  border: '1px solid #2563eb',
-                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                  minWidth: '90px'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#1d4ed8';
-                  e.currentTarget.style.borderColor = '#1d4ed8';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#2563eb';
-                  e.currentTarget.style.borderColor = '#2563eb';
-                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                ✏️ Editar
-              </button>
-              <button
-                onClick={() => handleRemoveQuestion(question.question_number)}
-                className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300"
-                title="Eliminar pregunta"
-                style={{
-                  backgroundColor: '#ef4444',
-                  color: '#ffffff',
-                  border: '1px solid #ef4444',
-                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                  minWidth: '90px'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#dc2626';
-                  e.currentTarget.style.borderColor = '#dc2626';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#ef4444';
-                  e.currentTarget.style.borderColor = '#ef4444';
-                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                Eliminar
-              </button>
-            </div>
-          </div>
+      {/* Lista de preguntas mejorada */}
+      <div className="space-y-6">
+        {currentQuestions.map((question, index) => (
+          <QuestionCard
+            key={`${question.question_number}-${index}`}
+            question={question}
+            onEdit={handleEditQuestion}
+            onDelete={handleRemoveQuestion}
+          />
+        ))}
+      </div>
 
-          <div className="mb-4">
-            <p className="text-gray-900 leading-relaxed">{question.question_text}</p>
-          </div>
-
-          <div className="space-y-2 mb-4">
-            {question.options.map((option, optionIndex) => (
-              <div
-                key={`${question.question_number}-${option.option_letter}-${optionIndex}`}
-                className={`option-item ${option.is_correct ? 'correct' : ''}`}
-              >
-                <div className="option-letter">
-                  {option.option_letter}
-                </div>
-                <span className="flex-1 text-gray-900">{option.option_text}</span>
-                <div className="ml-2">
-                  {option.is_correct ? (
-                    <span className="text-green-600">✓</span>
-                  ) : (
-                    <span className="text-gray-400">✗</span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mb-4">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">Explicación:</h4>
-            <p className="text-gray-600 text-sm leading-relaxed">{question.explanation}</p>
-          </div>
-
-          <div className="border-t pt-4">
-            <div className="flex items-center text-sm text-gray-500">
-              <span className="mr-2">🔗 Fuente:</span>
-              <a
-                href={question.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-800 truncate"
-              >
-                {question.link}
-              </a>
-            </div>
-          </div>
-        </div>
-      ))}
+      {/* Sistema de paginación moderno */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        questionsPerPage={questionsPerPage}
+        totalQuestions={questions.length}
+        onPageChange={handlePageChange}
+        onQuestionsPerPageChange={handleQuestionsPerPageChange}
+      />
       
       <ConfirmModal
         isOpen={isConfirmOpen}

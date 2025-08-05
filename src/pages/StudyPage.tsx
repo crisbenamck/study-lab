@@ -138,7 +138,7 @@ const StudyPage: React.FC = () => {
         navigate('/study/flashcards');
       } else {
         console.log('🎯 Navegando a /study/test');
-        navigate('/study/test');
+        navigate('/study/exam');
       }
     } catch (error) {
       console.error('❌ Error creando sesión:', error);

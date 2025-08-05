@@ -91,7 +91,7 @@ const StudyTestPage: React.FC = () => {
           // Tiempo agotado, finalizar test automáticamente
           if (currentSession) {
             completeSession(currentSession);
-            navigate('/study/results');
+            navigate('/study/session-results');
           }
           return 0;
         }
@@ -195,7 +195,7 @@ const StudyTestPage: React.FC = () => {
       // Es la última pregunta, finalizar test automáticamente
       if (currentSession) {
         completeSession(currentSession);
-        navigate('/study/results');
+        navigate('/study/session-results');
       }
     }
   };
@@ -241,7 +241,7 @@ const StudyTestPage: React.FC = () => {
     } else {
       // Es la última pregunta, finalizar test
       completeSession(currentSession);
-      navigate('/study/results');
+      navigate('/study/session-results');
     }
   };
 
@@ -266,7 +266,7 @@ const StudyTestPage: React.FC = () => {
   const handleExit = () => {
     if (currentSession) {
       completeSession(currentSession);
-      navigate('/study/results');
+      navigate('/study/session-results');
     } else {
       navigate('/study');
     }

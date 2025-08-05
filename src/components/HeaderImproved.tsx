@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const navItems = [
     { path: '/', label: 'Inicio' },
     { path: '/study', label: 'Estudiar' },
-    { path: '/test', label: 'Test API' }
+    { path: '/api-test', label: 'Test API' }
   ];
 
   const dropdownItems = [
