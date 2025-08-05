@@ -1,9 +1,9 @@
 import React from 'react';
-import type { Question } from '../types/Question';
-import { useScrollDirection } from '../hooks/useScrollDirection';
-import Logo from './Header/Logo';
-import Navigation from './Header/Navigation';
-import QuestionManagerDropdown from './Header/QuestionManagerDropdown';
+import type { Question } from '../../types/Question';
+import { useScrollDirection } from '../../hooks/useScrollDirection';
+import Logo from './Logo';
+import Navigation from './Navigation';
+import QuestionManagerDropdown from './QuestionManagerDropdown';
 
 interface HeaderProps {
   questions: Question[];
@@ -20,10 +20,9 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
 
   const navItems = [
     { path: '/', label: 'Inicio' },
-    { path: '/study', label: 'Estudiar' }
+    { path: '/study', label: 'Estudiar' },
+    { path: '/test', label: 'Test API' }
   ];
-
-  const testApiItem = { path: '/test', label: 'Test API' };
 
   return (
     <header 
@@ -45,7 +44,6 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
               items={questionManagerItems} 
               questions={questions} 
             />
-            <Navigation items={[testApiItem]} />
           </div>
         </div>
       </div>

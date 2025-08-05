@@ -1,0 +1,51 @@
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
+
+interface NavItem {
+  path: string;
+  label: string;
+}
+
+interface NavigationProps {
+  items: NavItem[];
+}
+
+const Navigation: React.FC<NavigationProps> = ({ items }) => {
+  const location = useLocation();
+
+  return (
+    <nav className="flex items-center gap-8">
+      {items.map((item) => {
+        // Para el menú "Estudiar", verificar si la ruta actual comienza con "/study"
+        const isActive = item.path === '/study' 
+          ? location.pathname.startsWith('/study')
+          : location.pathname === item.path;
+        
+        return (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={`relative py-2 text-sm font-medium transition-all duration-200 group ${
+              isActive 
+                ? 'text-blue-600' 
+                : 'text-gray-700 hover:text-blue-600'
+            }`}
+          >
+            {item.label}
+            
+            {/* Underline indicator for active state */}
+            <span 
+              className={`absolute bottom-0 left-0 h-0.5 bg-blue-600 transition-all duration-200 ${
+                isActive 
+                  ? 'w-full' 
+                  : 'w-0 group-hover:w-full'
+              }`}
+            />
+          </Link>
+        );
+      })}
+    </nav>
+  );
+};
+
+export default Navigation;
