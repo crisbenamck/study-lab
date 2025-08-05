@@ -128,12 +128,12 @@ const StudyTestPage: React.FC = () => {
     }
   };
 
-  // Confirmar respuesta
-  const handleConfirmAnswer = () => {
-    if (selectedAnswers.length === 0 || !currentSession) return;
+  // Procesar respuesta automáticamente
+  const processAnswer = (answers: string[]) => {
+    if (answers.length === 0 || !currentSession) return;
 
     const currentSessionQuestion = currentSession.questions[currentQuestionIndex];
-    const updatedQuestion = updateQuestionAnswer(currentSessionQuestion, selectedAnswers, currentQuestion);
+    const updatedQuestion = updateQuestionAnswer(currentSessionQuestion, answers, currentQuestion);
     
     // Actualizar la sesión
     const updatedQuestions = [...currentSession.questions];
@@ -149,23 +149,16 @@ const StudyTestPage: React.FC = () => {
     // Mostrar respuestas si la configuración lo permite
     if (currentSession.config.showAnswersMode === 'immediate') {
       setShowAnswers(true);
-    } else {
-      // Avanzar automáticamente si no se muestran respuestas
-      if (canGoNext()) {
-        setSelectedAnswers([]);
-        setShowAnswers(false);
-        setStartTime(new Date());
-        goToNext();
-      } else {
-        // Es la última pregunta, finalizar test
-        completeSession(currentSession);
-        navigate('/study/results');
-      }
     }
   };
 
   // Ir a siguiente pregunta
   const handleNext = () => {
+    // Procesar la respuesta actual si hay alguna seleccionada
+    if (selectedAnswers.length > 0 && !currentSession?.questions[currentQuestionIndex]?.answered) {
+      processAnswer(selectedAnswers);
+    }
+
     if (canGoNext()) {
       setSelectedAnswers([]);
       setShowAnswers(false);
@@ -240,6 +233,16 @@ const StudyTestPage: React.FC = () => {
     });
   };
 
+  // Salir del test
+  const handleExit = () => {
+    if (currentSession) {
+      completeSession(currentSession);
+      navigate('/study/results');
+    } else {
+      navigate('/study');
+    }
+  };
+
   const currentSessionQuestion = currentSession.questions[currentQuestionIndex];
   const isAnswered = currentSessionQuestion?.answered || false;
 
@@ -257,15 +260,23 @@ const StudyTestPage: React.FC = () => {
                 Pregunta {currentQuestionIndex! + 1} de {currentSession.totalQuestions}
               </p>
             </div>
-            <div className="text-right">
-              {timeLeft !== null && (
-                <div className={`text-lg font-mono ${timeLeft < 300 ? 'text-red-600' : 'text-gray-700'}`}>
-                  ⏰ {formatTime(timeLeft)}
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                {timeLeft !== null && (
+                  <div className={`text-lg font-mono ${timeLeft < 300 ? 'text-red-600' : 'text-gray-700'}`}>
+                    ⏰ {formatTime(timeLeft)}
+                  </div>
+                )}
+                <div className="text-sm text-gray-600">
+                  Correctas: {sessionStats.correct} / {sessionStats.answered}
                 </div>
-              )}
-              <div className="text-sm text-gray-600">
-                Correctas: {sessionStats.correct} / {sessionStats.answered}
               </div>
+              <button
+                onClick={handleExit}
+                className="px-4 py-2 text-red-600 hover:text-red-700 hover:bg-red-50 text-sm border border-red-300 rounded-lg hover:border-red-400 transition-colors font-medium"
+              >
+                Salir
+              </button>
             </div>
           </div>
 
@@ -325,15 +336,18 @@ const StudyTestPage: React.FC = () => {
                         : 'border-gray-300'
                     }`}>
                       {currentQuestion.requires_multiple_answers ? (
-                        isSelected || shouldShowCorrect ? '✓' : ''
+                        (isSelected || shouldShowCorrect) ? '✓' : shouldShowIncorrect ? '✗' : ''
                       ) : (
-                        isSelected || shouldShowCorrect ? '●' : ''
+                        shouldShowCorrect ? '●' : shouldShowIncorrect ? '✗' : isSelected ? '●' : ''
                       )}
                     </div>
                     <span className="font-medium mr-2">{option.option_letter})</span>
                     <span className="flex-1">{option.option_text}</span>
                     {showAnswers && isCorrect && (
                       <span className="text-green-600 ml-2">✓ Correcta</span>
+                    )}
+                    {showAnswers && isSelected && !isCorrect && (
+                      <span className="text-red-600 ml-2">✗ Incorrecta</span>
                     )}
                   </div>
                 </div>
@@ -368,32 +382,19 @@ const StudyTestPage: React.FC = () => {
             </button>
 
             <div className="flex space-x-3">
-              {!isAnswered && !showAnswers && (
-                <>
-                  <button
-                    onClick={handleSkip}
-                    className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
-                  >
-                    Saltar
-                  </button>
-                  <button
-                    onClick={handleConfirmAnswer}
-                    disabled={selectedAnswers.length === 0}
-                    className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
-                  >
-                    Confirmar
-                  </button>
-                </>
-              )}
-
-              {(isAnswered || showAnswers) && (
-                <button
-                  onClick={handleNext}
-                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-                >
-                  {canGoNext() ? 'Siguiente →' : 'Finalizar Test'}
-                </button>
-              )}
+              <button
+                onClick={handleSkip}
+                className="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Saltar
+              </button>
+              <button
+                onClick={handleNext}
+                disabled={selectedAnswers.length === 0 && !isAnswered}
+                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+              >
+                {canGoNext() ? 'Siguiente →' : 'Finalizar Test'}
+              </button>
             </div>
           </div>
         </div>

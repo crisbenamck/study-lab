@@ -1,18 +1,25 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { StudySession, StudySessionQuestion } from '../types/StudySession';
 import type { Question } from '../types/Question';
 
 export const useStudySession = (session: StudySession | null, questions: Question[]) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [startTime, setStartTime] = useState<Date | null>(null);
+  const lastSessionId = useRef<string | null>(null);
 
-  // Resetear índice cuando cambia la sesión
+  // Resetear índice solo cuando cambia a una nueva sesión
   useEffect(() => {
     if (session) {
-      setCurrentQuestionIndex(0);
-      setStartTime(new Date());
+      // Solo resetear si es una sesión completamente nueva
+      if (session.id !== lastSessionId.current) {
+        setCurrentQuestionIndex(0);
+        setStartTime(new Date());
+        lastSessionId.current = session.id;
+      }
     } else {
+      setCurrentQuestionIndex(0);
       setStartTime(null);
+      lastSessionId.current = null;
     }
   }, [session]);
 
