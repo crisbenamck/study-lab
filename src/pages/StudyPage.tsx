@@ -162,7 +162,7 @@ const StudyPage: React.FC = () => {
           {/* Título y descripción */}
           <div className="mb-12 text-left">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">
-              Modo de Estudio
+              Centro de Estudio
             </h1>
             <p className="text-lg text-gray-600 max-w-3xl">
               Centro de control para tus sesiones de estudio. Crea preguntas, importa contenido o configura tu práctica personalizada.

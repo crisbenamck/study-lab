@@ -34,7 +34,7 @@ const StudyModeSelector: React.FC<StudyModeSelectorProps> = ({ mode, onModeChang
   return (
     <div className="mb-10 pb-8 border-b border-gray-200">
       <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-        Modalidad de Estudio
+        Tipo de Práctica
       </h2>
       
       <div className="grid md:grid-cols-2 gap-4">

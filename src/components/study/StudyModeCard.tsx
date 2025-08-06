@@ -26,7 +26,7 @@ const StudyModeCard: React.FC<StudyModeCardProps> = ({
     >
       <div className="flex items-top gap-3">
         <div className={`w-12 h-12 min-w-12 min-h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
-          isSelected ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600'
+          isSelected ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
         }`}>
           <div className="w-6 h-6">
             {icon}
