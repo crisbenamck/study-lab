@@ -20,7 +20,7 @@ const StudyPage: React.FC = () => {
   const { showAlert } = useAlert();
 
   const [mode, setMode] = useState<StudyMode>('flashcards');
-  const [scope, setScope] = useState<StudyScope>('all');
+  const [scope, setScope] = useState<StudyScope | null>(null);
   const [rangeStart, setRangeStart] = useState<string>('');
   const [rangeEnd, setRangeEnd] = useState<string>('');
   const [randomCount, setRandomCount] = useState<string>('');
@@ -133,7 +133,7 @@ const StudyPage: React.FC = () => {
 
     const config: StudySessionConfig = {
       mode,
-      scope,
+      scope: scope || 'all', // Si scope es null, usar 'all'
       rangeStart: scope === 'range' ? parseInt(rangeStart) : undefined,
       rangeEnd: scope === 'range' ? parseInt(rangeEnd) : undefined,
       randomCount: scope === 'random' ? parseInt(randomCount) : undefined,
@@ -185,7 +185,7 @@ const StudyPage: React.FC = () => {
           />
 
           <QuestionScopeSelector
-            scope={scope}
+            scope={scope || 'all'}
             onScopeChange={setScope}
             questionsCount={questions.length}
             rangeStart={rangeStart}
