@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
-import FlashCard from '../components/study/FlashCard';
-import Button from '../components/common/Button';
-import { CloseIcon, CheckIcon } from '../icons';
+import { 
+  FlashCard, 
+  StudyFlashCardsHeader, 
+  CompletionNotice, 
+  LoadingState 
+} from '../components/flashcards';
 
 interface StudyFlashCardsPageProps {
   showConfirm: (message: string, onConfirm: () => void) => void;
@@ -49,7 +52,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
           console.log('🔄 Configuración para repetir encontrada:', config);
           
           // Crear nueva sesión con la configuración guardada
-          const newSession = createStudySession(config, questions);
+          createStudySession(config, questions);
           console.log('✅ Nueva sesión creada para repetir flashcards');
           
           // Limpiar la configuración temporal
@@ -131,52 +134,17 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
   const progress = getProgress();
 
   if (!currentSession || !currentQuestion) {
-    return (
-      <div className="container py-8">
-        <div className="text-center">
-          <p className="text-gray-600">Cargando sesión de estudio...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState />;
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header fijo */}
-      <div className="bg-white shadow-sm border-b sticky top-0 z-10">
-        <div className="container py-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-xl font-semibold text-gray-800">
-                Flash Cards - Modo Estudio
-              </h1>
-              <p className="text-sm text-gray-600">
-                {currentSession.config.scope === 'all' && 'Todas las preguntas'}
-                {currentSession.config.scope === 'range' && 
-                  `Preguntas ${currentSession.config.rangeStart} - ${currentSession.config.rangeEnd}`}
-                {currentSession.config.scope === 'random' && 
-                  `${currentSession.config.randomCount} preguntas aleatorias`}
-              </p>
-            </div>
-            
-            <div className="flex items-center gap-4">
-              <div className="text-sm text-gray-600">
-                {progress.current} / {progress.total}
-              </div>
-              <Button
-                onClick={handleExit}
-                variant="danger"
-                buttonType="outline"
-                size="sm"
-                icon={<CloseIcon />}
-                iconPosition="left"
-              >
-                Salir
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <StudyFlashCardsHeader
+        currentSession={currentSession}
+        progress={progress}
+        onExit={handleExit}
+      />
 
       {/* Contenido principal */}
       <div className="container py-8">
@@ -191,24 +159,10 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
         />
 
         {/* Botón de completar cuando sea la última pregunta */}
-        {currentQuestionIndex === currentSession.questions.length - 1 && (
-          <div className="max-w-2xl mx-auto mt-6">
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-              <p className="text-green-800 mb-3">
-                🎉 ¡Has llegado al final de las flash cards!
-              </p>
-              <Button
-                onClick={handleComplete}
-                variant="success"
-                size="md"
-                icon={<CheckIcon />}
-                iconPosition="left"
-              >
-                Completar Sesión
-              </Button>
-            </div>
-          </div>
-        )}
+        <CompletionNotice
+          isLastQuestion={currentQuestionIndex === currentSession.questions.length - 1}
+          onComplete={handleComplete}
+        />
       </div>
     </div>
   );

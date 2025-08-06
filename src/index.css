@@ -46,3 +46,16 @@ a:focus,
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+/* FlashCard 3D animations */
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
