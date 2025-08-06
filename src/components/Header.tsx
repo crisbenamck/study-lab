@@ -1,6 +1,5 @@
 import React from 'react';
 import type { Question } from '../types/Question';
-import { useScrollDirection } from '../hooks/useScrollDirection';
 import Logo from './Header/Logo';
 import Navigation from './Header/Navigation';
 import QuestionManagerDropdown from './Header/QuestionManagerDropdown';
@@ -10,7 +9,6 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ questions }) => {
-  const { isVisible } = useScrollDirection();
 
   const questionManagerItems = [
     { path: '/create', label: 'Crear Preguntas' },
@@ -26,11 +24,7 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
   const testApiItem = { path: '/api-test', label: 'Test API' };
 
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ease-in-out ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
-      }`}
-    >
+    <header className="fixed top-0 left-0 right-0 z-50">
       {/* Glass effect background */}
       <div className="absolute inset-0 bg-white/80 backdrop-blur-md border-b border-gray-200/50" />
       
