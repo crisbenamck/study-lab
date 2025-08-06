@@ -14,10 +14,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Focus styles */
-*:focus {
+/* Focus styles - only for interactive elements that need accessibility */
+button:focus:not(.focus\:outline-none),
+input:focus:not(.focus\:outline-none),
+textarea:focus:not(.focus\:outline-none),
+select:focus:not(.focus\:outline-none) {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
+}
+
+/* Remove default browser outlines for links and custom focus elements */
+a:focus,
+*[class*="focus:outline-none"]:focus {
+  outline: none;
 }
 
 /* Custom scrollbar */
