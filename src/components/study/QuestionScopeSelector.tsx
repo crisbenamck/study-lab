@@ -99,7 +99,7 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
         >
           {/* Sección superior: Icono y textos */}
           <div className="flex-1 mb-4">
-            <div className="grid grid-cols-[auto_1fr] gap-3">
+            <div className="grid grid-cols-[auto_1fr_auto] gap-3">
               <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
                 scope === 'range' || isRangeCardFocused
                   ? 'bg-blue-100 text-blue-600' 
@@ -108,19 +108,19 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
                 <TargetIcon className="w-6 h-6" />
               </div>
               <div>
-                <div className="flex items-start gap-2">
-                  <h3 className="text-base font-semibold">
-                    Rango específico
-                  </h3>
-                  <InfoIcon 
-                    className="text-blue-500 mt-0.5" 
-                    size="sm" 
-                    tooltip="Elige preguntas por número (ej: 1-10)"
-                  />
-                </div>
+                <h3 className="text-base font-semibold">
+                  Rango específico
+                </h3>
                 <p className="text-gray-600 text-xs">
                   Ingresa el rango de preguntas a estudiar
                 </p>
+              </div>
+              <div className="flex items-start">
+                <InfoIcon 
+                  className="text-blue-500" 
+                  size="md" 
+                  tooltip="Elige preguntas por número (ej: 1-10)"
+                />
               </div>
             </div>
           </div>
@@ -180,7 +180,7 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
         >
           {/* Sección superior: Icono y textos */}
           <div className="flex-1 mb-4">
-            <div className="grid grid-cols-[auto_1fr] gap-3">
+            <div className="grid grid-cols-[auto_1fr_auto] gap-3">
               <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
                 scope === 'random' || isRandomCardFocused
                   ? 'bg-blue-100 text-blue-600' 
@@ -189,19 +189,19 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
                 <RefreshIcon className="w-6 h-6" />
               </div>
               <div>
-                <div className="flex items-start gap-2">
-                  <h3 className="text-base font-semibold">
-                    Preguntas aleatorias
-                  </h3>
-                  <InfoIcon 
-                    className="text-blue-500 mt-0.5" 
-                    size="sm" 
-                    tooltip="Cantidad fija de preguntas aleatorias"
-                  />
-                </div>
+                <h3 className="text-base font-semibold">
+                  Preguntas aleatorias
+                </h3>
                 <p className="text-gray-600 text-xs">
                   Selecciona cuántas preguntas aleatorias quieres estudiar
                 </p>
+              </div>
+              <div className="flex items-start">
+                <InfoIcon 
+                  className="text-blue-500" 
+                  size="md" 
+                  tooltip="Cantidad fija de preguntas aleatorias"
+                />
               </div>
             </div>
           </div>
