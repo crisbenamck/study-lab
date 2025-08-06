@@ -112,7 +112,11 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
                   <h3 className="text-base font-semibold">
                     Rango específico
                   </h3>
-                  <InfoIcon className="text-blue-500 mt-0.5" size="sm" />
+                  <InfoIcon 
+                    className="text-blue-500 mt-0.5" 
+                    size="sm" 
+                    tooltip="Elige preguntas por número (ej: 1-10)"
+                  />
                 </div>
                 <p className="text-gray-600 text-xs">
                   Ingresa el rango de preguntas a estudiar
@@ -189,7 +193,11 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
                   <h3 className="text-base font-semibold">
                     Preguntas aleatorias
                   </h3>
-                  <InfoIcon className="text-blue-500 mt-0.5" size="sm" />
+                  <InfoIcon 
+                    className="text-blue-500 mt-0.5" 
+                    size="sm" 
+                    tooltip="Cantidad fija de preguntas aleatorias"
+                  />
                 </div>
                 <p className="text-gray-600 text-xs">
                   Selecciona cuántas preguntas aleatorias quieres estudiar
