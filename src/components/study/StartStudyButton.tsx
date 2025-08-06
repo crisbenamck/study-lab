@@ -10,7 +10,7 @@ interface StartStudyButtonProps {
 
 const StartStudyButton: React.FC<StartStudyButtonProps> = ({ mode, onStartSession }) => {
   return (
-    <div className="pt-8">
+    <div>
       <Button
         onClick={onStartSession}
         variant="primary"
