@@ -1,5 +1,4 @@
 import React from 'react';
-import { InfoIcon } from '../../icons';
 import type { ShowAnswersMode } from '../../types/StudySession';
 
 interface TestConfigurationProps {
@@ -35,15 +34,14 @@ const TestConfiguration: React.FC<TestConfigurationProps> = ({
       </h2>
       
       <div className="grid md:grid-cols-2 gap-6">
-        {/* Mostrar respuestas */}
-        <div>
-          <div className="flex items-start gap-2 mb-3">
+        {/* Card: Mostrar respuestas */}
+        <div className="p-6 border border-gray-200 rounded-xl">
+          <div className="mb-3">
             <h3 style={{ fontSize: 'var(--font-size-base)', fontWeight: 'var(--font-weight-semibold)' }}>
               Mostrar Respuestas
             </h3>
-            <InfoIcon className="text-blue-500 mt-0.5" size="sm" />
           </div>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-xs)', marginBottom: 'var(--space-sm)' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-xs)' }} className="mb-4">
             Elige cuándo quieres ver las respuestas correctas durante el test
           </p>
           
@@ -65,15 +63,14 @@ const TestConfiguration: React.FC<TestConfigurationProps> = ({
           </div>
         </div>
 
-        {/* Límite de tiempo */}
-        <div>
-          <div className="flex items-start gap-2 mb-3">
+        {/* Card: Límite de tiempo */}
+        <div className="p-6 border border-gray-200 rounded-xl">
+          <div className="mb-3">
             <h3 style={{ fontSize: 'var(--font-size-base)', fontWeight: 'var(--font-weight-semibold)' }}>
               Límite de Tiempo (opcional)
             </h3>
-            <InfoIcon className="text-blue-500 mt-0.5" size="sm" />
           </div>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-xs)', marginBottom: 'var(--space-sm)' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-xs)' }} className="mb-4">
             Establece un tiempo límite para completar el test. Deja vacío para tiempo ilimitado
           </p>
           
