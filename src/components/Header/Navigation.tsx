@@ -25,7 +25,7 @@ const Navigation: React.FC<NavigationProps> = ({ items }) => {
           <Link
             key={item.path}
             to={item.path}
-            className={`relative py-2 text-sm font-medium transition-all duration-200 group ${
+            className={`relative py-2 text-sm font-medium transition-all duration-200 group focus:outline-none focus:ring-0 ${
               isActive 
                 ? 'text-blue-600' 
                 : 'text-gray-700 hover:text-blue-600'

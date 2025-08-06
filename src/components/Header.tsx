@@ -3,6 +3,7 @@ import type { Question } from '../types/Question';
 import Logo from './Header/Logo';
 import Navigation from './Header/Navigation';
 import QuestionManagerDropdown from './Header/QuestionManagerDropdown';
+import ThemeToggle from './Header/ThemeToggle';
 
 interface HeaderProps {
   questions: Question[];
@@ -40,6 +41,7 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
               questions={questions} 
             />
             <Navigation items={[testApiItem]} />
+            <ThemeToggle />
           </div>
         </div>
       </div>
