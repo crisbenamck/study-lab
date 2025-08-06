@@ -28,6 +28,14 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
           }`}
         >
           Gestor de Preguntas
+          
+          {/* Badge entre el texto y el ícono */}
+          {questions.length > 0 && (
+            <div className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold ml-2 min-w-[20px]">
+              {questions.length}
+            </div>
+          )}
+          
           <svg 
             className="w-4 h-4 ml-2 transform transition-transform group-hover:rotate-180" 
             fill="none" 
@@ -46,13 +54,6 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
               : 'w-0 group-hover:w-full'
           }`}
         />
-        
-        {/* Badge de notificación */}
-        {questions.length > 0 && (
-          <div className="absolute -top-2 -right-3 bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold px-1 min-w-[20px]">
-            {questions.length}
-          </div>
-        )}
       </div>
 
       {/* Dropdown Menu */}
