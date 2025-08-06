@@ -155,15 +155,6 @@ const StudyPage: React.FC = () => {
     navigate(targetPath);
   };
 
-  // Si no hay preguntas, mostrar estado vacío
-  if (questions.length === 0) {
-    return (
-      <Layout>
-        <EmptyQuestionsState />
-      </Layout>
-    );
-  }
-
   return (
     <Layout>
       <div className="py-16">
@@ -171,45 +162,51 @@ const StudyPage: React.FC = () => {
           {/* Título y descripción */}
           <div className="mb-12 text-left">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">
-              Configurar Sesión de Estudio
+              Modo de Estudio
             </h1>
             <p className="text-lg text-gray-600 max-w-3xl">
-              Personaliza tu experiencia de estudio seleccionando el modo de práctica, 
-              el alcance de las preguntas y las configuraciones que mejor se adapten a tus necesidades.
+              Centro de control para tus sesiones de estudio. Crea preguntas, importa contenido o configura tu práctica personalizada.
             </p>
           </div>
-          
-          <StudyModeSelector 
-            mode={mode} 
-            onModeChange={setMode} 
-          />
 
-          <QuestionScopeSelector
-            scope={scope || 'all'}
-            onScopeChange={setScope}
-            questionsCount={questions.length}
-            rangeStart={rangeStart}
-            rangeEnd={rangeEnd}
-            randomCount={randomCount}
-            rangeError={rangeError}
-            onRangeStartChange={handleRangeStartChange}
-            onRangeEndChange={handleRangeEndChange}
-            onRandomCountChange={setRandomCount}
-          />
+          {/* Si no hay preguntas, mostrar estado vacío */}
+          {questions.length === 0 ? (
+            <EmptyQuestionsState />
+          ) : (
+            <>
+              <StudyModeSelector 
+                mode={mode} 
+                onModeChange={setMode} 
+              />
 
-          {mode === 'test' && (
-            <TestConfiguration
-              showAnswersMode={showAnswersMode}
-              onShowAnswersModeChange={setShowAnswersMode}
-              timeLimit={timeLimit}
-              onTimeLimitChange={setTimeLimit}
-            />
+              <QuestionScopeSelector
+                scope={scope || 'all'}
+                onScopeChange={setScope}
+                questionsCount={questions.length}
+                rangeStart={rangeStart}
+                rangeEnd={rangeEnd}
+                randomCount={randomCount}
+                rangeError={rangeError}
+                onRangeStartChange={handleRangeStartChange}
+                onRangeEndChange={handleRangeEndChange}
+                onRandomCountChange={setRandomCount}
+              />
+
+              {mode === 'test' && (
+                <TestConfiguration
+                  showAnswersMode={showAnswersMode}
+                  onShowAnswersModeChange={setShowAnswersMode}
+                  timeLimit={timeLimit}
+                  onTimeLimitChange={setTimeLimit}
+                />
+              )}
+
+              <StartStudyButton 
+                mode={mode} 
+                onStartSession={startStudySession} 
+              />
+            </>
           )}
-
-          <StartStudyButton 
-            mode={mode} 
-            onStartSession={startStudySession} 
-          />
 
         </div>
       </div>
