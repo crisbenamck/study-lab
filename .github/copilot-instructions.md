@@ -1,18 +1,30 @@
-# Generador de Preguntas - React SPA
+## Additional Copilot Instructions
+
+- All answers and explanations provided to the user must be in Spanish.
+- Any action that requires using the terminal (such as deleting files) must be actually executed, not just described.
+
+## Copilot Custom Rules
+
+- All code, components, variable names, and comments must be written in English.
+- Do not use Spanish or any other language for code, comments, or documentation.
+- If you find any existing code in Spanish, prefer to refactor it to English when making changes.
+- Use clear, descriptive English names for all new files, functions, and variables.
+- This applies to all future code, documentation, and communication in this project.
+# Question Generator - React SPA
 
 <!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
 
 ## Project Overview
-Este es un proyecto de una Single Page Application (SPA) construida con React, TypeScript y CSS vanilla para crear y gestionar preguntas de examen con múltiples opciones.
+This is a Single Page Application (SPA) built with React, TypeScript, and vanilla CSS to create and manage exam questions with multiple options.
 
 ## Key Features
-- Formulario para crear preguntas con múltiples opciones
-- Soporte para respuestas múltiples
-- Persistencia automática en localStorage
-- Exportación a formato JSON
-- Numeración secuencial de preguntas (0001, 0002, etc.)
-- Campo obligatorio de link de referencia
-- Interfaz limpia y minimalista con CSS vanilla
+- Form to create questions with multiple options
+- Support for multiple answers
+- Automatic persistence in localStorage
+- Export to JSON format
+- Sequential numbering of questions (0001, 0002, etc.)
+- Required reference link field
+- Clean and minimalist interface with vanilla CSS
 - Local storage persistence
 - JSON export functionality
 - Modern, minimalist UI with Tailwind CSS
@@ -25,7 +37,7 @@ Este es un proyecto de una Single Page Application (SPA) construida con React, T
 - Import types with `import type` syntax
 - Use Tailwind CSS for all styling
 - Follow React best practices for state management
-- Use meaningful variable and function names in Spanish when appropriate for user-facing content
+- Use meaningful variable and function names in English for user-facing content
 
 ## File Structure
 - `/src/types/` - TypeScript type definitions
