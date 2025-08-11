@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../../components/common/Button';
-import { CloseIcon } from '../../icons';
+import { CloseIcon, ExamIcon } from '../../icons';
 
 interface ExamHeaderProps {
   title: string;
@@ -26,11 +26,18 @@ const ExamHeader: React.FC<ExamHeaderProps> = ({
 }) => (
   <div className="mb-6">
     <div className="flex justify-between items-center">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
-        <p className="text-gray-600">
-          Pregunta {questionIndex + 1} de {totalQuestions}
-        </p>
+      <div className="flex items-center gap-3">
+        <div className={`w-12 h-12 min-w-12 min-h-12 rounded-lg flex items-center justify-center flex-shrink-0 bg-blue-100 text-blue-600`}>
+          <div className="w-6 h-6">
+            <ExamIcon className="w-full h-full" />
+          </div>
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
+          <p className="text-gray-600">
+            Pregunta {questionIndex + 1} de {totalQuestions}
+          </p>
+        </div>
       </div>
       <div className="flex items-center gap-4">
         <div className="text-right">

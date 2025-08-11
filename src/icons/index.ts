@@ -37,3 +37,7 @@ export { default as SunIcon } from './SunIcon';
 export { default as MoonIcon } from './MoonIcon';
 export { default as BookIcon } from './BookIcon';
 export { default as RefreshIcon } from './RefreshIcon';
+
+// Iconos de modos de estudio
+export { default as FlashcardsIcon } from './FlashcardsIcon';
+export { default as ExamIcon } from './TestIcon';

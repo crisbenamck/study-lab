@@ -1,6 +1,7 @@
 import React from 'react';
 import type { StudyMode } from '../../types/StudySession';
 import StudyModeCard from './StudyModeCard';
+import { FlashcardsIcon, ExamIcon } from '../../icons';
 
 interface StudyModeSelectorProps {
   mode: StudyMode;
@@ -13,21 +14,13 @@ const StudyModeSelector: React.FC<StudyModeSelectorProps> = ({ mode, onModeChang
       id: 'flashcards' as StudyMode,
       title: 'Flash Cards',
       description: 'Tarjetas interactivas con preguntas y respuestas. Perfecto para memorización y repaso rápido.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-        </svg>
-      )
+      icon: <FlashcardsIcon className="w-6 h-6" />
     },
     {
       id: 'test' as StudyMode,
       title: 'Test de Práctica',
       description: 'Examen con preguntas de opción múltiple. Incluye puntuación y análisis de resultados.',
-      icon: (
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-        </svg>
-      )
+  icon: <ExamIcon className="w-6 h-6" />
     }
   ];
 
