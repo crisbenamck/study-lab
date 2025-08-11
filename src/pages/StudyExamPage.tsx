@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
-import Button from '../components/common/Button';
+import { ExamHeader, ExamQuestion, ExamControls } from '../components/exam';
 import ExplanationReference from '../components/common/ExplanationReference';
-import { CloseIcon, ArrowLeftIcon, ArrowRightIcon, FileTextIcon, ClipboardIcon } from '../icons';
 
 const StudyTestPage: React.FC = () => {
   const navigate = useNavigate();
@@ -129,12 +128,7 @@ const StudyTestPage: React.FC = () => {
     );
   }
 
-  // Formatear tiempo restante
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
+  // ...existing code...
 
   // Manejar selección de respuesta
   const handleAnswerSelect = (optionLetter: string) => {
@@ -279,196 +273,54 @@ const StudyTestPage: React.FC = () => {
   return (
     <div className="container py-8">
       <div className="max-w-4xl mx-auto">
-        {/* Header del test */}
-        <div className="mb-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-800">
-                Test de Práctica
-              </h1>
-              <p className="text-gray-600">
-                Pregunta {currentQuestionIndex! + 1} de {currentSession.totalQuestions}
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                {timeLeft !== null && (
-                  <div className={`text-lg font-mono ${timeLeft < 300 ? 'text-red-600' : 'text-gray-700'}`}>
-                    ⏰ {formatTime(timeLeft)}
-                  </div>
-                )}
-              </div>
-              <Button
-                onClick={handleExit}
-                variant="danger"
-                buttonType="outline"
-                size="sm"
-                icon={<CloseIcon />}
-                iconPosition="left"
-              >
-                Salir
-              </Button>
-            </div>
+        <ExamHeader
+          title="Test de Práctica"
+          questionIndex={currentQuestionIndex!}
+          totalQuestions={currentSession.totalQuestions}
+          timeLeft={timeLeft ?? undefined}
+          onExit={handleExit}
+        />
+        {/* Barra de progreso */}
+        <div className="mt-4">
+          <div className="w-full h-2 bg-gray-100">
+            <div
+              className="bg-blue-500 h-2 transition-all duration-300"
+              style={{ width: `${progress.percentage}%` }}
+            ></div>
           </div>
-
-          {/* Barra de progreso */}
-          <div className="mt-4">
-            <div className="w-full h-2 bg-gray-100">
-              <div
-                className="bg-blue-500 h-2 transition-all duration-300"
-                style={{ width: `${progress.percentage}%` }}
-              ></div>
-            </div>
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>Respondidas: {sessionStats.answered}</span>
-              <span>Restantes: {sessionStats.total - sessionStats.answered}</span>
-            </div>
+          <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <span>Respondidas: {sessionStats.answered}</span>
+            <span>Restantes: {sessionStats.total - sessionStats.answered}</span>
           </div>
         </div>
-
-  {/* Pregunta */}
-  <div className="mb-6">
-          <div className="mb-4">
-            <h2 className="text-lg font-semibold text-gray-800">
-              {currentQuestion.question_text}
-            </h2>
-          </div>
-
-          {/* Opciones */}
-          <div className="space-y-3">
-            {currentQuestion.options.map((option) => {
-              const isSelected = selectedAnswers.includes(option.option_letter);
-              const isCorrect = option.is_correct;
-              const shouldShowCorrect = showAnswers && isCorrect;
-              const shouldShowIncorrect = showAnswers && isSelected && !isCorrect;
-
-              return (
-                <div
-                  key={option.option_letter}
-                  className={`p-2 cursor-pointer transition-all ${
-                    shouldShowCorrect
-                      ? 'bg-green-50'
-                      : shouldShowIncorrect
-                      ? 'bg-red-50'
-                      : isSelected
-                      ? 'bg-blue-50'
-                      : ''
-                  } ${showAnswers ? 'cursor-default' : ''}`}
-                  onClick={() => handleAnswerSelect(option.option_letter)}
-                >
-                  <div className="flex items-center">
-                    <div className={`w-6 h-6 flex items-center justify-center mr-3 rounded-full border-2 transition-colors
-                      ${shouldShowCorrect
-                        ? 'border-green-500 bg-green-50 text-green-600'
-                        : shouldShowIncorrect
-                        ? 'border-red-500 bg-red-50 text-red-600'
-                        : isSelected
-                        ? 'border-blue-500 bg-blue-50 text-blue-600'
-                        : 'border-gray-300 bg-white text-gray-400'}
-                    `}>
-                      {currentQuestion.requires_multiple_answers ? (
-                        (isSelected || shouldShowCorrect) ? (
-                          <span className="text-lg">✓</span>
-                        ) : shouldShowIncorrect ? (
-                          <span className="text-lg">✗</span>
-                        ) : null
-                      ) : (
-                        (isSelected || shouldShowCorrect) ? (
-                          <span className="w-3 h-3 bg-current rounded-full block"></span>
-                        ) : shouldShowIncorrect ? (
-                          <span className="text-lg">✗</span>
-                        ) : null
-                      )}
-                    </div>
-                    <span className="font-medium mr-2">{option.option_letter})</span>
-                    <span className="flex-1">{option.option_text}</span>
-                    {showAnswers && isCorrect && (
-                      <span className="text-green-600 ml-2">✓ Correcta</span>
-                    )}
-                    {showAnswers && isSelected && !isCorrect && (
-                      <span className="text-red-600 ml-2">✗ Incorrecta</span>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Controles */}
-  <div className="p-0">
-          {/* Botón de marcar para revisión y explicación */}
-          <div className="mb-4 pb-4 border-b border-gray-200">
-            <div className="flex space-x-3">
-              <Button
-                onClick={handleMarkForReview}
-                variant={currentSessionQuestion?.markedForReview ? "warning" : "secondary"}
-                buttonType={currentSessionQuestion?.markedForReview ? "solid" : "outline"}
-                size="sm"
-                icon={<ClipboardIcon />}
-                iconPosition="left"
-              >
-                {currentSessionQuestion?.markedForReview ? 'Marcada para revisión' : 'Marcar para revisión'}
-              </Button>
-              
-              {currentQuestion.explanation && (
-                <Button
-                  onClick={() => setShowExplanation(!showExplanation)}
-                  variant={showExplanation ? "info" : "secondary"}
-                  buttonType="outline"
-                  size="sm"
-                  icon={<FileTextIcon />}
-                  iconPosition="left"
-                >
-                  {showExplanation ? 'Ocultar explicación' : 'Ver explicación'}
-                </Button>
-              )}
-            </div>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <Button
-              onClick={handlePrevious}
-              disabled={!canGoPrevious()}
-              variant="secondary"
-              buttonType="outline"
-              size="md"
-              icon={<ArrowLeftIcon />}
-              iconPosition="left"
-            >
-              Anterior
-            </Button>
-
-            <div className="flex space-x-3">
-              <Button
-                onClick={handleSkip}
-                variant="secondary"
-                buttonType="outline"
-                size="md"
-              >
-                Saltar
-              </Button>
-              <Button
-                onClick={handleNext}
-                disabled={selectedAnswers.length === 0 && !isAnswered}
-                variant="primary"
-                size="md"
-                icon={<ArrowRightIcon />}
-                iconPosition="right"
-              >
-                {canGoNext() ? 'Siguiente' : 'Finalizar Test'}
-              </Button>
-            </div>
-          </div>
-        </div>
-
+        <ExamQuestion
+          questionText={currentQuestion.question_text}
+          options={currentQuestion.options}
+          selectedAnswers={selectedAnswers}
+          requiresMultipleAnswers={currentQuestion.requires_multiple_answers}
+          showAnswers={showAnswers}
+          onSelect={handleAnswerSelect}
+        />
+        <ExamControls
+          onPrevious={handlePrevious}
+          onNext={handleNext}
+          onSkip={handleSkip}
+          onMarkForReview={handleMarkForReview}
+          canGoPrevious={canGoPrevious()}
+          canGoNext={canGoNext()}
+          isAnswered={isAnswered}
+          selectedAnswers={selectedAnswers}
+          markedForReview={currentSessionQuestion?.markedForReview}
+          showExplanation={showExplanation}
+          onToggleExplanation={() => setShowExplanation(!showExplanation)}
+          hasExplanation={!!currentQuestion.explanation}
+        />
         {/* Explicación (solo cuando el usuario la solicite) */}
         {showExplanation && (currentQuestion.explanation || currentQuestion.link) && (
           <div className="mt-6">
             <ExplanationReference explanation={currentQuestion.explanation} link={currentQuestion.link} />
           </div>
         )}
-
         {/* Explicación con respuestas (solo si se muestran respuestas automáticamente) */}
         {showAnswers && !showExplanation && (currentQuestion.explanation || currentQuestion.link) && (
           <div className="mt-6">
