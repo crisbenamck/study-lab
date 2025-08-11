@@ -64,6 +64,18 @@
 - Si detectas código que puede optimizarse (por ejemplo, renderizados innecesarios o uso ineficiente de hooks), sugiere mejoras automáticas.
 - Al crear un nuevo hook, utilidad o componente, agrega un comentario breve en inglés explicando su propósito y uso.
 
+# Reglas para commits
+- Todos los commits deben estar en inglés, ser claros y estructurados.
+- Usa saltos de línea reales (no \n) para separar secciones.
+- Prefiere mensajes concisos pero informativos: incluye tipo de cambio, resumen, breaking change si aplica y archivos afectados si es relevante.
+- Ejemplo recomendado:
+	refactor(flashcards): rename StudyFlashCardsHeader to FlashCardsHeader
+  
+	- Rename component, props, imports, and exports for clarity
+	- No logic changes, only naming updates
+  
+	BREAKING CHANGE: Use FlashCardsHeader instead of StudyFlashCardsHeader
+
 ---
 
 ### Tecnologías principales del proyecto
