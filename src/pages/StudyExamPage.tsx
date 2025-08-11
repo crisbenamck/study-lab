@@ -278,13 +278,27 @@ const StudyTestPage: React.FC = () => {
   const currentSessionQuestion = currentSession.questions[currentQuestionIndex];
   const isAnswered = currentSessionQuestion?.answered || false;
 
+  // Helper para el subtítulo (alcance)
+  const getScopeText = () => {
+    switch (currentSession.config.scope) {
+      case 'all':
+        return 'Todas las preguntas';
+      case 'range':
+        return `Preguntas ${currentSession.config.rangeStart} - ${currentSession.config.rangeEnd}`;
+      case 'random':
+        return `${currentSession.config.randomCount} preguntas aleatorias`;
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="container py-8">
       <div className="max-w-4xl mx-auto">
         <ActivityHeader
           icon={<ExamIcon className="w-5 h-5" />}
           title="Modo Examen"
-          subtitle={`Pregunta ${currentQuestionIndex + 1} de ${currentSession.totalQuestions}`}
+          subtitle={getScopeText()}
           progressCurrent={currentQuestionIndex}
           progressTotal={currentSession.totalQuestions}
           timeLeft={timeLeft ?? undefined}
