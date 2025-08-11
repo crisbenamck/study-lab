@@ -3,12 +3,13 @@ import type { StudySession } from '../../types/StudySession';
 import Button from '../common/Button';
 import { CloseIcon } from '../../icons';
 
-interface StudyFlashCardsHeaderProps {
+
+interface FlashCardsHeaderProps {
   currentSession: StudySession;
   onExit: () => void;
 }
 
-const StudyFlashCardsHeader: React.FC<StudyFlashCardsHeaderProps> = ({
+const FlashCardsHeader: React.FC<FlashCardsHeaderProps> = ({
   currentSession,
   onExit,
 }) => {
@@ -59,4 +60,4 @@ const StudyFlashCardsHeader: React.FC<StudyFlashCardsHeaderProps> = ({
   );
 };
 
-export default StudyFlashCardsHeader;
+export default FlashCardsHeader;

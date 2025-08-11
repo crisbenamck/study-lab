@@ -5,7 +5,7 @@ import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
 import { 
   FlashCard, 
-  StudyFlashCardsHeader, 
+  FlashCardsHeader, 
   LoadingState 
 } from '../components/flashcards';
 
@@ -138,7 +138,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
     <div className="min-h-screen">
       <div className="max-w-4xl mx-auto py-8">
         {/* Header fijo */}
-        <StudyFlashCardsHeader
+  <FlashCardsHeader
           currentSession={currentSession}
           onExit={handleExit}
         />
