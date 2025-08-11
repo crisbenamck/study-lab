@@ -31,20 +31,10 @@ const StudyTestPage: React.FC = () => {
     updateQuestionAnswer,
   } = useStudySession(currentSession, questions);
 
-  const log = (message: string, ...args: unknown[]) => {
-    // Enhanced logging for development
-    if (process.env.NODE_ENV !== 'production') {
-      // Only log if not the 'Questions:' or 'Mode: exam' message
-      if (message !== 'Questions:' && message !== 'Mode: exam') {
-        console.log(`[StudyExamPage] ${message}`, ...args);
-      }
-    }
-  };
 
   // Validate session and handle repeat config on mount
   useEffect(() => {
     if (!isLoaded) {
-      log('Esperando a que se cargue el estado...');
       return;
     }
     if (!hasCheckedSession) {
@@ -53,11 +43,9 @@ const StudyTestPage: React.FC = () => {
       if (repeatConfig && !currentSession) {
         try {
           const config = JSON.parse(repeatConfig);
-          log('Configuración para repetir encontrada:', config);
           createStudySession(config, questions);
           localStorage.removeItem('repeat-session-config');
-        } catch (error) {
-          console.error('[StudyExamPage] Error al crear la sesión para repetir:', error);
+        } catch {
           localStorage.removeItem('repeat-session-config');
           navigate('/study');
         }
@@ -81,10 +69,8 @@ const StudyTestPage: React.FC = () => {
           }
           // Only allow mode 'exam' for this page
           if (!session || session.config.mode !== 'exam') {
-            log('No hay sesión válida, redirigiendo a /study');
             navigate('/study');
           } else {
-            log('Sesión válida encontrada');
             if (session.config.timeLimit) {
               setTimeLeft(session.config.timeLimit * 60);
             }
