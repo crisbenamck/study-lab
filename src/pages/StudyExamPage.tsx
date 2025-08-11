@@ -30,8 +30,6 @@ const StudyTestPage: React.FC = () => {
     updateQuestionAnswer,
   } = useStudySession(currentSession, questions);
 
-  // Robust session validation and logging (in English)
-  // Utility for contextual logging
   const log = (message: string, ...args: unknown[]) => {
     // Enhanced logging for development
     if (process.env.NODE_ENV !== 'production') {
@@ -42,10 +40,10 @@ const StudyTestPage: React.FC = () => {
     }
   };
 
+  // Validate session and handle repeat config on mount
   useEffect(() => {
-    // Wait for state to load before validating session
     if (!isLoaded) {
-      log('Waiting for state to load...');
+      log('Esperando a que se cargue el estado...');
       return;
     }
     if (!hasCheckedSession) {
@@ -54,12 +52,11 @@ const StudyTestPage: React.FC = () => {
       if (repeatConfig && !currentSession) {
         try {
           const config = JSON.parse(repeatConfig);
-          log('Repeat session config found:', config);
+          log('Configuración para repetir encontrada:', config);
           createStudySession(config, questions);
           localStorage.removeItem('repeat-session-config');
         } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error('[StudyExamPage] Error creating repeat session:', error);
+          console.error('[StudyExamPage] Error al crear la sesión para repetir:', error);
           localStorage.removeItem('repeat-session-config');
           navigate('/study');
         }
@@ -83,10 +80,10 @@ const StudyTestPage: React.FC = () => {
           }
           // Only allow mode 'exam' for this page
           if (!session || session.config.mode !== 'exam') {
-            log('No valid session found, redirecting to /study');
+            log('No hay sesión válida, redirigiendo a /study');
             navigate('/study');
           } else {
-            log('Valid session found');
+            log('Sesión válida encontrada');
             if (session.config.timeLimit) {
               setTimeLeft(session.config.timeLimit * 60);
             }
@@ -96,7 +93,7 @@ const StudyTestPage: React.FC = () => {
     }
   }, [currentSession, navigate, isLoaded, hasCheckedSession, createStudySession, questions]);
 
-  // Timer countdown for exam mode
+  // Handle timer countdown for exam mode
   useEffect(() => {
     if (timeLeft === null || timeLeft <= 0) return;
     const timer = setInterval(() => {
@@ -115,7 +112,7 @@ const StudyTestPage: React.FC = () => {
     return () => clearInterval(timer);
   }, [timeLeft, currentSession, completeSession, navigate]);
 
-  // Load saved answers when the question changes
+  // Load saved answers and explanation state when the question changes
   useEffect(() => {
     if (currentSession && currentQuestionIndex !== undefined) {
       const sessionQuestion = currentSession.questions[currentQuestionIndex];
@@ -143,12 +140,12 @@ const StudyTestPage: React.FC = () => {
 
   // ...existing code...
 
-  // Manejar selección de respuesta
+  // Handle answer selection
   const handleAnswerSelect = (optionLetter: string) => {
     if (showAnswers) return; // No permitir cambios si ya se muestran las respuestas
 
     if (currentQuestion.requires_multiple_answers) {
-      // Respuesta múltiple
+  // Multiple answer
       setSelectedAnswers(prev => {
         if (prev.includes(optionLetter)) {
           return prev.filter(letter => letter !== optionLetter);
@@ -157,19 +154,19 @@ const StudyTestPage: React.FC = () => {
         }
       });
     } else {
-      // Respuesta única
+  // Single answer
       setSelectedAnswers([optionLetter]);
     }
   };
 
-  // Procesar respuesta automáticamente
+  // Process answer and update session state
   const processAnswer = (answers: string[]) => {
     if (answers.length === 0 || !currentSession) return;
 
     const currentSessionQuestion = currentSession.questions[currentQuestionIndex];
     const updatedQuestion = updateQuestionAnswer(currentSessionQuestion, answers, currentQuestion);
     
-    // Actualizar la sesión
+  // Update session
     const updatedQuestions = [...currentSession.questions];
     updatedQuestions[currentQuestionIndex] = updatedQuestion;
     
@@ -180,15 +177,15 @@ const StudyTestPage: React.FC = () => {
       correctAnswers,
     });
 
-    // Mostrar respuestas si la configuración lo permite
+  // Show answers if config allows
     if (currentSession.config.showAnswersMode === 'immediate') {
       setShowAnswers(true);
     }
   };
 
-  // Ir a siguiente pregunta
+  // Go to next question or finish exam
   const handleNext = () => {
-    // Procesar la respuesta actual si hay alguna seleccionada
+  // Process current answer if selected
     if (selectedAnswers.length > 0 && !currentSession?.questions[currentQuestionIndex]?.answered) {
       processAnswer(selectedAnswers);
     }
@@ -200,7 +197,7 @@ const StudyTestPage: React.FC = () => {
       setStartTime(new Date());
       goToNext();
     } else {
-      // Es la última pregunta, finalizar test automáticamente
+  // If last question, finish exam automatically
       if (currentSession) {
         completeSession(currentSession);
         navigate('/study/session-results');
@@ -208,7 +205,7 @@ const StudyTestPage: React.FC = () => {
     }
   };
 
-  // Ir a pregunta anterior
+  // Go to previous question
   const handlePrevious = () => {
     if (canGoPrevious()) {
       setShowAnswers(false);
@@ -217,7 +214,7 @@ const StudyTestPage: React.FC = () => {
     }
   };
 
-  // Saltar pregunta
+  // Skip current question
   const handleSkip = () => {
     if (!currentSession) return;
 
@@ -231,7 +228,7 @@ const StudyTestPage: React.FC = () => {
       skipped: true,
     };
 
-    // Actualizar la sesión
+  // Update session
     const updatedQuestions = [...currentSession.questions];
     updatedQuestions[currentQuestionIndex] = updatedQuestion;
     
@@ -239,7 +236,7 @@ const StudyTestPage: React.FC = () => {
       questions: updatedQuestions,
     });
 
-    // Avanzar a la siguiente pregunta o finalizar
+  // Go to next question or finish
     if (canGoNext()) {
       setSelectedAnswers([]);
       setShowAnswers(false);
@@ -247,13 +244,13 @@ const StudyTestPage: React.FC = () => {
       setStartTime(new Date());
       goToNext();
     } else {
-      // Es la última pregunta, finalizar test
+  // If last question, finish exam
       completeSession(currentSession);
       navigate('/study/session-results');
     }
   };
 
-  // Marcar para revisión
+  // Mark question for review
   const handleMarkForReview = () => {
     const currentSessionQuestion = currentSession.questions[currentQuestionIndex];
     const updatedQuestion = {
@@ -261,7 +258,7 @@ const StudyTestPage: React.FC = () => {
       markedForReview: !currentSessionQuestion.markedForReview,
     };
 
-    // Actualizar la sesión
+  // Update session
     const updatedQuestions = [...currentSession.questions];
     updatedQuestions[currentQuestionIndex] = updatedQuestion;
     
@@ -270,7 +267,7 @@ const StudyTestPage: React.FC = () => {
     });
   };
 
-  // Salir del test
+  // Exit the exam and finish session
   const handleExit = () => {
     if (currentSession) {
       completeSession(currentSession);
@@ -293,7 +290,7 @@ const StudyTestPage: React.FC = () => {
           timeLeft={timeLeft ?? undefined}
           onExit={handleExit}
         />
-        {/* Barra de progreso */}
+  {/* Progress bar */}
         <div className="mt-4">
           <div className="w-full h-2 bg-gray-100">
             <div
@@ -328,13 +325,13 @@ const StudyTestPage: React.FC = () => {
           onToggleExplanation={() => setShowExplanation(!showExplanation)}
           hasExplanation={!!currentQuestion.explanation}
         />
-        {/* Explicación (solo cuando el usuario la solicite) */}
+  {/* Explanation (only when requested by user) */}
         {showExplanation && (currentQuestion.explanation || currentQuestion.link) && (
           <div className="mt-6">
             <ExplanationReference explanation={currentQuestion.explanation} link={currentQuestion.link} />
           </div>
         )}
-        {/* Explicación con respuestas (solo si se muestran respuestas automáticamente) */}
+  {/* Explanation with answers (only if answers are shown automatically) */}
         {showAnswers && !showExplanation && (currentQuestion.explanation || currentQuestion.link) && (
           <div className="mt-6">
             <ExplanationReference explanation={currentQuestion.explanation} link={currentQuestion.link} />

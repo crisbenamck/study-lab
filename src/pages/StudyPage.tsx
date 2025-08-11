@@ -47,25 +47,25 @@ const StudyPage: React.FC = () => {
     const endNum = parseInt(end);
 
     if (isNaN(startNum) || isNaN(endNum)) {
-      setRangeError('Values must be valid numbers');
+  setRangeError('Los valores deben ser números válidos');
       return;
     }
 
     if (startNum < 1) {
-      setRangeError('Start number cannot be less than 1');
+  setRangeError('El número inicial no puede ser menor a 1');
       return;
     }
 
     if (questions.length > 0) {
       const maxQuestionNumber = Math.max(...questions.map(q => q.question_number));
       if (endNum > maxQuestionNumber) {
-        setRangeError(`End number cannot be greater than ${maxQuestionNumber}`);
+  setRangeError(`El número final no puede ser mayor a ${maxQuestionNumber}`);
         return;
       }
     }
 
     if (startNum > endNum) {
-      setRangeError('Start number cannot be greater than end number');
+  setRangeError('El número inicial no puede ser mayor que el final');
       return;
     }
 
@@ -86,32 +86,32 @@ const StudyPage: React.FC = () => {
   // Validate configuration before starting session
   const validateConfig = (): string | null => {
     if (questions.length === 0) {
-      return 'No questions available. Please create some questions first.';
+  return 'No hay preguntas disponibles. Crea algunas preguntas primero.';
     }
 
     if (scope === 'range') {
       const start = parseInt(rangeStart);
       const end = parseInt(rangeEnd);
       if (!rangeStart || !rangeEnd || isNaN(start) || isNaN(end)) {
-        return 'Please enter a valid range of questions.';
+  return 'Por favor ingresa un rango válido de preguntas.';
       }
       if (start > end) {
-        return 'Start number cannot be greater than end number.';
+  return 'El número inicial no puede ser mayor que el final.';
       }
       const maxQuestionNumber = Math.max(...questions.map(q => q.question_number));
       const minQuestionNumber = Math.min(...questions.map(q => q.question_number));
       if (start < minQuestionNumber || end > maxQuestionNumber) {
-        return `Range must be between ${minQuestionNumber} and ${maxQuestionNumber}.`;
+  return `El rango debe estar entre ${minQuestionNumber} y ${maxQuestionNumber}.`;
       }
     }
 
     if (scope === 'random') {
       const count = parseInt(randomCount);
       if (!randomCount || isNaN(count) || count <= 0) {
-        return 'Please enter a valid number of random questions.';
+  return 'Por favor ingresa un número válido de preguntas aleatorias.';
       }
       if (count > questions.length) {
-        return `You cannot select more than ${questions.length} questions.`;
+  return `No puedes seleccionar más de ${questions.length} preguntas.`;
       }
     }
 
@@ -147,10 +147,10 @@ const StudyPage: React.FC = () => {
           {/* Title and description */}
           <div className="mb-12 text-left">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">
-              Study Center
+              Centro de Estudio
             </h1>
             <p className="text-lg text-gray-600 max-w-3xl">
-              Control center for your study sessions. Create questions, import content, or configure your custom practice.
+              Centro de control para tus sesiones de estudio. Crea preguntas, importa contenido o configura tu práctica personalizada.
             </p>
           </div>
 
