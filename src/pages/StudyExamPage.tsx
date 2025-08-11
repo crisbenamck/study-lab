@@ -280,7 +280,7 @@ const StudyTestPage: React.FC = () => {
     <div className="container py-8">
       <div className="max-w-4xl mx-auto">
         {/* Header del test */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+        <div className="mb-6">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-2xl font-bold text-gray-800">
@@ -316,9 +316,9 @@ const StudyTestPage: React.FC = () => {
 
           {/* Barra de progreso */}
           <div className="mt-4">
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full h-2 bg-gray-100">
               <div
-                className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                className="bg-blue-500 h-2 transition-all duration-300"
                 style={{ width: `${progress.percentage}%` }}
               ></div>
             </div>
@@ -329,8 +329,8 @@ const StudyTestPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Pregunta */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
+  {/* Pregunta */}
+  <div className="mb-6">
           <div className="mb-4">
             <h2 className="text-lg font-semibold text-gray-800">
               {currentQuestion.question_text}
@@ -348,26 +348,26 @@ const StudyTestPage: React.FC = () => {
               return (
                 <div
                   key={option.option_letter}
-                  className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  className={`p-2 cursor-pointer transition-all ${
                     shouldShowCorrect
-                      ? 'border-green-500 bg-green-50'
+                      ? 'bg-green-50'
                       : shouldShowIncorrect
-                      ? 'border-red-500 bg-red-50'
+                      ? 'bg-red-50'
                       : isSelected
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'bg-blue-50'
+                      : ''
                   } ${showAnswers ? 'cursor-default' : ''}`}
                   onClick={() => handleAnswerSelect(option.option_letter)}
                 >
                   <div className="flex items-center">
-                    <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 ${
+                    <div className={`w-6 h-6 flex items-center justify-center mr-3 ${
                       shouldShowCorrect
-                        ? 'border-green-500 bg-green-500 text-white'
+                        ? 'text-green-600'
                         : shouldShowIncorrect
-                        ? 'border-red-500 bg-red-500 text-white'
+                        ? 'text-red-600'
                         : isSelected
-                        ? 'border-blue-500 bg-blue-500 text-white'
-                        : 'border-gray-300'
+                        ? 'text-blue-600'
+                        : 'text-gray-400'
                     }`}>
                       {currentQuestion.requires_multiple_answers ? (
                         (isSelected || shouldShowCorrect) ? '✓' : shouldShowIncorrect ? '✗' : ''
@@ -391,7 +391,7 @@ const StudyTestPage: React.FC = () => {
         </div>
 
         {/* Controles */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
+  <div className="p-0">
           {/* Botón de marcar para revisión y explicación */}
           <div className="mb-4 pb-4 border-b border-gray-200">
             <div className="flex space-x-3">
@@ -459,14 +459,14 @@ const StudyTestPage: React.FC = () => {
 
         {/* Explicación (solo cuando el usuario la solicite) */}
         {showExplanation && (currentQuestion.explanation || currentQuestion.link) && (
-          <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
+          <div className="mt-6">
             <ExplanationReference explanation={currentQuestion.explanation} link={currentQuestion.link} />
           </div>
         )}
 
         {/* Explicación con respuestas (solo si se muestran respuestas automáticamente) */}
         {showAnswers && !showExplanation && (currentQuestion.explanation || currentQuestion.link) && (
-          <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
+          <div className="mt-6">
             <ExplanationReference explanation={currentQuestion.explanation} link={currentQuestion.link} />
           </div>
         )}
