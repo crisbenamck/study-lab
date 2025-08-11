@@ -98,14 +98,12 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header questions={questions} />
-      
-      {/* Spacer para compensar el header fijo */}
-      <div style={{ height: '80px' }}></div>
-      
-      <main className="main-content bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <Routes>
+      <div className="max-w-4xl mx-auto bg-white min-h-screen">
+        <Header questions={questions} />
+
+  <main className="main-content pt-20">
+          <div className="px-4 sm:px-6 lg:px-8">
+            <Routes>
             <Route 
               path="/" 
               element={<HomePage />} 
@@ -201,29 +199,30 @@ function App() {
               element={<IconPreviewPage />} 
             />
           </Routes>
-        </div>
-      </main>
-      
-      {/* Modales */}
-      <AlertModal
-        isOpen={isAlertOpen}
-        onClose={hideAlert}
-        title={alertOptions.title}
-        message={alertMessage}
-        type={alertOptions.type}
-        buttonText={alertOptions.buttonText}
-      />
-      
-      <ConfirmModal
-        isOpen={isConfirmOpen}
-        onConfirm={confirmCallback || (() => {})}
-        onCancel={hideConfirm}
-        title={confirmOptions.title}
-        message={confirmMessage}
-        confirmText={confirmOptions.confirmText}
-        cancelText={confirmOptions.cancelText}
-        type={confirmOptions.type}
-      />
+          </div>
+        </main>
+
+        {/* Modales */}
+        <AlertModal
+          isOpen={isAlertOpen}
+          onClose={hideAlert}
+          title={alertOptions.title}
+          message={alertMessage}
+          type={alertOptions.type}
+          buttonText={alertOptions.buttonText}
+        />
+
+        <ConfirmModal
+          isOpen={isConfirmOpen}
+          onConfirm={confirmCallback || (() => {})}
+          onCancel={hideConfirm}
+          title={confirmOptions.title}
+          message={confirmMessage}
+          confirmText={confirmOptions.confirmText}
+          cancelText={confirmOptions.cancelText}
+          type={confirmOptions.type}
+        />
+      </div>
     </div>
   );
 }

@@ -17,8 +17,8 @@ const CompletionNotice: React.FC<CompletionNoticeProps> = ({
 
   return (
     <div className="max-w-2xl mx-auto mt-6">
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-        <p className="text-green-800 mb-3">
+  <div className="bg-white border border-gray-200 rounded-lg p-4 text-center">
+  <p className="text-gray-800 mb-3">
           🎉 ¡Has llegado al final de las flash cards!
         </p>
         <Button

@@ -6,7 +6,6 @@ import { useStudySession } from '../hooks/useStudySession';
 import { 
   FlashCard, 
   StudyFlashCardsHeader, 
-  CompletionNotice, 
   LoadingState 
 } from '../components/flashcards';
 
@@ -26,8 +25,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
     goToPrevious,
     canGoNext,
     canGoPrevious,
-    getCurrentQuestion,
-    getProgress,
+  getCurrentQuestion,
   } = useStudySession(currentSession, questions);
 
   // Verificar si hay sesión activa
@@ -131,23 +129,21 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
   };
 
   const currentQuestion = getCurrentQuestion();
-  const progress = getProgress();
 
   if (!currentSession || !currentQuestion) {
     return <LoadingState />;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header fijo */}
-      <StudyFlashCardsHeader
-        currentSession={currentSession}
-        progress={progress}
-        onExit={handleExit}
-      />
+    <div className="min-h-screen">
+      <div className="max-w-4xl mx-auto py-8">
+        {/* Header fijo */}
+        <StudyFlashCardsHeader
+          currentSession={currentSession}
+          onExit={handleExit}
+        />
 
-      {/* Contenido principal */}
-      <div className="container py-8">
+        {/* Contenido principal */}
         <FlashCard
           question={currentQuestion}
           onNext={handleNext}
@@ -158,11 +154,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
           totalQuestions={currentSession.questions.length}
         />
 
-        {/* Botón de completar cuando sea la última pregunta */}
-        <CompletionNotice
-          isLastQuestion={currentQuestionIndex === currentSession.questions.length - 1}
-          onComplete={handleComplete}
-        />
+
       </div>
     </div>
   );
