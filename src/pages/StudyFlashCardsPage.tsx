@@ -30,54 +30,39 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
   getCurrentQuestion,
   } = useStudySession(currentSession, questions);
 
-  // Verificar si hay sesión activa
+  // Check if there is an active session
   useEffect(() => {
-    console.log('📱 StudyFlashCardsPage - currentSession:', currentSession, 'isLoaded:', isLoaded);
-    
-    // Esperar a que se cargue el estado antes de verificar
     if (!isLoaded) {
-      console.log('⏳ Esperando a que se cargue el estado...');
       return;
     }
 
     if (!hasCheckedSession) {
       setHasCheckedSession(true);
-      
-      // Verificar si hay una configuración guardada para repetir flashcards
+      // Check if there is a saved config to repeat flashcards
       const repeatConfig = localStorage.getItem('repeat-session-config');
-      
+
       if (repeatConfig && !currentSession) {
         try {
           const config = JSON.parse(repeatConfig);
-          console.log('🔄 Configuración para repetir encontrada:', config);
-          
-          // Crear nueva sesión con la configuración guardada
           createStudySession(config, questions);
-          console.log('✅ Nueva sesión creada para repetir flashcards');
-          
-          // Limpiar la configuración temporal
+          // Clean up temporary config
           localStorage.removeItem('repeat-session-config');
-          
-        } catch (error) {
-          console.error('❌ Error al crear sesión para repetir:', error);
+        } catch {
           localStorage.removeItem('repeat-session-config');
           navigate('/study');
         }
       } else {
-        // Dar un pequeño delay para asegurar que la sesión se haya creado
+        // Add a small delay to ensure the session is created
         setTimeout(() => {
           if (!currentSession || currentSession.config.mode !== 'flashcards') {
-            console.log('❌ No hay sesión válida, redirigiendo a /study');
             navigate('/study');
-          } else {
-            console.log('✅ Sesión válida encontrada');
           }
         }, 100);
       }
     }
   }, [currentSession, navigate, isLoaded, hasCheckedSession, createStudySession, questions]);
 
-  // Manejar navegación hacia siguiente
+  // Handle navigation to next
   const handleNext = () => {
     if (canGoNext()) {
       goToNext();
@@ -87,7 +72,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
     }
   };
 
-  // Completar sesión de flash cards
+  // Complete flashcards session
   const handleComplete = async () => {
     if (!currentSession) return;
 
@@ -115,7 +100,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
     }
   };
 
-  // Manejar salida prematura
+  // Handle early exit
   const handleExit = async () => {
     try {
       await showConfirm(
