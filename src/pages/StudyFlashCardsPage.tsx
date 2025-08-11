@@ -8,6 +8,7 @@ import {
   LoadingState 
 } from '../components/flashcards';
 import ActivityHeader from '../components/common/ActivityHeader';
+import { getScopeText } from '../utils/sessionHelpers';
 import { BookIcon } from '../icons';
 
 interface StudyFlashCardsPageProps {
@@ -135,20 +136,6 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
     return <LoadingState />;
   }
 
-  // Helper para el subtítulo (alcance)
-  const getScopeText = () => {
-    switch (currentSession.config.scope) {
-      case 'all':
-        return 'Todas las preguntas';
-      case 'range':
-        return `Preguntas ${currentSession.config.rangeStart} - ${currentSession.config.rangeEnd}`;
-      case 'random':
-        return `${currentSession.config.randomCount} preguntas aleatorias`;
-      default:
-        return '';
-    }
-  };
-
   return (
     <div className="min-h-screen">
       <div className="max-w-4xl mx-auto py-8">
@@ -156,7 +143,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
         <ActivityHeader
           icon={<BookIcon className="w-5 h-5" />}
           title="Modo Flashcards"
-          subtitle={getScopeText()}
+          subtitle={getScopeText(currentSession.config)}
           progressCurrent={currentQuestionIndex}
           progressTotal={currentSession.questions.length}
           onExit={handleExit}

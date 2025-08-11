@@ -5,6 +5,7 @@ import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
 import { ExamQuestion, ExamControls } from '../components/exam';
 import ActivityHeader from '../components/common/ActivityHeader';
+import { getScopeText } from '../utils/sessionHelpers';
 import { ExamIcon } from '../icons';
 import ExplanationReference from '../components/common/ExplanationReference';
 
@@ -278,27 +279,13 @@ const StudyTestPage: React.FC = () => {
   const currentSessionQuestion = currentSession.questions[currentQuestionIndex];
   const isAnswered = currentSessionQuestion?.answered || false;
 
-  // Helper para el subtítulo (alcance)
-  const getScopeText = () => {
-    switch (currentSession.config.scope) {
-      case 'all':
-        return 'Todas las preguntas';
-      case 'range':
-        return `Preguntas ${currentSession.config.rangeStart} - ${currentSession.config.rangeEnd}`;
-      case 'random':
-        return `${currentSession.config.randomCount} preguntas aleatorias`;
-      default:
-        return '';
-    }
-  };
-
   return (
     <div className="container py-8">
       <div className="max-w-4xl mx-auto">
         <ActivityHeader
           icon={<ExamIcon className="w-5 h-5" />}
           title="Modo Examen"
-          subtitle={getScopeText()}
+          subtitle={getScopeText(currentSession.config)}
           progressCurrent={currentQuestionIndex}
           progressTotal={currentSession.totalQuestions}
           timeLeft={timeLeft ?? undefined}
