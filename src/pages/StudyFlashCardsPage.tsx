@@ -5,9 +5,10 @@ import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
 import { 
   FlashCard, 
-  FlashCardsHeader, 
   LoadingState 
 } from '../components/flashcards';
+import ActivityHeader from '../components/common/ActivityHeader';
+import { BookIcon } from '../icons';
 
 interface StudyFlashCardsPageProps {
   showConfirm: (message: string, onConfirm: () => void) => void;
@@ -134,13 +135,32 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
     return <LoadingState />;
   }
 
+  // Helper para el subtítulo (alcance)
+  const getScopeText = () => {
+    switch (currentSession.config.scope) {
+      case 'all':
+        return 'Todas las preguntas';
+      case 'range':
+        return `Preguntas ${currentSession.config.rangeStart} - ${currentSession.config.rangeEnd}`;
+      case 'random':
+        return `${currentSession.config.randomCount} preguntas aleatorias`;
+      default:
+        return '';
+    }
+  };
+
   return (
     <div className="min-h-screen">
       <div className="max-w-4xl mx-auto py-8">
-        {/* Header fijo */}
-  <FlashCardsHeader
-          currentSession={currentSession}
+        {/* Header unificado */}
+        <ActivityHeader
+          icon={<BookIcon className="w-5 h-5" />}
+          title="Modo Flashcards"
+          subtitle={getScopeText()}
+          progressCurrent={currentQuestionIndex}
+          progressTotal={currentSession.questions.length}
           onExit={handleExit}
+          showProgressBar={true}
         />
 
         {/* Contenido principal */}
@@ -150,11 +170,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
           onPrevious={goToPrevious}
           canGoNext={canGoNext() || currentQuestionIndex === currentSession.questions.length - 1}
           canGoPrevious={canGoPrevious()}
-          currentIndex={currentQuestionIndex}
-          totalQuestions={currentSession.questions.length}
         />
-
-
       </div>
     </div>
   );

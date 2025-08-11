@@ -3,7 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
-import { ExamHeader, ExamQuestion, ExamControls } from '../components/exam';
+import { ExamQuestion, ExamControls } from '../components/exam';
+import ActivityHeader from '../components/common/ActivityHeader';
+import { ExamIcon } from '../icons';
 import ExplanationReference from '../components/common/ExplanationReference';
 
 const StudyTestPage: React.FC = () => {
@@ -25,8 +27,6 @@ const StudyTestPage: React.FC = () => {
     canGoNext,
     canGoPrevious,
     getCurrentQuestion,
-    getProgress,
-    getSessionStats,
     updateQuestionAnswer,
   } = useStudySession(currentSession, questions);
 
@@ -125,8 +125,6 @@ const StudyTestPage: React.FC = () => {
   }, [currentQuestionIndex, currentSession]);
 
   const currentQuestion = getCurrentQuestion();
-  const progress = getProgress();
-  const sessionStats = getSessionStats();
 
   if (!currentSession || !currentQuestion) {
     return (
@@ -283,26 +281,17 @@ const StudyTestPage: React.FC = () => {
   return (
     <div className="container py-8">
       <div className="max-w-4xl mx-auto">
-        <ExamHeader
+        <ActivityHeader
+          icon={<ExamIcon className="w-5 h-5" />}
           title="Modo Examen"
-          questionIndex={currentQuestionIndex!}
-          totalQuestions={currentSession.totalQuestions}
+          subtitle={`Pregunta ${currentQuestionIndex + 1} de ${currentSession.totalQuestions}`}
+          progressCurrent={currentQuestionIndex}
+          progressTotal={currentSession.totalQuestions}
           timeLeft={timeLeft ?? undefined}
           onExit={handleExit}
+          showProgressBar={true}
+          showTimer={true}
         />
-  {/* Progress bar */}
-        <div className="mt-4">
-          <div className="w-full h-2 bg-gray-100">
-            <div
-              className="bg-blue-500 h-2 transition-all duration-300"
-              style={{ width: `${progress.percentage}%` }}
-            ></div>
-          </div>
-          <div className="flex justify-between text-xs text-gray-500 mt-1">
-            <span>Respondidas: {sessionStats.answered}</span>
-            <span>Restantes: {sessionStats.total - sessionStats.answered}</span>
-          </div>
-        </div>
         <ExamQuestion
           questionText={currentQuestion.question_text}
           options={currentQuestion.options}

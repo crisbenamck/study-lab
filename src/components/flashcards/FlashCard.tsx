@@ -77,8 +77,6 @@ interface FlashCardProps {
   onPrevious: () => void;
   canGoNext: boolean;
   canGoPrevious: boolean;
-  currentIndex: number;
-  totalQuestions: number;
 }
 
 const FlashCard: React.FC<FlashCardProps> = ({
@@ -87,8 +85,6 @@ const FlashCard: React.FC<FlashCardProps> = ({
   onPrevious,
   canGoNext,
   canGoPrevious,
-  currentIndex,
-  totalQuestions,
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -110,22 +106,6 @@ const FlashCard: React.FC<FlashCardProps> = ({
 
   return (
     <div className="w-full max-w-none mx-auto">
-      {/* Progress indicator */}
-      <div className="mb-6 w-full">
-        <div className="flex justify-between text-sm text-gray-600 mb-2 mt-2">
-          <span>Pregunta {currentIndex + 1} de {totalQuestions}</span>
-          <span>{Math.round(((currentIndex + 1) / totalQuestions) * 100)}%</span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
-          <div
-            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-            style={{ width: `${((currentIndex + 1) / totalQuestions) * 100}%` }}
-          ></div>
-        </div>
-        {/* Add margin between progress bar and below content */}
-        <div className="mt-6"></div>
-      </div>
-
       {/* Centered card */}
       <div className="relative h-96 mb-6 w-full flex justify-center">
         <div
