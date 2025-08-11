@@ -17,49 +17,51 @@ const formatTime = (seconds: number) => {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 };
 
+
 const ExamHeader: React.FC<ExamHeaderProps> = ({
   title,
   questionIndex,
   totalQuestions,
   timeLeft,
   onExit,
-}) => (
-  <div className="mb-6">
-    <div className="flex justify-between items-center">
-      <div className="flex items-center gap-3">
-        <div className={`w-12 h-12 min-w-12 min-h-12 rounded-lg flex items-center justify-center flex-shrink-0 bg-blue-100 text-blue-600`}>
-          <div className="w-6 h-6">
-            <ExamIcon className="w-full h-full" />
+}) => {
+  return (
+    <div className="bg-white border-b top-0 z-10">
+      <div className="max-w-4xl mx-auto p-6">
+        <div className="flex justify-between items-center">
+          <div className="flex items-start">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-blue-100 text-blue-600 mr-3 mt-1">
+              <ExamIcon className="w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
+              <p className="text-sm text-gray-600">
+                Pregunta {questionIndex + 1} de {totalQuestions}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            {typeof timeLeft === 'number' && !isNaN(timeLeft) && timeLeft >= 0 && formatTime(timeLeft) !== '' && (
+              <div className={`text-base font-mono ${timeLeft < 300 ? 'text-red-600' : 'text-gray-700'}`}> 
+                ⏰ {formatTime(timeLeft)}
+              </div>
+            )}
+            <Button
+              onClick={onExit}
+              variant="danger"
+              buttonType="outline"
+              size="sm"
+              icon={<CloseIcon />}
+              iconPosition="left"
+              aria-label="Exit exam"
+            >
+              Salir
+            </Button>
           </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
-          <p className="text-gray-600">
-            Pregunta {questionIndex + 1} de {totalQuestions}
-          </p>
-        </div>
-      </div>
-      <div className="flex items-center gap-4">
-        <div className="text-right">
-          {typeof timeLeft === 'number' && !isNaN(timeLeft) && timeLeft >= 0 && formatTime(timeLeft) !== '' && (
-            <div className={`text-lg font-mono ${timeLeft < 300 ? 'text-red-600' : 'text-gray-700'}`}>
-              ⏰ {formatTime(timeLeft)}
-            </div>
-          )}
-        </div>
-        <Button
-          onClick={onExit}
-          variant="danger"
-          buttonType="outline"
-          size="sm"
-          icon={<CloseIcon />}
-          iconPosition="left"
-        >
-          Salir
-        </Button>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default ExamHeader;
