@@ -8,7 +8,7 @@ import ImportPDFPage from './pages/ImportPDFPage';
 import TestAPIPage from './pages/TestAPIPage';
 import StudyPage from './pages/StudyPage';
 import StudyFlashCardsPage from './pages/StudyFlashCardsPage';
-import StudyTestPage from './pages/StudyTestPage';
+import StudyExamPage from './pages/StudyExamPage';
 import StudyResultsPage from './pages/StudyResultsPage';
 import ButtonDemoPage from './pages/ButtonDemoPage';
 import IconPreviewPage from './pages/IconPreviewPage';
@@ -173,12 +173,12 @@ function App() {
             />
             <Route 
               path="/study/exam" 
-              element={<StudyTestPage />} 
+              element={<StudyExamPage />} 
             />
             {/* Mantener /study/test como alias para compatibilidad */}
             <Route 
               path="/study/test" 
-              element={<StudyTestPage />} 
+              element={<StudyExamPage />} 
             />
             <Route 
               path="/study/session-results" 

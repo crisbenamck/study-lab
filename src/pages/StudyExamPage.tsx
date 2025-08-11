@@ -4,6 +4,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useStudySession } from '../hooks/useStudySession';
 import Button from '../components/common/Button';
+import ExplanationReference from '../components/common/ExplanationReference';
 import { CloseIcon, ArrowLeftIcon, ArrowRightIcon, FileTextIcon, ClipboardIcon } from '../icons';
 
 const StudyTestPage: React.FC = () => {
@@ -457,50 +458,16 @@ const StudyTestPage: React.FC = () => {
         </div>
 
         {/* Explicación (solo cuando el usuario la solicite) */}
-        {showExplanation && currentQuestion.explanation && (
+        {showExplanation && (currentQuestion.explanation || currentQuestion.link) && (
           <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-2">Explicación:</h4>
-              <p className="text-blue-700">{currentQuestion.explanation}</p>
-            </div>
-
-            {/* Link de referencia */}
-            {currentQuestion.link && (
-              <div className="mt-4">
-                <a
-                  href={currentQuestion.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 underline text-sm"
-                >
-                  📚 Ver referencia
-                </a>
-              </div>
-            )}
+            <ExplanationReference explanation={currentQuestion.explanation} link={currentQuestion.link} />
           </div>
         )}
 
         {/* Explicación con respuestas (solo si se muestran respuestas automáticamente) */}
-        {showAnswers && !showExplanation && currentQuestion.explanation && (
+        {showAnswers && !showExplanation && (currentQuestion.explanation || currentQuestion.link) && (
           <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-2">Explicación:</h4>
-              <p className="text-blue-700">{currentQuestion.explanation}</p>
-            </div>
-
-            {/* Link de referencia */}
-            {currentQuestion.link && (
-              <div className="mt-4">
-                <a
-                  href={currentQuestion.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-800 underline text-sm"
-                >
-                  📚 Ver referencia
-                </a>
-              </div>
-            )}
+            <ExplanationReference explanation={currentQuestion.explanation} link={currentQuestion.link} />
           </div>
         )}
       </div>
