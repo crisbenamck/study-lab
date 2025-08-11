@@ -297,9 +297,6 @@ const StudyTestPage: React.FC = () => {
                     ⏰ {formatTime(timeLeft)}
                   </div>
                 )}
-                <div className="text-sm text-gray-600">
-                  Correctas: {sessionStats.correct} / {sessionStats.answered}
-                </div>
               </div>
               <Button
                 onClick={handleExit}
@@ -360,19 +357,27 @@ const StudyTestPage: React.FC = () => {
                   onClick={() => handleAnswerSelect(option.option_letter)}
                 >
                   <div className="flex items-center">
-                    <div className={`w-6 h-6 flex items-center justify-center mr-3 ${
-                      shouldShowCorrect
-                        ? 'text-green-600'
+                    <div className={`w-6 h-6 flex items-center justify-center mr-3 rounded-full border-2 transition-colors
+                      ${shouldShowCorrect
+                        ? 'border-green-500 bg-green-50 text-green-600'
                         : shouldShowIncorrect
-                        ? 'text-red-600'
+                        ? 'border-red-500 bg-red-50 text-red-600'
                         : isSelected
-                        ? 'text-blue-600'
-                        : 'text-gray-400'
-                    }`}>
+                        ? 'border-blue-500 bg-blue-50 text-blue-600'
+                        : 'border-gray-300 bg-white text-gray-400'}
+                    `}>
                       {currentQuestion.requires_multiple_answers ? (
-                        (isSelected || shouldShowCorrect) ? '✓' : shouldShowIncorrect ? '✗' : ''
+                        (isSelected || shouldShowCorrect) ? (
+                          <span className="text-lg">✓</span>
+                        ) : shouldShowIncorrect ? (
+                          <span className="text-lg">✗</span>
+                        ) : null
                       ) : (
-                        shouldShowCorrect ? '●' : shouldShowIncorrect ? '✗' : isSelected ? '●' : ''
+                        (isSelected || shouldShowCorrect) ? (
+                          <span className="w-3 h-3 bg-current rounded-full block"></span>
+                        ) : shouldShowIncorrect ? (
+                          <span className="text-lg">✗</span>
+                        ) : null
                       )}
                     </div>
                     <span className="font-medium mr-2">{option.option_letter})</span>
@@ -398,7 +403,7 @@ const StudyTestPage: React.FC = () => {
               <Button
                 onClick={handleMarkForReview}
                 variant={currentSessionQuestion?.markedForReview ? "warning" : "secondary"}
-                buttonType="outline"
+                buttonType={currentSessionQuestion?.markedForReview ? "solid" : "outline"}
                 size="sm"
                 icon={<ClipboardIcon />}
                 iconPosition="left"
