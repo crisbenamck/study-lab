@@ -18,7 +18,7 @@ const StartStudyButton: React.FC<StartStudyButtonProps> = ({ mode, onStartSessio
         icon={<TargetIcon />}
         iconPosition="left"
       >
-        Iniciar {mode === 'flashcards' ? 'Flash Cards' : 'Test'}
+        Iniciar {mode === 'flashcards' ? 'Flash Cards' : 'Exam'}
       </Button>
     </div>
   );

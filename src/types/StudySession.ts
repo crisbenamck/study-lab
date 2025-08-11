@@ -29,7 +29,7 @@ export interface StudySession {
   status: 'in-progress' | 'completed' | 'abandoned';
 }
 
-export type StudyMode = 'flashcards' | 'test';
+export type StudyMode = 'flashcards' | 'exam';
 export type StudyScope = 'all' | 'range' | 'random';
 export type ShowAnswersMode = 'immediate' | 'end';
 export type SessionStatus = 'in-progress' | 'completed' | 'abandoned';

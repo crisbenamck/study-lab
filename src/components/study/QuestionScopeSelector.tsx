@@ -67,7 +67,7 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
       <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 max-w-none">
           <p className="text-blue-800 text-sm flex-1">
-            <strong>Por defecto:</strong> Si no seleccionas ninguna opción específica, el test iniciará con todas las preguntas disponibles ({questionsCount} pregunta{questionsCount !== 1 ? 's' : ''}).
+            <strong>Por defecto:</strong> Si no seleccionas ninguna opción específica, la práctica iniciará con todas las preguntas disponibles ({questionsCount} pregunta{questionsCount !== 1 ? 's' : ''}).
           </p>
           {(scope === 'range' || scope === 'random') && (
             <Button

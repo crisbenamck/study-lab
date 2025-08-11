@@ -270,7 +270,7 @@ const StudyResultsPage: React.FC = () => {
                   </h1>
                 </div>
                 <p style={{ fontSize: 'var(--font-size-xl)', color: 'var(--text-secondary)' }}>
-                  {lastSession.config.mode === 'flashcards' ? 'Modo Flash Cards' : 'Modo Test de Práctica'}
+                  {lastSession.config.mode === 'flashcards' ? 'Modo Flash Cards' : 'Modo Examen'}
                 </p>
               </div>
               

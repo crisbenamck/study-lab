@@ -23,28 +23,28 @@ const TestConfiguration: React.FC<TestConfigurationProps> = ({
     {
       id: 'end' as ShowAnswersMode,
       title: 'Al finalizar',
-      description: 'Todo el test completo'
+      description: 'Después de terminar todo el examen'
     }
   ];
 
   return (
     <div className="mb-10 pb-8 border-b border-gray-200">
       <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-        Configuración del Test
+        Configuración del Examen
       </h2>
-      
+
       <div className="grid md:grid-cols-2 gap-6">
         {/* Card: Mostrar respuestas */}
         <div className="p-6 border border-gray-200 rounded-xl">
           <div className="mb-3">
-            <h3 style={{ fontSize: 'var(--font-size-base)', fontWeight: 'var(--font-weight-semibold)' }}>
+            <h3 className="text-base font-semibold">
               Mostrar Respuestas
             </h3>
           </div>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-xs)' }} className="mb-4">
-            Elige cuándo quieres ver las respuestas correctas durante el test
-          </p>
-          
+            <p className="mb-4 text-sm text-gray-500">
+            Elige cuándo quieres ver las respuestas correctas durante el examen
+            </p>
+
           <div className="space-y-3">
             {answersModes.map((mode) => (
               <button
@@ -66,14 +66,14 @@ const TestConfiguration: React.FC<TestConfigurationProps> = ({
         {/* Card: Límite de tiempo */}
         <div className="p-6 border border-gray-200 rounded-xl">
           <div className="mb-3">
-            <h3 style={{ fontSize: 'var(--font-size-base)', fontWeight: 'var(--font-weight-semibold)' }}>
+            <h3 className="text-base font-semibold">
               Límite de Tiempo (opcional)
             </h3>
           </div>
-          <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-size-xs)' }} className="mb-4">
-            Establece un tiempo límite para completar el test. Deja vacío para tiempo ilimitado
-          </p>
-          
+            <p className="mb-4 text-sm text-gray-500">
+            Establece un tiempo límite para completar el examen. <b>Deja vacío para tiempo ilimitado</b>
+            </p>
+
           <div className="flex items-center gap-2">
             <input
               type="number"

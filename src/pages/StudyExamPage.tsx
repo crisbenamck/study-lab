@@ -274,7 +274,7 @@ const StudyTestPage: React.FC = () => {
     <div className="container py-8">
       <div className="max-w-4xl mx-auto">
         <ExamHeader
-          title="Test de Práctica"
+          title="Modo Examen"
           questionIndex={currentQuestionIndex!}
           totalQuestions={currentSession.totalQuestions}
           timeLeft={timeLeft ?? undefined}

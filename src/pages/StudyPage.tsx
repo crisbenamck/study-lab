@@ -8,7 +8,7 @@ import {
   EmptyQuestionsState,
   StudyModeSelector,
   QuestionScopeSelector,
-  TestConfiguration,
+  ExamConfiguration,
   StartStudyButton,
 } from '../components/study';
 import type { StudySessionConfig, StudyMode, StudyScope, ShowAnswersMode } from '../types/StudySession';
@@ -137,8 +137,8 @@ const StudyPage: React.FC = () => {
       rangeStart: scope === 'range' ? parseInt(rangeStart) : undefined,
       rangeEnd: scope === 'range' ? parseInt(rangeEnd) : undefined,
       randomCount: scope === 'random' ? parseInt(randomCount) : undefined,
-      showAnswersMode: mode === 'test' ? showAnswersMode : 'end',
-      timeLimit: mode === 'test' && timeLimit ? parseInt(timeLimit) : undefined
+      showAnswersMode: mode === 'exam' ? showAnswersMode : 'end',
+      timeLimit: mode === 'exam' && timeLimit ? parseInt(timeLimit) : undefined
     };
 
     console.log('🚀 Iniciando sesión de estudio...');
@@ -192,8 +192,8 @@ const StudyPage: React.FC = () => {
                 onRandomCountChange={setRandomCount}
               />
 
-              {mode === 'test' && (
-                <TestConfiguration
+              {mode === 'exam' && (
+                <ExamConfiguration
                   showAnswersMode={showAnswersMode}
                   onShowAnswersModeChange={setShowAnswersMode}
                   timeLimit={timeLimit}

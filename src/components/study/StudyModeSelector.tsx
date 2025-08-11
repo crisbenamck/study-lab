@@ -17,8 +17,8 @@ const StudyModeSelector: React.FC<StudyModeSelectorProps> = ({ mode, onModeChang
       icon: <FlashcardsIcon className="w-6 h-6" />
     },
     {
-      id: 'test' as StudyMode,
-      title: 'Test de Práctica',
+      id: 'exam' as StudyMode,
+      title: 'Examen',
       description: 'Examen con preguntas de opción múltiple. Incluye puntuación y análisis de resultados.',
   icon: <ExamIcon className="w-6 h-6" />
     }
