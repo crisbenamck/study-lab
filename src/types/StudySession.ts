@@ -1,5 +1,5 @@
 export interface StudySessionConfig {
-  mode: 'flashcards' | 'test';
+  mode: 'flashcards' | 'exam';
   scope: 'all' | 'range' | 'random';
   rangeStart?: number;
   rangeEnd?: number;

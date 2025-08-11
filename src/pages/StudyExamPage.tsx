@@ -30,65 +30,79 @@ const StudyTestPage: React.FC = () => {
     updateQuestionAnswer,
   } = useStudySession(currentSession, questions);
 
-  // Verificar si hay sesión activa
+  // Robust session validation and logging (in English)
+  // Utility for contextual logging
+  const log = (message: string, ...args: unknown[]) => {
+    // Enhanced logging for development
+    if (process.env.NODE_ENV !== 'production') {
+      // Only log if not the 'Questions:' or 'Mode: exam' message
+      if (message !== 'Questions:' && message !== 'Mode: exam') {
+        console.log(`[StudyExamPage] ${message}`, ...args);
+      }
+    }
+  };
+
   useEffect(() => {
-    console.log('🧪 StudyTestPage - currentSession:', currentSession, 'isLoaded:', isLoaded);
-    
-    // Esperar a que se cargue el estado antes de verificar
+    // Wait for state to load before validating session
     if (!isLoaded) {
-      console.log('⏳ Esperando a que se cargue el estado...');
+      log('Waiting for state to load...');
       return;
     }
-
     if (!hasCheckedSession) {
       setHasCheckedSession(true);
-      
-      // Verificar si hay una configuración guardada para repetir test
       const repeatConfig = localStorage.getItem('repeat-session-config');
-      
       if (repeatConfig && !currentSession) {
         try {
           const config = JSON.parse(repeatConfig);
-          console.log('🔄 Configuración para repetir encontrada:', config);
-          
-          // Crear nueva sesión con la configuración guardada
-          const newSession = createStudySession(config, questions);
-          console.log('✅ Nueva sesión creada para repetir test');
-          
-          // Limpiar la configuración temporal
+          log('Repeat session config found:', config);
+          createStudySession(config, questions);
           localStorage.removeItem('repeat-session-config');
-          
         } catch (error) {
-          console.error('❌ Error al crear sesión para repetir:', error);
+          // eslint-disable-next-line no-console
+          console.error('[StudyExamPage] Error creating repeat session:', error);
           localStorage.removeItem('repeat-session-config');
           navigate('/study');
         }
       } else {
-        // Dar un pequeño delay para asegurar que la sesión se haya creado
         setTimeout(() => {
-          if (!currentSession || currentSession.config.mode !== 'test') {
-            console.log('❌ No hay sesión válida, redirigiendo a /study');
-            navigate('/study');
-          } else {
-            console.log('✅ Sesión válida encontrada');
-            // Configurar timer si hay límite de tiempo
-            if (currentSession.config.timeLimit) {
-              setTimeLeft(currentSession.config.timeLimit * 60); // convertir a segundos
+          let session = currentSession;
+          if (!session) {
+            const stored = localStorage.getItem('study-lab-current-session');
+            if (stored) {
+              try {
+                const parsed = JSON.parse(stored);
+                session = {
+                  ...parsed,
+                  startTime: new Date(parsed.startTime),
+                  endTime: parsed.endTime ? new Date(parsed.endTime) : undefined,
+                };
+              } catch {
+                session = null;
+              }
             }
           }
-        }, 100);
+          // Only allow mode 'exam' for this page
+          if (!session || session.config.mode !== 'exam') {
+            log('No valid session found, redirecting to /study');
+            navigate('/study');
+          } else {
+            log('Valid session found');
+            if (session.config.timeLimit) {
+              setTimeLeft(session.config.timeLimit * 60);
+            }
+          }
+        }, 250);
       }
     }
   }, [currentSession, navigate, isLoaded, hasCheckedSession, createStudySession, questions]);
 
-  // Timer countdown
+  // Timer countdown for exam mode
   useEffect(() => {
     if (timeLeft === null || timeLeft <= 0) return;
-
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         if (prev && prev <= 1) {
-          // Tiempo agotado, finalizar test automáticamente
+          // Time is up, finish the exam automatically
           if (currentSession) {
             completeSession(currentSession);
             navigate('/study/session-results');
@@ -98,18 +112,17 @@ const StudyTestPage: React.FC = () => {
         return prev ? prev - 1 : null;
       });
     }, 1000);
-
     return () => clearInterval(timer);
   }, [timeLeft, currentSession, completeSession, navigate]);
 
-  // Cargar respuestas guardadas cuando cambia la pregunta
+  // Load saved answers when the question changes
   useEffect(() => {
     if (currentSession && currentQuestionIndex !== undefined) {
       const sessionQuestion = currentSession.questions[currentQuestionIndex];
       if (sessionQuestion) {
         setSelectedAnswers(sessionQuestion.selectedOptions);
         setShowAnswers(sessionQuestion.answered && currentSession.config.showAnswersMode === 'immediate');
-        setShowExplanation(false); // Ocultar explicación al cambiar de pregunta
+        setShowExplanation(false); // Hide explanation when changing question
       }
     }
   }, [currentQuestionIndex, currentSession]);

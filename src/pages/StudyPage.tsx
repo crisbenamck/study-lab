@@ -28,7 +28,7 @@ const StudyPage: React.FC = () => {
   const [timeLimit, setTimeLimit] = useState<string>('');
   const [rangeError, setRangeError] = useState<string>('');
 
-  // Inicializar randomCount con valor por defecto
+  // Initialize randomCount with a default value when questions are loaded
   useEffect(() => {
     if (questions.length > 0 && randomCount === '') {
       const defaultCount = Math.min(60, questions.length);
@@ -36,7 +36,7 @@ const StudyPage: React.FC = () => {
     }
   }, [questions.length, randomCount]);
 
-  // Validar rango cuando cambian los valores
+  // Validate range when values change
   const validateRange = (start: string, end: string) => {
     if (!start || !end) {
       setRangeError('');
@@ -47,32 +47,32 @@ const StudyPage: React.FC = () => {
     const endNum = parseInt(end);
 
     if (isNaN(startNum) || isNaN(endNum)) {
-      setRangeError('Los valores deben ser números válidos');
+      setRangeError('Values must be valid numbers');
       return;
     }
 
     if (startNum < 1) {
-      setRangeError('El número inicial no puede ser menor a 1');
+      setRangeError('Start number cannot be less than 1');
       return;
     }
 
     if (questions.length > 0) {
       const maxQuestionNumber = Math.max(...questions.map(q => q.question_number));
       if (endNum > maxQuestionNumber) {
-        setRangeError(`El número final no puede ser mayor a ${maxQuestionNumber}`);
+        setRangeError(`End number cannot be greater than ${maxQuestionNumber}`);
         return;
       }
     }
 
     if (startNum > endNum) {
-      setRangeError('El número inicial no puede ser mayor que el final');
+      setRangeError('Start number cannot be greater than end number');
       return;
     }
 
     setRangeError('');
   };
 
-  // Handlers para cambios de valores
+  // Handlers for value changes
   const handleRangeStartChange = (value: string) => {
     setRangeStart(value);
     validateRange(value, rangeEnd);
@@ -83,75 +83,60 @@ const StudyPage: React.FC = () => {
     validateRange(rangeStart, value);
   };
 
-  // Validar configuración
+  // Validate configuration before starting session
   const validateConfig = (): string | null => {
     if (questions.length === 0) {
-      return 'No hay preguntas disponibles. Crea algunas preguntas primero.';
+      return 'No questions available. Please create some questions first.';
     }
 
     if (scope === 'range') {
       const start = parseInt(rangeStart);
       const end = parseInt(rangeEnd);
-      
       if (!rangeStart || !rangeEnd || isNaN(start) || isNaN(end)) {
-        return 'Por favor ingresa un rango válido de preguntas.';
+        return 'Please enter a valid range of questions.';
       }
-      
       if (start > end) {
-        return 'El número inicial no puede ser mayor que el final.';
+        return 'Start number cannot be greater than end number.';
       }
-      
       const maxQuestionNumber = Math.max(...questions.map(q => q.question_number));
       const minQuestionNumber = Math.min(...questions.map(q => q.question_number));
-      
       if (start < minQuestionNumber || end > maxQuestionNumber) {
-        return `El rango debe estar entre ${minQuestionNumber} y ${maxQuestionNumber}.`;
+        return `Range must be between ${minQuestionNumber} and ${maxQuestionNumber}.`;
       }
     }
 
     if (scope === 'random') {
       const count = parseInt(randomCount);
       if (!randomCount || isNaN(count) || count <= 0) {
-        return 'Por favor ingresa un número válido de preguntas aleatorias.';
+        return 'Please enter a valid number of random questions.';
       }
-      
       if (count > questions.length) {
-        return `No puedes seleccionar más de ${questions.length} preguntas.`;
+        return `You cannot select more than ${questions.length} questions.`;
       }
     }
 
     return null;
   };
 
-  // Función para iniciar sesión de estudio
+  // Start a new study session with validated config
   const startStudySession = () => {
     const validation = validateConfig();
     if (validation) {
       showAlert(validation, { type: 'error' });
       return;
     }
-
     const config: StudySessionConfig = {
       mode,
-      scope: scope || 'all', // Si scope es null, usar 'all'
+      scope: scope || 'all', // Use 'all' if scope is null
       rangeStart: scope === 'range' ? parseInt(rangeStart) : undefined,
       rangeEnd: scope === 'range' ? parseInt(rangeEnd) : undefined,
       randomCount: scope === 'random' ? parseInt(randomCount) : undefined,
       showAnswersMode: mode === 'exam' ? showAnswersMode : 'end',
       timeLimit: mode === 'exam' && timeLimit ? parseInt(timeLimit) : undefined
     };
-
-    console.log('🚀 Iniciando sesión de estudio...');
-    console.log('Mode:', mode);
-    console.log('Questions:', questions);
-    console.log('📋 Config:', config);
-
-    const session = createStudySession(config, questions);
-    console.log('✅ Sesión creada:', session);
-
-    // Navegar a la página correspondiente
+    createStudySession(config, questions);
+    // Navigate to the corresponding page
     const targetPath = mode === 'flashcards' ? '/study/flashcards' : '/study/exam';
-    console.log('🎯 Navegando a', targetPath);
     navigate(targetPath);
   };
 
@@ -159,17 +144,17 @@ const StudyPage: React.FC = () => {
     <Layout>
       <div className="py-16">
         <div className="max-w-4xl mx-auto px-4">
-          {/* Título y descripción */}
+          {/* Title and description */}
           <div className="mb-12 text-left">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">
-              Centro de Estudio
+              Study Center
             </h1>
             <p className="text-lg text-gray-600 max-w-3xl">
-              Centro de control para tus sesiones de estudio. Crea preguntas, importa contenido o configura tu práctica personalizada.
+              Control center for your study sessions. Create questions, import content, or configure your custom practice.
             </p>
           </div>
 
-          {/* Si no hay preguntas, mostrar estado vacío */}
+          {/* Show empty state if there are no questions */}
           {questions.length === 0 ? (
             <EmptyQuestionsState />
           ) : (
