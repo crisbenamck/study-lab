@@ -1,60 +1,77 @@
-## Additional Copilot Instructions
 
-- All answers and explanations provided to the user must be in Spanish.
-- Any action that requires using the terminal (such as deleting files) must be actually executed, not just described.
+# Copilot Custom Instructions for Study Lab
 
-## Copilot Custom Rules
+## 1. Lenguaje y comunicación
+- Todas las respuestas y explicaciones deben ser en español.
+- Todo el código, nombres de variables, funciones, componentes y comentarios deben estar en inglés, siguiendo las convenciones de TypeScript y React.
 
-- All code, components, variable names, and comments must be written in English.
-- Do not use Spanish or any other language for code, comments, or documentation.
-- If you find any existing code in Spanish, prefer to refactor it to English when making changes.
-- Use clear, descriptive English names for all new files, functions, and variables.
-- This applies to all future code, documentation, and communication in this project.
-# Question Generator - React SPA
+## 2. Estructura y estilo de código
+- Usa TypeScript en todos los archivos de lógica y componentes.
+- Utiliza componentes funcionales y hooks de React.
+- Importa tipos usando `import type`.
+- Usa Tailwind CSS exclusivamente para el estilizado, sin frameworks de UI externos.
+- Los componentes deben estar en PascalCase y ubicados en `src/components`.
+- Los hooks personalizados deben estar en `src/hooks` y usar camelCase.
+- Los tipos deben estar en `src/types`.
+- Las utilidades deben estar en `src/utils` y usar camelCase.
+- Mantén la estructura de carpetas y archivos según la convención del proyecto.
 
-<!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
+## 3. Gestión de estado y persistencia
+- Usa el hook `useLocalStorage` para toda la persistencia en localStorage.
+- Los datos de preguntas deben guardarse automáticamente al modificarse.
+- Los números de preguntas deben ser secuenciales y con formato 0001, 0002, etc.
 
-## Project Overview
-This is a Single Page Application (SPA) built with React, TypeScript, and vanilla CSS to create and manage exam questions with multiple options.
+## 4. Formularios y validaciones
+- Usa React Hook Form para todos los formularios.
+- Valida todos los campos requeridos, especialmente el campo de referencia.
+- Permite arrays dinámicos de opciones en las preguntas.
+- Resetea el formulario tras un envío exitoso.
 
-## Key Features
-- Form to create questions with multiple options
-- Support for multiple answers
-- Automatic persistence in localStorage
-- Export to JSON format
-- Sequential numbering of questions (0001, 0002, etc.)
-- Required reference link field
-- Clean and minimalist interface with vanilla CSS
-- Local storage persistence
-- JSON export functionality
-- Modern, minimalist UI with Tailwind CSS
-- TypeScript for type safety
-- React Hook Form for form management
+## 5. UI y experiencia de usuario
+- La interfaz debe ser minimalista y moderna, usando solo Tailwind CSS.
+- No uses componentes de UI externos salvo justificación clara.
+- Aplica clases de Tailwind directamente en los componentes.
 
-## Code Style Guidelines
-- Use TypeScript for all components and utilities
-- Use functional components with hooks
-- Import types with `import type` syntax
-- Use Tailwind CSS for all styling
-- Follow React best practices for state management
-- Use meaningful variable and function names in English for user-facing content
+## 6. Exportación e importación
+- Implementa la exportación de preguntas a JSON.
+- Si se solicita importación, valida el formato antes de guardar.
 
-## File Structure
-- `/src/types/` - TypeScript type definitions
-- `/src/components/` - React components
-- `/src/hooks/` - Custom React hooks
-- `/src/utils/` - Utility functions
-- Use PascalCase for component files
-- Use camelCase for utility files and hooks
+## 7. Refactorización y mantenimiento
+- Si encuentras código, comentarios o nombres en español, refactóralos a inglés cuando hagas cambios.
+- Prefiere nombres claros y descriptivos en inglés para todo lo nuevo.
 
-## State Management
-- Use localStorage for data persistence
-- Custom hook `useLocalStorage` handles all storage operations
-- Questions are automatically saved when modified
-- Question numbers start from 1 and are formatted as 0001, 0002, etc.
+## 8. Terminal y automatización
+- Si una acción requiere terminal (por ejemplo, borrar archivos), ejecútala realmente, no solo la describas.
 
-## Form Handling
-- Use React Hook Form for all forms
-- Validate required fields
-- Handle dynamic option arrays
-- Reset form after successful submission
+## 9. Documentación y ayuda
+- Si el usuario pide ejemplos, genera código listo para usar y bien comentado.
+- Si el usuario pide explicación de una función, da una breve descripción en español y referencia el archivo o componente.
+
+
+## 10. General
+- Si el usuario no especifica archivos, infiere y sugiere los archivos correctos según la estructura del proyecto.
+- Si tienes dudas, busca primero en el workspace antes de preguntar detalles al usuario.
+- Sigue las mejores prácticas de React, TypeScript y Tailwind CSS en todo momento.
+
+## 11. Reglas adicionales para interacción avanzada
+
+- Si el usuario solicita una funcionalidad sin especificar detalles, sugiere primero la estructura de archivos y componentes recomendada antes de implementar.
+- Si detectas patrones repetidos o código duplicado, sugiere refactorización automática usando hooks, utilidades o componentes reutilizables.
+- Si el usuario solicita una nueva funcionalidad, sugiere o genera pruebas unitarias básicas siguiendo la convención del proyecto.
+- Si detectas errores o warnings en el código, sugiere la corrección siguiendo las mejores prácticas de TypeScript y React.
+- Sugiere siempre agregar atributos de accesibilidad (aria-label, roles, etc.) en componentes interactivos.
+- Si creas un nuevo componente visual, sugiere una estructura semántica y accesible.
+- Si detectas código que puede optimizarse (por ejemplo, renderizados innecesarios o uso ineficiente de hooks), sugiere mejoras automáticas.
+- Al crear un nuevo hook, utilidad o componente, agrega un comentario breve en inglés explicando su propósito y uso.
+
+---
+
+### Tecnologías principales del proyecto
+- React (SPA)
+- TypeScript
+- Tailwind CSS
+- React Hook Form
+- Vite
+- localStorage (persistencia)
+- Vanilla CSS (mínimo)
+- Estructura modular (componentes, hooks, utils, types)
