@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import AlertModal from './AlertModal';
+import { useAlert } from '../../hooks/useAlert';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import type { QuestionFormData } from '../../types/Question';
 import Button from './Button';
@@ -91,7 +93,17 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     }
   };
 
+
+  // Alert hook for modal
+  const { isAlertOpen, alertMessage, alertOptions, showAlert, hideAlert } = useAlert();
+
+  // Custom validation: at least one option must be marked as correct
   const handleFormSubmit = (data: QuestionFormData) => {
+    const hasCorrect = data.options.some(option => option.is_correct);
+    if (!hasCorrect) {
+      showAlert('Debes marcar al menos una opción como correcta.', { type: 'warning', title: 'Validación' });
+      return;
+    }
     const optionsWithLetters = data.options.map((option, index) => ({
       ...option,
       option_letter: String.fromCharCode(65 + index),
@@ -112,6 +124,14 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
   return (
     <div className="question-card container">
+      <AlertModal
+        isOpen={isAlertOpen}
+        onClose={hideAlert}
+        title={alertOptions.title}
+        message={alertMessage}
+        type={alertOptions.type}
+        buttonText={alertOptions.buttonText}
+      />
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
