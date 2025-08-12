@@ -1,4 +1,6 @@
+
 import React, { useEffect } from 'react';
+import { InfoIcon, CheckIcon, WarningIcon, ErrorIcon } from '../icons';
 
 interface ModalProps {
   isOpen: boolean;
@@ -41,28 +43,28 @@ const Modal: React.FC<ModalProps> = ({
     switch (type) {
       case 'success':
         return {
-          icon: '✅',
+          icon: <CheckIcon className="w-6 h-6 text-green-500" />,
           borderColor: 'border-green-500',
           iconColor: 'text-green-500',
           bgColor: 'bg-green-50'
         };
       case 'warning':
         return {
-          icon: '⚠️',
+          icon: <WarningIcon className="w-6 h-6 text-yellow-500" />,
           borderColor: 'border-yellow-500',
           iconColor: 'text-yellow-500',
           bgColor: 'bg-yellow-50'
         };
       case 'error':
         return {
-          icon: '❌',
+          icon: <ErrorIcon className="w-6 h-6 text-red-500" />,
           borderColor: 'border-red-500',
           iconColor: 'text-red-500',
           bgColor: 'bg-red-50'
         };
       default:
         return {
-          icon: 'ℹ️',
+          icon: <InfoIcon className="w-6 h-6 text-blue-500" />,
           borderColor: 'border-blue-500',
           iconColor: 'text-blue-500',
           bgColor: 'bg-blue-50'
@@ -114,7 +116,7 @@ const Modal: React.FC<ModalProps> = ({
         {(title || showCloseButton) && (
           <div className={`flex items-center justify-between p-4 border-b ${styles.bgColor} ${styles.borderColor} border-t-4`}>
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">{styles.icon}</span>
+              <span className="text-2xl flex items-center">{styles.icon}</span>
               {title && (
                 <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
               )}

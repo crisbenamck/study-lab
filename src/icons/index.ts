@@ -24,6 +24,8 @@ export { default as ChevronDoubleRightIcon } from './ChevronDoubleRightIcon';
 
 // Iconos de información y estado
 export { default as InfoIcon } from './InfoIcon';
+export { default as WarningIcon } from './WarningIcon';
+export { default as ErrorIcon } from './ErrorIcon';
 export { default as TargetIcon } from './TargetIcon';
 
 // Iconos de documentos y archivos
