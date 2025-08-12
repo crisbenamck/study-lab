@@ -105,8 +105,10 @@ const StudyTestPage: React.FC = () => {
       const sessionQuestion = currentSession.questions[currentQuestionIndex];
       if (sessionQuestion) {
         setSelectedAnswers(sessionQuestion.selectedOptions);
-        setShowAnswers(sessionQuestion.answered && currentSession.config.showAnswersMode === 'immediate');
-        setShowExplanation(false); // Hide explanation when changing question
+        const isImmediate = currentSession.config.showAnswersMode === 'immediate';
+        setShowAnswers(sessionQuestion.answered && isImmediate);
+        // Show explanation by default if answered and immediate mode
+        setShowExplanation(sessionQuestion.answered && isImmediate);
       }
     }
   }, [currentQuestionIndex, currentSession]);
@@ -168,9 +170,9 @@ const StudyTestPage: React.FC = () => {
       correctAnswers,
     });
 
-    // Show answers immediately
+    // Show answers and explanation immediately
     setShowAnswers(true);
-    setShowExplanation(false);
+    setShowExplanation(true);
   };
 
   // Process answer and update session state (for non-immediate mode)
@@ -332,17 +334,12 @@ const StudyTestPage: React.FC = () => {
           selectedAnswers={selectedAnswers}
           markedForReview={currentSessionQuestion?.markedForReview}
           showExplanation={showExplanation}
-          onToggleExplanation={() => setShowExplanation(!showExplanation)}
+          // Allow toggling explanation even if showAnswers is true (immediate mode)
+          onToggleExplanation={() => setShowExplanation(prev => !prev)}
           hasExplanation={!!currentQuestion.explanation}
         />
-  {/* Explanation (only when requested by user) */}
+        {/* Explanation: show if user requested (showExplanation) or in immediate mode after answering */}
         {showExplanation && (currentQuestion.explanation || currentQuestion.link) && (
-          <div className="mt-6">
-            <ExplanationReference explanation={currentQuestion.explanation} link={currentQuestion.link} />
-          </div>
-        )}
-  {/* Explanation with answers (only if answers are shown automatically) */}
-        {showAnswers && !showExplanation && (currentQuestion.explanation || currentQuestion.link) && (
           <div className="mt-6">
             <ExplanationReference explanation={currentQuestion.explanation} link={currentQuestion.link} />
           </div>
