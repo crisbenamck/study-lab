@@ -13,10 +13,10 @@ interface QuestionFormProps {
   onCancel?: () => void;
 }
 
-const QuestionForm: React.FC<QuestionFormProps> = ({ 
-  onSubmit, 
-  nextQuestionNumber, 
-  onClearForm, 
+const QuestionForm: React.FC<QuestionFormProps> = ({
+  onSubmit,
+  nextQuestionNumber,
+  onClearForm,
   // Removed: onSetInitialNumber, showInitialNumberField
   initialData,
   isEditing = false,
@@ -134,7 +134,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         </div>
       </div>
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
-        {/* Texto de la pregunta */}
+        {/* Question text */}
         <div>
           <label className="block text-md font-medium text-gray-700 mb-2">
             Texto de la pregunta <span className="text-red-500">*</span>
@@ -149,7 +149,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             <p className="text-sm text-red-600 mt-1">{errors.question_text.message}</p>
           )}
         </div>
-        {/* Permitir múltiples respuestas */}
+        {/* Allow multiple correct answers */}
         <div className="flex items-center">
           <input
             type="checkbox"
@@ -160,7 +160,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             Esta pregunta permite varias respuestas correctas
           </label>
         </div>
-        {/* Opciones de respuesta */}
+        {/* Answer options */}
         <div>
           <div className="flex items-center justify-between mb-4">
             <label className="block text-md font-medium text-gray-700">
@@ -237,14 +237,14 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             ))}
           </div>
         </div>
-        {/* Enlace de referencia */}
+        {/* Reference link */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Enlace de referencia
           </label>
           <input
             type="url"
-            {...register('link', { 
+            {...register('link', {
               pattern: {
                 value: /^https?:\/\/.+/,
                 message: 'Debe ser una URL válida (http:// o https://)'
@@ -257,7 +257,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             <p className="text-sm text-red-600 mt-1">{errors.link.message}</p>
           )}
         </div>
-        {/* Explicación */}
+        {/* Explanation */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Explicación
@@ -272,7 +272,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             <p className="text-sm text-red-600 mt-1">{errors.explanation.message}</p>
           )}
         </div>
-        {/* Botones de acción */}
+        {/* Action buttons */}
         <div className={isEditing ? 'flex gap-2' : 'flex justify-start'}>
           <Button
             type="submit"
