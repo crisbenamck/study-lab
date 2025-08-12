@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useForm, useFieldArray, useWatch } from 'react-hook-form';
 import type { QuestionFormData } from '../../types/Question';
 import Button from './Button';
-import { SaveIcon, CloseIcon, CheckIcon, PlusIcon, MinusIcon, EraserIcon } from '../../icons';
+import { SaveIcon, CloseIcon, PlusIcon, MinusIcon, EraserIcon } from '../../icons';
 
 interface QuestionFormProps {
   onSubmit: (data: QuestionFormData) => void;
   nextQuestionNumber: number;
   onClearForm?: () => void;
-  onSetInitialNumber?: (number: number) => void;
-  showInitialNumberField?: boolean;
   initialData?: QuestionFormData;
   isEditing?: boolean;
   onCancel?: () => void;
@@ -19,13 +17,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
   onSubmit, 
   nextQuestionNumber, 
   onClearForm, 
-  onSetInitialNumber, 
-  showInitialNumberField,
+  // Removed: onSetInitialNumber, showInitialNumberField
   initialData,
   isEditing = false,
   onCancel
 }) => {
-  const [customNumber, setCustomNumber] = useState(nextQuestionNumber);
 
   const getDefaultValues = (): QuestionFormData => {
     if (initialData) {
@@ -56,7 +52,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     defaultValues: getDefaultValues()
   });
 
-  // Reset form when initialData changes
   useEffect(() => {
     if (initialData) {
       reset(initialData);
@@ -78,7 +73,12 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     name: 'options'
   });
 
-  // Ensures only one correct answer if multiple answers are not allowed
+
+  const addOption = () => {
+    if (fields.length < 5) {
+      append({ option_text: '', is_correct: false });
+    }
+  };
   const handleOptionCorrectChange = (index: number, isChecked: boolean) => {
     if (!isMultipleAnswers && isChecked) {
       const updatedOptions = watchedOptions.map((option, i) => ({
@@ -91,7 +91,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     }
   };
 
-  // Assigns letters to options and submits the form
   const handleFormSubmit = (data: QuestionFormData) => {
     const optionsWithLetters = data.options.map((option, index) => ({
       ...option,
@@ -104,10 +103,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     reset();
   };
 
-  const addOption = () => {
-    append({ option_text: '', is_correct: false });
-  };
-
   const handleClearForm = () => {
     reset();
     if (onClearForm) {
@@ -117,52 +112,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
   return (
     <div className="question-card container">
-      <div className="mb-6 pt-6 border-gray-300 border-t-2">
+      <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Nueva pregunta #{nextQuestionNumber.toString().padStart(4, '0')}
             </h2>
           </div>
-          {/* Compact field for initial number - only if there are no questions */}
-          {showInitialNumberField && (
-            <div className="flex items-center space-x-3">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 px-4">
-                  <label className="block text-xs font-medium text-gray-700 mb-1">
-                    Número inicial
-                  </label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="number"
-                    min="1"
-                    value={customNumber}
-                    onChange={(e) => setCustomNumber(parseInt(e.target.value) || 1)}
-                    className="form-input w-20 text-sm"
-                    placeholder="0001"
-                  />
-                  <Button
-                    type="button"
-                    onClick={() => onSetInitialNumber && onSetInitialNumber(customNumber)}
-                    variant="primary"
-                    size="sm"
-                    icon={<CheckIcon />}
-                  />
-                </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  Solo para la primera pregunta
-                </p>
-              </div>
-              <Button
-                type="button"
-                onClick={handleClearForm}
-                variant="secondary"
-                size="md"
-                icon={<EraserIcon />}
-              >
-                Limpiar formulario
-              </Button>
-            </div>
-          )}
           {/* If not editing, show clear button */}
           {!isEditing && (
             <Button
@@ -181,7 +137,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         {/* Texto de la pregunta */}
         <div>
           <label className="block text-md font-medium text-gray-700 mb-2">
-            Texto de la pregunta *
+            Texto de la pregunta <span className="text-red-500">*</span>
           </label>
           <textarea
             {...register('question_text', { required: 'El texto de la pregunta es obligatorio' })}
@@ -208,7 +164,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         <div>
           <div className="flex items-center justify-between mb-4">
             <label className="block text-md font-medium text-gray-700">
-              Opciones de respuesta *
+              Opciones de respuesta <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center gap-2">
               <Button
@@ -235,10 +191,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
           </div>
           <div className="space-y-3">
             {fields.map((field, index) => (
-              // Option row: letter, textarea, correct checkbox, error message
               <div key={field.id} className="option-item flex gap-2 items-center min-h-[56px]">
-                <div className="option-letter flex items-center justify-center text-base font-semibold text-gray-700 min-w-[24px] min-h-[24px] border rounded-2xl border-gray-400">
-                  {String.fromCharCode(65 + index)}
+                <div className="flex flex-col items-center">
+                  <div className="option-letter flex items-center justify-center text-base font-semibold text-gray-500 bg-gray-100 rounded-full min-w-[32px] min-h-[32px]">
+                    {String.fromCharCode(65 + index)}
+                  </div>
+                  <div className="min-h-[20px] w-full mt-1 flex items-center justify-center">
+                    {errors.options?.[index]?.option_text && (
+                      <span className="text-xs text-red-500 text-center w-full"></span>
+                    )}
+                  </div>
                 </div>
                 <div className="flex-1 flex flex-col">
                   <div className="flex items-center gap-2">
