@@ -14,6 +14,7 @@ Si surge un conflicto entre reglas, sigue este orden de prioridad:
 ## 1. Lenguaje y comunicación
 - Todas las respuestas y explicaciones deben ser en español.
 - Todo el código, nombres de variables, funciones, componentes y comentarios deben estar en inglés, siguiendo las convenciones de TypeScript y React.
+- Todos los comentarios en el código deben estar únicamente en inglés. No se permite el uso de comentarios en español en ningún archivo de código.
 
 ### Ejemplos
 
@@ -35,6 +36,7 @@ const textoPregunta = "What is the capital of France?"; // Texto visible en ingl
 - Utiliza componentes funcionales y hooks de React.
 - Importa tipos usando `import type`.
 - Usa Tailwind CSS exclusivamente para el estilizado, sin frameworks de UI externos.
+- No se permite el uso de estilos en línea (`style={{ ... }}`) en ningún componente. Todos los estilos deben aplicarse mediante clases de Tailwind CSS.
 - Los componentes deben estar en PascalCase y ubicados en `src/components`.
 - Los hooks personalizados deben estar en `src/hooks` y usar camelCase.
 - Los tipos deben estar en `src/types`.
@@ -126,7 +128,7 @@ add componente tarjetaPregunta
 
 # Reglas para commits
 - Todos los commits deben estar en inglés, ser claros y estructurados.
-- Usa saltos de línea reales (no \n) para separar secciones.
+- Usa saltos de línea reales (presiona Enter) para separar secciones en los mensajes de commit. Nunca uses la secuencia \n para los saltos de línea.
 - Prefiere mensajes concisos pero informativos: incluye tipo de cambio, resumen, breaking change si aplica y archivos afectados si es relevante.
 - Ejemplo recomendado:
 	refactor(flashcards): rename StudyFlashCardsHeader to FlashCardsHeader

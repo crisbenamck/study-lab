@@ -117,20 +117,20 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
   return (
     <div className="question-card container">
-      <div className="mb-6">
+      <div className="mb-6 pt-6 border-gray-300 border-t-2">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              New Question #{nextQuestionNumber.toString().padStart(4, '0')}
+              Nueva pregunta #{nextQuestionNumber.toString().padStart(4, '0')}
             </h2>
           </div>
           {/* Compact field for initial number - only if there are no questions */}
           {showInitialNumberField && (
             <div className="flex items-center space-x-3">
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 px-4">
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Initial number
-                </label>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Número inicial
+                  </label>
                 <div className="flex items-center space-x-2">
                   <input
                     type="number"
@@ -149,7 +149,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                   />
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  Only for the first question
+                  Solo para la primera pregunta
                 </p>
               </div>
               <Button
@@ -159,7 +159,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 size="md"
                 icon={<EraserIcon />}
               >
-                Clear Form
+                Limpiar formulario
               </Button>
             </div>
           )}
@@ -172,28 +172,28 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               size="md"
               icon={<EraserIcon />}
             >
-              Clear Form
+              Limpiar formulario
             </Button>
           )}
         </div>
       </div>
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
-        {/* Question text */}
+        {/* Texto de la pregunta */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Question text *
+          <label className="block text-md font-medium text-gray-700 mb-2">
+            Texto de la pregunta *
           </label>
           <textarea
-            {...register('question_text', { required: 'Question text is required' })}
+            {...register('question_text', { required: 'El texto de la pregunta es obligatorio' })}
             rows={4}
-            className="form-input"
-            placeholder="Write the question text here..."
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-white text-gray-900"
+            placeholder="Escribe el texto de la pregunta aquí..."
           />
           {errors.question_text && (
             <p className="text-sm text-red-600 mt-1">{errors.question_text.message}</p>
           )}
         </div>
-        {/* Multiple answers */}
+        {/* Permitir múltiples respuestas */}
         <div className="flex items-center">
           <input
             type="checkbox"
@@ -201,16 +201,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             className="form-checkbox mr-2"
           />
           <label className="text-sm text-gray-700">
-            This question allows multiple correct answers
+            Esta pregunta permite varias respuestas correctas
           </label>
         </div>
-        {/* Answer options */}
+        {/* Opciones de respuesta */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <label className="block text-sm font-medium text-gray-700">
-              Answer options *
+            <label className="block text-md font-medium text-gray-700">
+              Opciones de respuesta *
             </label>
-            <div className="flex items-center" style={{ gap: '8px' }}>
+            <div className="flex items-center gap-2">
               <Button
                 type="button"
                 onClick={addOption}
@@ -219,7 +219,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 size="sm"
                 icon={<PlusIcon />}
               >
-                Add
+                Agregar
               </Button>
               <Button
                 type="button"
@@ -229,86 +229,89 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 size="sm"
                 icon={<MinusIcon />}
               >
-                Remove
+                Quitar
               </Button>
             </div>
           </div>
           <div className="space-y-3">
             {fields.map((field, index) => (
-              <div key={field.id} className="option-item">
-                <div className="option-letter">
+              // Option row: letter, textarea, correct checkbox, error message
+              <div key={field.id} className="option-item flex gap-2 items-center min-h-[56px]">
+                <div className="option-letter flex items-center justify-center text-base font-semibold text-gray-700 min-w-[24px] min-h-[24px] border rounded-2xl border-gray-400">
                   {String.fromCharCode(65 + index)}
                 </div>
-                <div className="flex-1">
-                  <textarea
-                    {...register(`options.${index}.option_text`, {
-                      required: 'Option text is required'
-                    })}
-                    className="form-input"
-                    placeholder={`Option text ${String.fromCharCode(65 + index)}`}
-                    rows={2}
-                  />
+                <div className="flex-1 flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <textarea
+                      {...register(`options.${index}.option_text`, {
+                        required: 'El texto de la opción es obligatorio'
+                      })}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-white text-gray-900 min-h-[56px]"
+                      placeholder={`Texto de opción ${String.fromCharCode(65 + index)}`}
+                      rows={2}
+                    />
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        {...register(`options.${index}.is_correct`)}
+                        className="form-checkbox"
+                        disabled={!isMultipleAnswers && watchedOptions?.some((opt, i) => i !== index && opt.is_correct)}
+                        onChange={(e) => {
+                          const isChecked = e.target.checked;
+                          handleOptionCorrectChange(index, isChecked);
+                          setValue(`options.${index}.is_correct`, isChecked);
+                        }}
+                      />
+                      <label className="text-sm text-gray-700">Correcta</label>
+                    </div>
+                  </div>
                   {errors.options?.[index]?.option_text && (
                     <p className="text-sm text-red-600 mt-1">
                       {errors.options[index]?.option_text?.message}
                     </p>
                   )}
                 </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    {...register(`options.${index}.is_correct`)}
-                    className="form-checkbox"
-                    disabled={!isMultipleAnswers && watchedOptions?.some((opt, i) => i !== index && opt.is_correct)}
-                    onChange={(e) => {
-                      const isChecked = e.target.checked;
-                      handleOptionCorrectChange(index, isChecked);
-                      setValue(`options.${index}.is_correct`, isChecked);
-                    }}
-                  />
-                  <label className="text-sm text-gray-700">Correct</label>
-                </div>
               </div>
             ))}
           </div>
         </div>
-        {/* Reference link */}
+        {/* Enlace de referencia */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Reference link
+            Enlace de referencia
           </label>
           <input
             type="url"
             {...register('link', { 
               pattern: {
-                value: /^https?:\/\/.+/, // eslint-disable-line
-                message: 'Must be a valid URL (http:// or https://)'
+                value: /^https?:\/\/.+/,
+                message: 'Debe ser una URL válida (http:// o https://)'
               }
             })}
-            className="form-input"
-            placeholder="https://example.com/information-source"
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition bg-white text-gray-900"
+            placeholder="https://ejemplo.com/fuente-informacion"
           />
           {errors.link && (
             <p className="text-sm text-red-600 mt-1">{errors.link.message}</p>
           )}
         </div>
-        {/* Explanation */}
+        {/* Explicación */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Explanation
+            Explicación
           </label>
           <textarea
             {...register('explanation')}
             rows={4}
-            className="form-input"
-            placeholder="Provide a detailed explanation of why the answers are correct..."
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-white text-gray-900"
+            placeholder="Agrega una explicación detallada de por qué las respuestas son correctas..."
           />
           {errors.explanation && (
             <p className="text-sm text-red-600 mt-1">{errors.explanation.message}</p>
           )}
         </div>
-        {/* Submit buttons */}
-        <div className={`${isEditing ? 'flex' : 'flex justify-start'}`} style={{ gap: isEditing ? '8px' : '0' }}>
+        {/* Botones de acción */}
+        <div className={isEditing ? 'flex gap-2' : 'flex justify-start'}>
           <Button
             type="submit"
             variant="success"
@@ -316,7 +319,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             icon={<SaveIcon />}
             iconPosition="left"
           >
-            {isEditing ? 'Save Changes' : 'Save Question'}
+            {isEditing ? 'Guardar cambios' : 'Guardar pregunta'}
           </Button>
           {isEditing && onCancel && (
             <Button
@@ -327,7 +330,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               icon={<CloseIcon />}
               iconPosition="left"
             >
-              Cancel
+              Cancelar
             </Button>
           )}
         </div>
