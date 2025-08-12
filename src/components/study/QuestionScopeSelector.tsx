@@ -58,7 +58,7 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
   const isRandomCardFocused = focusedInput === 'randomCount' || randomCardFocused;
 
   return (
-    <div className="mb-10 pb-8 border-b border-gray-200">
+    <div className="mb-10 pb-8 border-b">
       <h2 className="text-2xl font-semibold text-gray-900 mb-4">
         Preguntas a Estudiar
       </h2>
