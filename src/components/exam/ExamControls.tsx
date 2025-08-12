@@ -32,7 +32,7 @@ const ExamControls: React.FC<ExamControlsProps> = ({
   hasExplanation,
 }) => (
   <div className="p-0">
-    <div className="mb-4 pb-4 border-b border-gray-200">
+    <div className="mb-4 pb-4 border-b">
       <div className="flex space-x-3">
         <Button
           onClick={onMarkForReview}
@@ -58,7 +58,7 @@ const ExamControls: React.FC<ExamControlsProps> = ({
         )}
       </div>
     </div>
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center border-b pb-4">
       <Button
         onClick={onPrevious}
         disabled={!canGoPrevious}

@@ -23,7 +23,7 @@ const ExamQuestion: React.FC<ExamQuestionProps> = ({
   showAnswers,
   onSelect,
 }) => (
-  <div className="mb-6">
+  <div className="mb-6 h-auto md:h-[400px] overflow-y-auto">
     <div className="mb-4">
       <h2 className="text-lg font-semibold text-gray-800">{questionText}</h2>
     </div>
