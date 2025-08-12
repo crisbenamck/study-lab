@@ -56,7 +56,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     defaultValues: getDefaultValues()
   });
 
-  // Reset del formulario cuando cambian los datos iniciales
+  // Reset form when initialData changes
   useEffect(() => {
     if (initialData) {
       reset(initialData);
@@ -68,7 +68,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     name: 'options'
   });
 
-  // Watch para detectar cambios en múltiples respuestas y opciones
   const isMultipleAnswers = useWatch({
     control,
     name: 'requires_multiple_answers'
@@ -79,35 +78,29 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
     name: 'options'
   });
 
-  // Función para manejar el cambio de una opción correcta
+  // Ensures only one correct answer if multiple answers are not allowed
   const handleOptionCorrectChange = (index: number, isChecked: boolean) => {
     if (!isMultipleAnswers && isChecked) {
-      // Si no permite múltiples respuestas y se marca una opción,
-      // desmarcar todas las demás
       const updatedOptions = watchedOptions.map((option, i) => ({
         ...option,
         is_correct: i === index
       }));
-      
-      // Actualizar todas las opciones
       updatedOptions.forEach((option, i) => {
         setValue(`options.${i}.is_correct`, option.is_correct);
       });
     }
   };
 
+  // Assigns letters to options and submits the form
   const handleFormSubmit = (data: QuestionFormData) => {
-    // Asignar letras automáticamente (A, B, C, D, etc.)
     const optionsWithLetters = data.options.map((option, index) => ({
       ...option,
-      option_letter: String.fromCharCode(65 + index), // A=65, B=66, etc.
+      option_letter: String.fromCharCode(65 + index),
     }));
-
     onSubmit({
       ...data,
       options: optionsWithLetters
     });
-
     reset();
   };
 
@@ -128,16 +121,15 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Nueva Pregunta #{nextQuestionNumber.toString().padStart(4, '0')}
+              New Question #{nextQuestionNumber.toString().padStart(4, '0')}
             </h2>
           </div>
-          
-          {/* Campo compacto para número inicial - solo si no hay preguntas */}
+          {/* Compact field for initial number - only if there are no questions */}
           {showInitialNumberField && (
             <div className="flex items-center space-x-3">
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 px-4">
                 <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Número inicial
+                  Initial number
                 </label>
                 <div className="flex items-center space-x-2">
                   <input
@@ -157,10 +149,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                   />
                 </div>
                 <p className="text-xs text-gray-500 mt-1">
-                  Solo primera pregunta
+                  Only for the first question
                 </p>
               </div>
-              
               <Button
                 type="button"
                 onClick={handleClearForm}
@@ -168,12 +159,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 size="md"
                 icon={<EraserIcon />}
               >
-                Limpiar Formulario
+                Clear Form
               </Button>
             </div>
           )}
-          
-          {/* Si no estamos editando, mostrar el botón limpiar */}
+          {/* If not editing, show clear button */}
           {!isEditing && (
             <Button
               type="button"
@@ -182,30 +172,28 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               size="md"
               icon={<EraserIcon />}
             >
-              Limpiar Formulario
+              Clear Form
             </Button>
           )}
         </div>
       </div>
-
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
-        {/* Texto de la pregunta */}
+        {/* Question text */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Texto de la pregunta *
+            Question text *
           </label>
           <textarea
-            {...register('question_text', { required: 'El texto de la pregunta es requerido' })}
+            {...register('question_text', { required: 'Question text is required' })}
             rows={4}
             className="form-input"
-            placeholder="Escribe aquí el texto de la pregunta..."
+            placeholder="Write the question text here..."
           />
           {errors.question_text && (
             <p className="text-sm text-red-600 mt-1">{errors.question_text.message}</p>
           )}
         </div>
-
-        {/* Múltiples respuestas */}
+        {/* Multiple answers */}
         <div className="flex items-center">
           <input
             type="checkbox"
@@ -213,15 +201,14 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             className="form-checkbox mr-2"
           />
           <label className="text-sm text-gray-700">
-            Esta pregunta permite múltiples respuestas correctas
+            This question allows multiple correct answers
           </label>
         </div>
-
-        {/* Opciones */}
+        {/* Answer options */}
         <div>
           <div className="flex items-center justify-between mb-4">
             <label className="block text-sm font-medium text-gray-700">
-              Opciones de respuesta *
+              Answer options *
             </label>
             <div className="flex items-center" style={{ gap: '8px' }}>
               <Button
@@ -232,9 +219,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 size="sm"
                 icon={<PlusIcon />}
               >
-                Agregar
+                Add
               </Button>
-              
               <Button
                 type="button"
                 onClick={() => remove(fields.length - 1)}
@@ -243,25 +229,23 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 size="sm"
                 icon={<MinusIcon />}
               >
-                Eliminar
+                Remove
               </Button>
             </div>
           </div>
-
           <div className="space-y-3">
             {fields.map((field, index) => (
               <div key={field.id} className="option-item">
                 <div className="option-letter">
                   {String.fromCharCode(65 + index)}
                 </div>
-                
                 <div className="flex-1">
                   <textarea
                     {...register(`options.${index}.option_text`, {
-                      required: 'El texto de la opción es requerido'
+                      required: 'Option text is required'
                     })}
                     className="form-input"
-                    placeholder={`Texto de la opción ${String.fromCharCode(65 + index)}`}
+                    placeholder={`Option text ${String.fromCharCode(65 + index)}`}
                     rows={2}
                   />
                   {errors.options?.[index]?.option_text && (
@@ -270,7 +254,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                     </p>
                   )}
                 </div>
-
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -280,55 +263,51 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                     onChange={(e) => {
                       const isChecked = e.target.checked;
                       handleOptionCorrectChange(index, isChecked);
-                      // También necesitamos manejar el registro normal
                       setValue(`options.${index}.is_correct`, isChecked);
                     }}
                   />
-                  <label className="text-sm text-gray-700">Correcta</label>
+                  <label className="text-sm text-gray-700">Correct</label>
                 </div>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Link de referencia */}
+        {/* Reference link */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Link de referencia
+            Reference link
           </label>
           <input
             type="url"
             {...register('link', { 
               pattern: {
-                value: /^https?:\/\/.+/,
-                message: 'Debe ser una URL válida (http:// o https://)'
+                value: /^https?:\/\/.+/, // eslint-disable-line
+                message: 'Must be a valid URL (http:// or https://)'
               }
             })}
             className="form-input"
-            placeholder="https://ejemplo.com/fuente-de-informacion"
+            placeholder="https://example.com/information-source"
           />
           {errors.link && (
             <p className="text-sm text-red-600 mt-1">{errors.link.message}</p>
           )}
         </div>
-
-        {/* Explicación */}
+        {/* Explanation */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Explicación
+            Explanation
           </label>
           <textarea
             {...register('explanation')}
             rows={4}
             className="form-input"
-            placeholder="Proporciona una explicación detallada de por qué las respuestas son correctas..."
+            placeholder="Provide a detailed explanation of why the answers are correct..."
           />
           {errors.explanation && (
             <p className="text-sm text-red-600 mt-1">{errors.explanation.message}</p>
           )}
         </div>
-
-        {/* Botones de envío */}
+        {/* Submit buttons */}
         <div className={`${isEditing ? 'flex' : 'flex justify-start'}`} style={{ gap: isEditing ? '8px' : '0' }}>
           <Button
             type="submit"
@@ -337,9 +316,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             icon={<SaveIcon />}
             iconPosition="left"
           >
-            {isEditing ? 'Guardar Cambios' : 'Guardar Pregunta'}
+            {isEditing ? 'Save Changes' : 'Save Question'}
           </Button>
-          
           {isEditing && onCancel && (
             <Button
               type="button"
@@ -349,13 +327,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
               icon={<CloseIcon />}
               iconPosition="left"
             >
-              Cancelar
+              Cancel
             </Button>
           )}
         </div>
       </form>
     </div>
   );
-};
+}
 
 export default QuestionForm;
