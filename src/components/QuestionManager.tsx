@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { Question, QuestionFormData } from '../types/Question';
 import { formatQuestionNumber, downloadQuestionsAsJSON } from '../utils/downloadUtils';
-import QuestionForm from './QuestionForm';
+import QuestionForm from './common/QuestionForm';
 import ConfirmModal from './ConfirmModal';
 import QuestionCard from './QuestionCard';
 import Pagination from './Pagination';

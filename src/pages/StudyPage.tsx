@@ -4,6 +4,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useAlert } from '../hooks/useAlert';
 import Layout from '../components/Layout';
+import PageHeader from '../components/common/PageHeader';
 import {
   EmptyQuestionsState,
   StudyModeSelector,
@@ -144,15 +145,10 @@ const StudyPage: React.FC = () => {
     <Layout>
       <div className="py-16">
         <div className="max-w-4xl mx-auto px-4">
-          {/* Title and description */}
-          <div className="mb-12 text-left">
-            <h1 className="text-4xl font-bold text-gray-800 mb-4">
-              Centro de Estudio
-            </h1>
-            <p className="text-lg text-gray-600 max-w-3xl">
-              Centro de control para tus sesiones de estudio. Crea preguntas, importa contenido o configura tu práctica personalizada.
-            </p>
-          </div>
+          <PageHeader
+            title="Centro de Estudio"
+            description="Centro de control para tus sesiones de estudio. Crea preguntas, importa contenido o configura tu práctica personalizada."
+          />
 
           {/* Show empty state if there are no questions */}
           {questions.length === 0 ? (
