@@ -125,53 +125,87 @@ const StudyTestPage: React.FC = () => {
 
   // ...existing code...
 
+
   // Handle answer selection
   const handleAnswerSelect = (optionLetter: string) => {
-    if (showAnswers) return; // No permitir cambios si ya se muestran las respuestas
+    if (showAnswers) return; // Do not allow changes if answers are shown
 
+    let newSelectedAnswers: string[];
     if (currentQuestion.requires_multiple_answers) {
-  // Multiple answer
-      setSelectedAnswers(prev => {
-        if (prev.includes(optionLetter)) {
-          return prev.filter(letter => letter !== optionLetter);
-        } else {
-          return [...prev, optionLetter];
-        }
-      });
+      newSelectedAnswers = selectedAnswers.includes(optionLetter)
+        ? selectedAnswers.filter(letter => letter !== optionLetter)
+        : [...selectedAnswers, optionLetter];
     } else {
-  // Single answer
-      setSelectedAnswers([optionLetter]);
+      newSelectedAnswers = [optionLetter];
+    }
+    setSelectedAnswers(newSelectedAnswers);
+
+    // If immediate mode, process answer right away
+    if (
+      currentSession &&
+      currentSession.config.showAnswersMode === 'immediate' &&
+      !currentSession.questions[currentQuestionIndex]?.answered
+    ) {
+      processAnswerImmediate(newSelectedAnswers);
     }
   };
 
-  // Process answer and update session state
-  const processAnswer = (answers: string[]) => {
+  // Process answer and update session state (for immediate mode)
+  const processAnswerImmediate = (answers: string[]) => {
     if (answers.length === 0 || !currentSession) return;
 
     const currentSessionQuestion = currentSession.questions[currentQuestionIndex];
     const updatedQuestion = updateQuestionAnswer(currentSessionQuestion, answers, currentQuestion);
-    
-  // Update session
+
+    // Update session
     const updatedQuestions = [...currentSession.questions];
     updatedQuestions[currentQuestionIndex] = updatedQuestion;
-    
+
     const correctAnswers = updatedQuestions.filter(q => q.isCorrect).length;
-    
+
     updateCurrentSession({
       questions: updatedQuestions,
       correctAnswers,
     });
 
-  // Show answers if config allows
+    // Show answers immediately
+    setShowAnswers(true);
+    setShowExplanation(false);
+  };
+
+  // Process answer and update session state (for non-immediate mode)
+  const processAnswer = (answers: string[]) => {
+    if (answers.length === 0 || !currentSession) return;
+
+    const currentSessionQuestion = currentSession.questions[currentQuestionIndex];
+    const updatedQuestion = updateQuestionAnswer(currentSessionQuestion, answers, currentQuestion);
+
+    // Update session
+    const updatedQuestions = [...currentSession.questions];
+    updatedQuestions[currentQuestionIndex] = updatedQuestion;
+
+    const correctAnswers = updatedQuestions.filter(q => q.isCorrect).length;
+
+    updateCurrentSession({
+      questions: updatedQuestions,
+      correctAnswers,
+    });
+
+    // Show answers if config allows (for non-immediate mode)
     if (currentSession.config.showAnswersMode === 'immediate') {
       setShowAnswers(true);
     }
   };
 
+
   // Go to next question or finish exam
   const handleNext = () => {
-  // Process current answer if selected
-    if (selectedAnswers.length > 0 && !currentSession?.questions[currentQuestionIndex]?.answered) {
+    // In immediate mode, do not process answer again if already answered
+    if (
+      selectedAnswers.length > 0 &&
+      !currentSession?.questions[currentQuestionIndex]?.answered &&
+      currentSession?.config.showAnswersMode !== 'immediate'
+    ) {
       processAnswer(selectedAnswers);
     }
 
@@ -182,7 +216,7 @@ const StudyTestPage: React.FC = () => {
       setStartTime(new Date());
       goToNext();
     } else {
-  // If last question, finish exam automatically
+      // If last question, finish exam automatically
       if (currentSession) {
         completeSession(currentSession);
         navigate('/study/session-results');
