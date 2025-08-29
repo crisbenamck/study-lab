@@ -132,9 +132,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Nueva pregunta #{nextQuestionNumber.toString().padStart(4, '0')}
-            </h2>
+            {!isEditing && (
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Nueva pregunta {nextQuestionNumber.toString().padStart(4, '0')}
+              </h2>
+            )}
           </div>
           {/* If not editing, show clear button */}
           {!isEditing && (
@@ -154,7 +156,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         {/* Question text */}
         <div>
           <label className="block text-md font-medium text-gray-700 mb-2">
-            Texto de la pregunta <span className="text-red-500">*</span>
+            <span className="text-sm font-bold text-black mb-2">Texto de la pregunta</span> <span className="text-red-500">*</span>
           </label>
           <textarea
             {...register('question_text', { required: 'El texto de la pregunta es obligatorio' })}
@@ -181,7 +183,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         <div>
           <div className="flex items-center justify-between mb-4">
             <label className="block text-md font-medium text-gray-700">
-              Opciones de respuesta <span className="text-red-500">*</span>
+              <span className="text-sm font-bold text-black mb-2">Opciones de respuesta</span> <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center gap-2">
               <Button
@@ -268,7 +270,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         {/* Reference link */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Enlace de referencia
+            <span className="text-sm font-bold text-black mb-2">Enlace de referencia</span>
           </label>
           <input
             type="url"
@@ -288,7 +290,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         {/* Explanation */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Explicación
+            <span className="text-sm font-bold text-black mb-2">Explicación</span>
           </label>
           <textarea
             {...register('explanation')}

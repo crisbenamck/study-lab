@@ -195,7 +195,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  Editando Pregunta #{formatQuestionNumber(editingQuestion.question_number)}
+                  Editando Pregunta {formatQuestionNumber(editingQuestion.question_number)}
                 </h1>
                 <p className="text-gray-600">
                   Modifica los campos necesarios y guarda los cambios

@@ -11,7 +11,6 @@ const QuestionSource: React.FC<QuestionSourceProps> = ({ link }) => {
       <div className="border-t pt-4">
         <div className="flex items-center gap-2 text-sm">
           <LinkIcon className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          <span className="text-gray-400 font-medium">Fuente:</span>
           <span className="text-gray-400 italic">
             No se proporcionó fuente para esta pregunta
           </span>
@@ -34,7 +33,6 @@ const QuestionSource: React.FC<QuestionSourceProps> = ({ link }) => {
     <div className="border-t pt-4">
       <div className="flex items-center gap-2 text-sm">
         <LinkIcon className="w-4 h-4 text-gray-500 flex-shrink-0" />
-        <span className="text-gray-500 font-medium">Fuente:</span>
         {isValidUrl(link) ? (
           <a
             href={link}
