@@ -28,9 +28,9 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       <div className="bg-gray-50 px-6 py-4 border-b border-gray-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center shadow-sm">
-              <span className="text-white font-bold text-sm">
-                #{formatQuestionNumber(question.question_number)}
+            <div className="w-16 h-10 bg-blue-200 rounded-xl flex items-center justify-center mx-2 my-0.5">
+              <span className="text-black font-semibold text-lg tracking-wide select-none">
+                {formatQuestionNumber(question.question_number)}
               </span>
             </div>
             <div>
@@ -69,7 +69,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       <div className="p-6">
         {/* Texto de la pregunta */}
         <div className="mb-6">
-          <h4 className="text-sm font-medium text-gray-700 mb-2">Pregunta:</h4>
+          <h4 className="text-sm font-bold text-black mb-2">Pregunta:</h4>
           <p className="text-gray-900 leading-relaxed text-base">
             {question.question_text}
           </p>
@@ -77,7 +77,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
 
         {/* Opciones de respuesta */}
         <div className="mb-6">
-          <h4 className="text-sm font-medium text-gray-700 mb-3">Opciones de respuesta:</h4>
+          <h4 className="text-sm font-bold text-black mb-3">Opciones de respuesta:</h4>
           <div className="grid gap-3">
             {question.options.map((option, optionIndex) => (
               <div
@@ -110,11 +110,12 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           </div>
         </div>
 
-        {/* Explicación */}
-        <QuestionExplanation explanation={question.explanation} />
+  {/* Explicación */}
+  <QuestionExplanation explanation={question.explanation} />
 
-        {/* Fuente/Link */}
-        <QuestionSource link={question.link} />
+  {/* Fuente/Link */}
+  <h4 className="text-sm font-bold text-black mb-2">Fuente:</h4>
+  <QuestionSource link={question.link} />
       </div>
     </div>
   );
