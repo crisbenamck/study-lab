@@ -257,7 +257,11 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         {/* Error message for correct option (after options, before reference link) */}
         {showCorrectOptionError && (
           <div className="w-full flex justify-end">
-            <span className="text-red-500 text-sm text-right">Debes marcar al menos una opción como correcta.</span>
+            <span className="text-red-500 text-sm text-right">
+              {isMultipleAnswers
+                ? 'Debes marcar las opciones correctas.'
+                : 'Debes marcar la opción correcta.'}
+            </span>
           </div>
         )}
 
