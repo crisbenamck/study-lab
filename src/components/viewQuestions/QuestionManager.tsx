@@ -6,15 +6,13 @@ import ConfirmModal from '../common/ConfirmModal';
 import QuestionCard from './QuestionCard';
 import Pagination from '../Pagination';
 import Button from '../common/Button';
-import QuestionActionCard from './QuestionActionCard';
+import EmptyLibraryActions from '../common/EmptyLibraryActions';
 import { useConfirm } from '../../hooks/useConfirm';
 import {
   DownloadIcon,
   TrashIcon,
   ArrowLeftIcon,
   EyeIcon,
-  PlusIcon,
-  UploadIcon,
   EditIcon
 } from '../../icons';
 
@@ -167,47 +165,10 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
 
   if (questions.length === 0) {
     return (
-      <div className="bg-white">
-        <div className="max-w-5xl mx-auto px-4 py-8">
-          <div className="text-center mb-16">
-            <div className="max-w-3xl mx-auto mb-16">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Tu biblioteca está vacía
-              </h2>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Comienza creando tu primera pregunta o importa contenido desde un archivo PDF para construir tu colección de estudio.
-              </p>
-            </div>
-            <div className="mb-16">
-              <h3 className="text-lg font-bold text-blue-700">
-                ¡Selecciona una opción para comenzar ahora!
-              </h3>
-            </div>
-          </div>
-          <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-6">
-              <QuestionActionCard
-                icon={<PlusIcon className="w-12 h-12 text-white" />}
-                title="Crear Primera Pregunta"
-                description="Diseña preguntas personalizadas usando nuestro formulario intuitivo"
-                buttonText="Empezar a Crear"
-                buttonIcon={<PlusIcon className="w-5 h-5" />}
-                onClick={() => window.location.href = '/create'}
-                variant="primary"
-              />
-              <QuestionActionCard
-                icon={<UploadIcon className="w-12 h-12 text-white" />}
-                title="Importar desde PDF"
-                description="Deja que la IA extraiga preguntas automáticamente de tus documentos"
-                buttonText="Subir Documento"
-                buttonIcon={<UploadIcon className="w-5 h-5" />}
-                onClick={() => window.location.href = '/import'}
-                variant="primary"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
+      <EmptyLibraryActions
+        onCreate={() => window.location.href = '/create'}
+        onImport={() => window.location.href = '/import'}
+      />
     );
   }
 
