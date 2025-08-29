@@ -20,7 +20,7 @@ const QuestionExplanation: React.FC<QuestionExplanationProps> = ({ explanation }
 
   return (
     <div className="mb-6">
-      <h4 className="text-sm font-medium text-gray-700 mb-2">Explicación:</h4>
+      <h4 className="text-sm font-bold text-black mb-2">Explicación:</h4>
       <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
         <p className="text-gray-900 leading-relaxed">
           {explanation}
