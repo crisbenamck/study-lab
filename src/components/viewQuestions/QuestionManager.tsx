@@ -6,7 +6,7 @@ import ConfirmModal from '../common/ConfirmModal';
 import QuestionCard from './QuestionCard';
 import Pagination from '../Pagination';
 import Button from '../common/Button';
-import ActionCard from '../ActionCard';
+import QuestionActionCard from './QuestionActionCard';
 import { useConfirm } from '../../hooks/useConfirm';
 import {
   DownloadIcon,
@@ -167,7 +167,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
 
   if (questions.length === 0) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="bg-white">
         <div className="max-w-5xl mx-auto px-4 py-16">
           <div className="text-center mb-24">
             <div className="max-w-3xl mx-auto mb-16">
@@ -186,7 +186,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
           </div>
           <div className="max-w-4xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8">
-              <ActionCard
+              <QuestionActionCard
                 icon={<PlusIcon className="w-12 h-12 text-white" />}
                 title="Crear Primera Pregunta"
                 description="Diseña preguntas personalizadas usando nuestro formulario intuitivo"
@@ -195,7 +195,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
                 onClick={() => window.location.href = '/create'}
                 variant="primary"
               />
-              <ActionCard
+              <QuestionActionCard
                 icon={<UploadIcon className="w-12 h-12 text-white" />}
                 title="Importar desde PDF"
                 description="Deja que la IA extraiga preguntas automáticamente de tus documentos"
