@@ -6,29 +6,26 @@ import type { QuestionFormData } from '../types/Question';
 interface CreateQuestionPageProps {
   onSubmit: (formData: QuestionFormData) => void;
   nextQuestionNumber: number;
-  onSetInitialNumber: (number: number) => void;
-  showInitialNumberField: boolean;
+  // Removed unused props
 }
 
 const CreateQuestionPage: React.FC<CreateQuestionPageProps> = ({
   onSubmit,
   nextQuestionNumber,
-  onSetInitialNumber,
-  showInitialNumberField
+  // Removed unused props
 }) => {
   return (
-    <div className="container space-y-6 py-16">
-      <PageHeader
-        title="Crear Nueva Pregunta"
-        description="Diseña preguntas efectivas para tus exámenes con opciones múltiples, explicaciones y referencias educativas"
-      />
-      
-      <QuestionForm
-        onSubmit={onSubmit}
-        nextQuestionNumber={nextQuestionNumber}
-        onSetInitialNumber={onSetInitialNumber}
-        showInitialNumberField={showInitialNumberField}
-      />
+    <div className="py-16">
+      <div className="max-w-4xl mx-auto px-4 space-y-6">
+        <PageHeader
+          title="Crear Nueva Pregunta"
+          description="Diseña preguntas efectivas para tus exámenes con opciones múltiples, explicaciones y referencias educativas"
+        />
+        <QuestionForm
+          onSubmit={onSubmit}
+          nextQuestionNumber={nextQuestionNumber}
+        />
+      </div>
     </div>
   );
 };

@@ -21,19 +21,21 @@ const ViewQuestionsPage: React.FC<ViewQuestionsPageProps> = ({
   showConfirmModal
 }) => {
   return (
-  <div className="container space-y-6 py-16">
-      <PageHeader
-        title="Gestión de Preguntas"
-        description="Organiza y gestiona tu biblioteca de preguntas de manera eficiente. Edita, elimina y descarga tu contenido cuando lo necesites."
-      />
-      <QuestionManager
-        questions={questions}
-        onRemoveQuestion={onRemoveQuestion}
-        onUpdateQuestion={onUpdateQuestion}
-        onClearAll={onClearAll}
-        showAlert={showAlert}
-        showConfirmModal={showConfirmModal}
-      />
+    <div className="py-16">
+      <div className="max-w-4xl mx-auto px-4 space-y-6">
+        <PageHeader
+          title="Gestión de Preguntas"
+          description="Organiza y gestiona tu biblioteca de preguntas de manera eficiente. Edita, elimina y descarga tu contenido cuando lo necesites."
+        />
+        <QuestionManager
+          questions={questions}
+          onRemoveQuestion={onRemoveQuestion}
+          onUpdateQuestion={onUpdateQuestion}
+          onClearAll={onClearAll}
+          showAlert={showAlert}
+          showConfirmModal={showConfirmModal}
+        />
+      </div>
     </div>
   );
 };
