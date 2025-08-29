@@ -47,22 +47,22 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
     hideConfirm 
   } = useConfirm();
 
-  // Cálculos de paginación
+  // Pagination calculations
   const totalPages = Math.ceil(questions.length / questionsPerPage);
   const startIndex = (currentPage - 1) * questionsPerPage;
   const endIndex = startIndex + questionsPerPage;
   const currentQuestions = questions.slice(startIndex, endIndex);
 
-  // Función para cambiar de página
+  // Handle page change
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Función para cambiar preguntas por página
+  // Handle questions per page change
   const handleQuestionsPerPageChange = (perPage: number) => {
     setQuestionsPerPage(perPage);
-    setCurrentPage(1); // Resetear a la primera página
+  setCurrentPage(1); // Reset to first page
   };
 
   const handleRemoveQuestion = (questionNumber: number) => {
@@ -133,7 +133,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
   const handleSaveEdit = (formData: QuestionFormData) => {
     if (!editingQuestion) return;
 
-    // Convertir las opciones del formulario al formato correcto
+  // Convert form options to correct format
     const optionsWithLetters = formData.options.map((option, index) => ({
       option_letter: String.fromCharCode(65 + index), // A, B, C, D...
       option_text: option.option_text,
@@ -151,7 +151,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
     setEditingQuestion(null);
   };
 
-  // Convertir Question a QuestionFormData para el formulario de edición
+  // Convert Question to QuestionFormData for edit form
   const questionToFormData = (question: Question): QuestionFormData => {
     return {
       question_text: question.question_text,
@@ -169,7 +169,6 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
     return (
       <div className="min-h-screen bg-white">
         <div className="max-w-5xl mx-auto px-4 py-16">
-          {/* Header principal optimizado y centrado */}
           <div className="text-center mb-24">
             <h1 className="text-4xl font-bold text-gray-900 mb-8">
               Gestión de Preguntas
@@ -179,8 +178,6 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
                 Organiza y gestiona tu biblioteca de preguntas de manera eficiente
               </p>
             </div>
-
-            {/* Mensaje de estado vacío unificado y centrado */}
             <div className="max-w-3xl mx-auto mb-16">
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">
                 Tu biblioteca está vacía
@@ -189,19 +186,14 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
                 Comienza creando tu primera pregunta o importa contenido desde un archivo PDF para construir tu colección de estudio.
               </p>
             </div>
-
-            {/* Call to action claro */}
             <div className="mb-16">
               <h3 className="text-lg font-medium text-gray-700">
                 Elige cómo empezar
               </h3>
             </div>
           </div>
-          
-          {/* Opciones de acción con componente ActionCard */}
           <div className="max-w-4xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8">
-              {/* Opción principal: Crear pregunta */}
               <ActionCard
                 icon={<PlusIcon className="w-12 h-12 text-white" />}
                 title="Crear Primera Pregunta"
@@ -211,8 +203,6 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
                 onClick={() => window.location.href = '/create'}
                 variant="primary"
               />
-
-              {/* Opción alternativa: Importar PDF */}
               <ActionCard
                 icon={<UploadIcon className="w-12 h-12 text-white" />}
                 title="Importar desde PDF"
@@ -229,11 +219,11 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
     );
   }
 
-  // Si estamos editando una pregunta, mostrar el formulario
+  // Show edit form if editingQuestion is set
   if (editingQuestion) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header con título y botón de regreso */}
+  {/* Header with title and back button */}
         <div className="mb-8">
           <Button
             variant="secondary"
@@ -275,36 +265,11 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      {/* Header principal con título, descripción y estadísticas */}
+    <div className="max-w-6xl mx-auto px-4">
+  {/* Main header with title, description and stats */}
       <div className="mb-8">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Gestión de Preguntas
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6 text-center">
-            Organiza y gestiona tu biblioteca de preguntas de manera eficiente. 
-            Edita, elimina y descarga tu contenido cuando lo necesites.
-          </p>
-          
-          {/* Estadísticas rápidas */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span>Total: {questions.length} preguntas</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span>Página {currentPage} de {totalPages}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-              <span>Mostrando {Math.min(questionsPerPage, questions.length - startIndex)} elementos</span>
-            </div>
-          </div>
-        </div>
 
-        {/* Barra de acciones */}
+  {/* Actions bar */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -344,9 +309,27 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
             </div>
           </div>
         </div>
+        
+        <div className="text-center mb-8">
+          {/* Quick stats */}
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span>Total: {questions.length} preguntas</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span>Página {currentPage} de {totalPages}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span>Mostrando {Math.min(questionsPerPage, questions.length - startIndex)} elementos</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Lista de preguntas mejorada */}
+  {/* Improved questions list */}
       <div className="space-y-6">
         {currentQuestions.map((question, index) => (
           <QuestionCard
@@ -358,7 +341,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
         ))}
       </div>
 
-      {/* Sistema de paginación moderno */}
+  {/* Modern pagination system */}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
