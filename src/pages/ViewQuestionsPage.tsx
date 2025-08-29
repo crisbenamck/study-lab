@@ -1,5 +1,6 @@
 import React from 'react';
 import QuestionManager from '../components/QuestionManager';
+import PageHeader from '../components/common/PageHeader';
 import type { Question } from '../types/Question';
 
 interface ViewQuestionsPageProps {
@@ -20,7 +21,11 @@ const ViewQuestionsPage: React.FC<ViewQuestionsPageProps> = ({
   showConfirmModal
 }) => {
   return (
-    <div className="container space-y-6">
+    <div className="container space-y-6 py-16">
+      <PageHeader
+        title="Gestión de Preguntas"
+        description="Organiza y gestiona tu biblioteca de preguntas de manera eficiente. Edita, elimina y descarga tu contenido cuando lo necesites."
+      />
       <QuestionManager
         questions={questions}
         onRemoveQuestion={onRemoveQuestion}
