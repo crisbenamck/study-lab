@@ -138,6 +138,12 @@ add componente tarjetaPregunta
   
 	BREAKING CHANGE: Use FlashCardsHeader instead of StudyFlashCardsHeader
 
+## Reglas para merges
+
+- Cada vez que se realice un merge entre ramas, el commit debe incluir un mensaje descriptivo en español sobre el motivo del merge y los cambios principales.
+- Si el usuario no especifica el mensaje, sugiere uno basado en los cambios realizados.
+- Ejemplo recomendado:
+	Merge branch 'feature/nueva-funcionalidad' into main: agrega gestión de usuarios
 ---
 
 ### Tecnologías principales del proyecto
