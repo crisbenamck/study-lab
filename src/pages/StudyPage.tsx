@@ -5,13 +5,11 @@ import { useStudyStorage } from '../hooks/useStudyStorage';
 import { useAlert } from '../hooks/useAlert';
 import Layout from '../components/Layout';
 import PageHeader from '../components/common/PageHeader';
-import {
-  EmptyQuestionsState,
-  StudyModeSelector,
-  QuestionScopeSelector,
-  ExamConfiguration,
-  StartStudyButton,
-} from '../components/study';
+import EmptyLibraryActions from '../components/common/EmptyLibraryActions';
+import StudyModeSelector from '../components/study/StudyModeSelector';
+import QuestionScopeSelector from '../components/study/QuestionScopeSelector';
+import ExamConfiguration from '../components/study/ExamConfiguration';
+import StartStudyButton from '../components/study/StartStudyButton';
 import type { StudySessionConfig, StudyMode, StudyScope, ShowAnswersMode } from '../types/StudySession';
 
 const StudyPage: React.FC = () => {
@@ -152,7 +150,10 @@ const StudyPage: React.FC = () => {
 
           {/* Show empty state if there are no questions */}
           {questions.length === 0 ? (
-            <EmptyQuestionsState />
+            <EmptyLibraryActions
+              onCreate={() => window.location.href = '/create'}
+              onImport={() => window.location.href = '/import'}
+            />
           ) : (
             <>
               <StudyModeSelector 
