@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import type { Question, QuestionFormData } from '../types/Question';
-import { formatQuestionNumber, downloadQuestionsAsJSON } from '../utils/downloadUtils';
-import QuestionForm from './common/QuestionForm';
-import ConfirmModal from './common/ConfirmModal';
-import QuestionCard from './QuestionCard';
-import Pagination from './Pagination';
-import Button from './common/Button';
-import ActionCard from './ActionCard';
-import { useConfirm } from '../hooks/useConfirm';
+import type { Question, QuestionFormData } from '../../types/Question';
+import { formatQuestionNumber, downloadQuestionsAsJSON } from '../../utils/downloadUtils';
+import QuestionForm from '../common/QuestionForm';
+import ConfirmModal from '../common/ConfirmModal';
+import QuestionCard from '../QuestionCard';
+import Pagination from '../Pagination';
+import Button from '../common/Button';
+import ActionCard from '../ActionCard';
+import { useConfirm } from '../../hooks/useConfirm';
 import {
   DownloadIcon,
   TrashIcon,
@@ -16,7 +16,7 @@ import {
   PlusIcon,
   UploadIcon,
   EditIcon
-} from '../icons';
+} from '../../icons';
 
 interface QuestionManagerProps {
   questions: Question[];
