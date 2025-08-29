@@ -1,5 +1,5 @@
 import React from 'react';
-import QuestionManager from '../components/QuestionManager';
+import QuestionManager from '../components/viewQuestions/QuestionManager';
 import PageHeader from '../components/common/PageHeader';
 import type { Question } from '../types/Question';
 

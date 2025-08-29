@@ -27,9 +27,9 @@ interface QuestionManagerProps {
   showConfirmModal: (message: string, onConfirm: () => void, options?: { title?: string; confirmText?: string; cancelText?: string; }) => void;
 }
 
-const QuestionManager: React.FC<QuestionManagerProps> = ({ 
-  questions, 
-  onRemoveQuestion, 
+const QuestionManager: React.FC<QuestionManagerProps> = ({
+  questions,
+  onRemoveQuestion,
   onUpdateQuestion,
   onClearAll,
   showAlert,
@@ -38,13 +38,13 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [questionsPerPage, setQuestionsPerPage] = useState(5);
-  const { 
-    isConfirmOpen, 
-    confirmMessage, 
-    confirmOptions, 
-    confirmCallback, 
-    showConfirm, 
-    hideConfirm 
+  const {
+    isConfirmOpen,
+    confirmMessage,
+    confirmOptions,
+    confirmCallback,
+    showConfirm,
+    hideConfirm
   } = useConfirm();
 
   // Pagination calculations
@@ -62,12 +62,12 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
   // Handle questions per page change
   const handleQuestionsPerPageChange = (perPage: number) => {
     setQuestionsPerPage(perPage);
-  setCurrentPage(1); // Reset to first page
+    setCurrentPage(1); // Reset to first page
   };
 
   const handleRemoveQuestion = (questionNumber: number) => {
     const questionNumberFormatted = formatQuestionNumber(questionNumber);
-    
+
     showConfirm(
       `¿Estás seguro de que quieres eliminar la Pregunta #${questionNumberFormatted}?`,
       () => onRemoveQuestion(questionNumber),
@@ -90,7 +90,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
 
     const questionCount = questions.length;
     const questionText = questionCount === 1 ? 'pregunta' : 'preguntas';
-    
+
     showConfirmModal(
       `¿Estás seguro de que quieres descargar ${questionCount} ${questionText} en formato JSON?`,
       () => downloadQuestionsAsJSON(questions),
@@ -110,7 +110,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
       });
       return;
     }
-    
+
     showConfirmModal(
       `¿Estás seguro de que quieres eliminar todas las ${questions.length} preguntas? Esta acción no se puede deshacer.`,
       onClearAll,
@@ -133,7 +133,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
   const handleSaveEdit = (formData: QuestionFormData) => {
     if (!editingQuestion) return;
 
-  // Convert form options to correct format
+    // Convert form options to correct format
     const optionsWithLetters = formData.options.map((option, index) => ({
       option_letter: String.fromCharCode(65 + index), // A, B, C, D...
       option_text: option.option_text,
@@ -170,14 +170,6 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
       <div className="min-h-screen bg-white">
         <div className="max-w-5xl mx-auto px-4 py-16">
           <div className="text-center mb-24">
-            <h1 className="text-4xl font-bold text-gray-900 mb-8">
-              Gestión de Preguntas
-            </h1>
-            <div className="max-w-4xl mx-auto">
-              <p className="text-xl text-gray-600 leading-relaxed mb-12">
-                Organiza y gestiona tu biblioteca de preguntas de manera eficiente
-              </p>
-            </div>
             <div className="max-w-3xl mx-auto mb-16">
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">
                 Tu biblioteca está vacía
@@ -223,7 +215,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
   if (editingQuestion) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-8">
-  {/* Header with title and back button */}
+        {/* Header with title and back button */}
         <div className="mb-8">
           <Button
             variant="secondary"
@@ -234,7 +226,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
             <ArrowLeftIcon className="w-4 h-4" />
             Volver a la lista
           </Button>
-          
+
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -249,7 +241,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
                 </p>
               </div>
             </div>
-            
+
             <QuestionForm
               onSubmit={handleSaveEdit}
               nextQuestionNumber={editingQuestion.question_number}
@@ -266,10 +258,10 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
 
   return (
     <div className="max-w-6xl mx-auto px-4">
-  {/* Main header with title, description and stats */}
+      {/* Main header with title, description and stats */}
       <div className="mb-8">
 
-  {/* Actions bar */}
+        {/* Actions bar */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -285,7 +277,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
               <Button
                 variant="success"
@@ -296,7 +288,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
                 <DownloadIcon className="w-4 h-4" />
                 Descargar JSON
               </Button>
-              
+
               <Button
                 variant="warning"
                 size="md"
@@ -309,7 +301,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
             </div>
           </div>
         </div>
-        
+
         <div className="text-center mb-8">
           {/* Quick stats */}
           <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
@@ -329,7 +321,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
         </div>
       </div>
 
-  {/* Improved questions list */}
+      {/* Improved questions list */}
       <div className="space-y-6">
         {currentQuestions.map((question, index) => (
           <QuestionCard
@@ -341,7 +333,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
         ))}
       </div>
 
-  {/* Modern pagination system */}
+      {/* Modern pagination system */}
       <Pagination
         currentPage={currentPage}
         totalPages={totalPages}
@@ -350,10 +342,10 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
         onPageChange={handlePageChange}
         onQuestionsPerPageChange={handleQuestionsPerPageChange}
       />
-      
+
       <ConfirmModal
         isOpen={isConfirmOpen}
-        onConfirm={confirmCallback || (() => {})}
+        onConfirm={confirmCallback || (() => { })}
         onCancel={hideConfirm}
         title={confirmOptions.title}
         message={confirmMessage}
