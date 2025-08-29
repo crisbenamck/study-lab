@@ -22,11 +22,11 @@ const QuestionActionCard: React.FC<ActionCardProps> = ({
 }) => {
   return (
     <div className="group">
-  <div className="bg-white rounded-3xl border-2 border-gray-100 p-4 shadow-md hover:border-blue-200 hover:shadow-xl transition-all duration-300 group-hover:scale-105">
+  <div className="bg-white rounded-3xl border-2 border-gray-100 py-8 px-4 shadow-md hover:border-blue-200 hover:shadow-xl transition-all duration-300 group-hover:scale-105">
         {/* Centered icon */}
         <div className="flex justify-center mb-8">
-          <div className="w-20 h-20 flex items-center justify-center bg-blue-50 rounded-2xl group-hover:bg-blue-100 transition-colors duration-300">
-            {icon}
+          <div className="w-20 h-20 flex items-center justify-center bg-blue-400 rounded-2xl group-hover:bg-blue-500 transition-colors duration-300">
+            <span className="text-white">{icon}</span>
           </div>
         </div>
 
