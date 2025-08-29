@@ -169,9 +169,9 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
     return (
       <div className="bg-white">
         <div className="max-w-5xl mx-auto px-4 py-16">
-          <div className="text-center mb-24">
+          <div className="text-center mb-16">
             <div className="max-w-3xl mx-auto mb-16">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                 Tu biblioteca está vacía
               </h2>
               <p className="text-lg text-gray-600 leading-relaxed">
@@ -179,13 +179,13 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
               </p>
             </div>
             <div className="mb-16">
-              <h3 className="text-lg font-medium text-gray-700">
-                Elige cómo empezar
+              <h3 className="text-lg font-bold text-blue-700">
+                ¡Selecciona una opción para comenzar ahora!
               </h3>
             </div>
           </div>
           <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-6">
               <QuestionActionCard
                 icon={<PlusIcon className="w-12 h-12 text-white" />}
                 title="Crear Primera Pregunta"

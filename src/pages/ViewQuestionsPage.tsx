@@ -21,7 +21,7 @@ const ViewQuestionsPage: React.FC<ViewQuestionsPageProps> = ({
   showConfirmModal
 }) => {
   return (
-    <div className="container space-y-6 py-16">
+  <div className="container space-y-6 py-8">
       <PageHeader
         title="Gestión de Preguntas"
         description="Organiza y gestiona tu biblioteca de preguntas de manera eficiente. Edita, elimina y descarga tu contenido cuando lo necesites."
