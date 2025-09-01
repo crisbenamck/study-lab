@@ -1,9 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import { PDFProcessorService } from '../../utils/pdfProcessor';
 import type { Question } from '../../types/Question';
 import { usePDFProcessing } from '../../hooks/usePDFProcessing';
 import ApiKeyConfigSection from './ApiKeyConfigSection';
-import NextStepMessage from './NextStepMessage';
 import UserProgressSection from './UserProgressSection';
 import AutomaticModelsSection from './AutomaticModelsSection';
 import FileUploadArea from './FileUploadArea';
@@ -28,29 +26,34 @@ interface PDFImportProps {
   showConfirm: (message: string, onConfirm: () => void, options?: { title?: string; confirmText?: string; cancelText?: string; }) => void;
 }
 
-const PDFImport: React.FC<PDFImportProps> = ({ 
-  onImportQuestions, 
-  appState, 
+const PDFImport: React.FC<PDFImportProps> = ({
+  onImportQuestions,
+  appState,
   nextQuestionNumber,
   showAlert,
   showConfirm
 }) => {
-  // Local state only for UI-specific functionality  
   const [showManualProcessing, setShowManualProcessing] = useState(false);
-
-  const { 
-    geminiApiKey, 
-    saveGeminiApiKey, 
-    selectedFile, 
-    updateSelectedFile, 
-    totalPages, 
-    setTotalPages, 
-    pageToProcess, 
-    setPageToProcess 
+  const {
+    geminiApiKey,
+    saveGeminiApiKey,
+    selectedFile,
+    updateSelectedFile,
+    totalPages,
+    setTotalPages,
+    pageToProcess,
+    setPageToProcess
   } = appState;
 
-  // PDF Processing Hook - provides enhanced processing functionality
-  const pdfProcessingHook = usePDFProcessing({
+  const {
+    isProcessing,
+    processingProgress,
+    individualProcessingProgress,
+    currentGeminiModel,
+    fallbackStatus,
+    startSinglePageProcessing,
+    startIntelligentProcessing
+  } = usePDFProcessing({
     geminiApiKey,
     nextQuestionNumber,
     showAlert,
@@ -58,112 +61,89 @@ const PDFImport: React.FC<PDFImportProps> = ({
     onImportQuestions
   });
 
-  const {
-    isProcessing: hookIsProcessing,
-    processingProgress: hookProcessingProgress,
-    individualProcessingProgress: hookIndividualProgress,
-    currentGeminiModel: hookCurrentModel,
-    fallbackStatus: hookFallbackStatus,
-    startSinglePageProcessing,
-    startIntelligentProcessing
-  } = pdfProcessingHook;
-
-  const handleFileSelect = useCallback(async (file: File) => {
-    updateSelectedFile(file);
-    
-    try {
-      const processor = new PDFProcessorService(geminiApiKey || 'temp');
-      const pdfInfo = await processor.getPDFInfo(file);
-      setTotalPages(pdfInfo.totalPages);
-      setPageToProcess(1);
-      console.log(`📄 PDF cargado: ${file.name} - ${pdfInfo.totalPages} páginas`);
-    } catch (error) {
-      console.error('Error cargando PDF:', error);
-      const simulatedPages = Math.floor(Math.random() * 45) + 5;
-      setTotalPages(simulatedPages);
-      setPageToProcess(1);
-      console.log(`📄 PDF cargado (simulado): ${file.name} - ${simulatedPages} páginas`);
-    }
-  }, [geminiApiKey, updateSelectedFile, setTotalPages, setPageToProcess]);
-
-  const handleStartProcessing = useCallback(async () => {
-    if (!selectedFile || !geminiApiKey.trim()) {
-      showAlert('Por favor asegúrate de tener un archivo y API key configurados', {
-        title: 'Configuración incompleta',
-        type: 'warning'
-      });
-      return;
-    }
-
-    console.log(`🚀 Iniciando procesamiento de página ${pageToProcess} de ${selectedFile.name}`);
-    await startSinglePageProcessing(selectedFile, pageToProcess);
-  }, [selectedFile, geminiApiKey, pageToProcess, showAlert, startSinglePageProcessing]);
-
-  const handleIntelligentProcessing = useCallback(async (contentType: 'text-only' | 'with-images') => {
-    if (!selectedFile || !geminiApiKey.trim()) {
+  const validateFileAndApiKey = useCallback(() => {
+    if (!selectedFile || !geminiApiKey?.trim()) {
       showAlert('Se requiere archivo y API key para el procesamiento', {
         title: 'Configuración incompleta',
         type: 'warning'
       });
+      return false;
+    }
+    return true;
+  }, [selectedFile, geminiApiKey, showAlert]);
+
+  const handleFileSelect = useCallback((file: File, pages: number) => {
+    if (selectedFile?.name === file.name && totalPages === pages) {
       return;
     }
 
-    console.log(`🚀 Iniciando procesamiento inteligente de PDF: ${selectedFile.name}`);
+    updateSelectedFile(file, pages);
+    setTotalPages(pages);
+    setPageToProcess(1);
+  }, [updateSelectedFile, setTotalPages, setPageToProcess, selectedFile, totalPages]);
+
+  const handleResetFile = useCallback(() => {
+    updateSelectedFile(null);
+    setTotalPages(0);
+    setPageToProcess(1);
+  }, [updateSelectedFile, setTotalPages, setPageToProcess]);
+
+  const handleStartProcessing = useCallback(async () => {
+    if (!validateFileAndApiKey() || !selectedFile) return;
+    await startSinglePageProcessing(selectedFile, pageToProcess);
+  }, [validateFileAndApiKey, selectedFile, pageToProcess, startSinglePageProcessing]);
+
+  const handleIntelligentProcessing = useCallback(async (contentType: 'text-only' | 'with-images') => {
+    if (!validateFileAndApiKey() || !selectedFile) return;
     await startIntelligentProcessing(selectedFile, totalPages, contentType);
-  }, [selectedFile, geminiApiKey, totalPages, showAlert, startIntelligentProcessing]);
+  }, [validateFileAndApiKey, selectedFile, totalPages, startIntelligentProcessing]);
+
+  const hasApiKey = Boolean(geminiApiKey?.trim());
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <ApiKeyConfigSection 
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
+      <ApiKeyConfigSection
         geminiApiKey={geminiApiKey}
         saveGeminiApiKey={saveGeminiApiKey}
-        currentGeminiModel={hookCurrentModel}
-        fallbackStatus={hookFallbackStatus}
+        currentGeminiModel={currentGeminiModel}
+        fallbackStatus={fallbackStatus}
       />
 
-      {geminiApiKey && geminiApiKey.trim() !== '' && (
-        <AutomaticModelsSection />
-      )}
+      {hasApiKey && <AutomaticModelsSection />}
 
-      <FileUploadArea 
+      <FileUploadArea
         selectedFile={selectedFile}
         totalPages={totalPages}
         onFileSelect={handleFileSelect}
         geminiApiKey={geminiApiKey}
+        onResetFile={handleResetFile}
       />
 
-      <NextStepMessage 
-        geminiApiKey={geminiApiKey}
+      <ProcessingOptionsSection
         selectedFile={selectedFile}
-      />
-
-      {selectedFile && <div className="h-6"></div>}
-
-      <ProcessingOptionsSection 
-        selectedFile={selectedFile}
-        isProcessing={hookIsProcessing}
-        processingProgress={hookProcessingProgress}
-        individualProcessingProgress={hookIndividualProgress}
+        isProcessing={isProcessing}
+        processingProgress={processingProgress}
+        individualProcessingProgress={individualProcessingProgress}
         onIntelligentProcessing={handleIntelligentProcessing}
         showManualProcessing={showManualProcessing}
         setShowManualProcessing={setShowManualProcessing}
       />
 
-      <ManualProcessingSection 
+      <ManualProcessingSection
         showManualProcessing={showManualProcessing}
         selectedFile={selectedFile}
         totalPages={totalPages}
         pageToProcess={pageToProcess}
         setPageToProcess={setPageToProcess}
-        isProcessing={hookIsProcessing}
+        isProcessing={isProcessing}
         geminiApiKey={geminiApiKey}
         onStartProcessing={handleStartProcessing}
       />
 
-      <UserProgressSection 
+      <UserProgressSection
         geminiApiKey={geminiApiKey}
         selectedFile={selectedFile}
-        isProcessing={hookIsProcessing}
+        isProcessing={isProcessing}
       />
     </div>
   );
