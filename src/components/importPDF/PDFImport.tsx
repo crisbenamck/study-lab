@@ -23,7 +23,6 @@ interface PDFImportProps {
   showConfirm: (message: string, onConfirm: () => void, options?: { title?: string; confirmText?: string; cancelText?: string; }) => void;
 }
 
-// Componente colapsable para la configuración de API Key
 interface ApiKeyConfigSectionProps {
   geminiApiKey: string;
   saveGeminiApiKey: (key: string) => void;
@@ -121,7 +120,6 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
   );
 };
 
-// Componente para el mensaje de próximo paso
 interface NextStepMessageProps {
   geminiApiKey: string;
   selectedFile: File | null;
@@ -131,11 +129,11 @@ const NextStepMessage: React.FC<NextStepMessageProps> = ({ geminiApiKey, selecte
   const hasApiKey = !!(geminiApiKey && geminiApiKey.trim() !== '');
   
   if (!hasApiKey) {
-    return null; // No mostrar nada si no hay API key
+    return null;
   }
   
   if (selectedFile) {
-    return null; // No mostrar nada si ya hay archivo seleccionado
+    return null;
   }
   
   return (
@@ -155,7 +153,6 @@ const NextStepMessage: React.FC<NextStepMessageProps> = ({ geminiApiKey, selecte
   );
 };
 
-// Componente para el progreso del usuario (simplificado)
 interface UserProgressSectionProps {
   geminiApiKey: string;
   selectedFile: File | null;
@@ -196,13 +193,13 @@ const UserProgressSection: React.FC<UserProgressSectionProps> = ({
     {
       id: 'process',
       text: 'Procesar preguntas',
-      completed: false, // Se marcará cuando el procesamiento sea exitoso
+      completed: false,
       inProgress: isProcessing
     },
     {
       id: 'import',
       text: 'Importar a la lista',
-      completed: false, // Se marcará cuando se importen las preguntas
+      completed: false,
       inProgress: false
     }
   ];
@@ -320,7 +317,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
     updateSelectedFile(file);
     
     try {
-      // Obtener información real del PDF
       const processor = new PDFProcessorService(geminiApiKey || 'temp');
       const pdfInfo = await processor.getPDFInfo(file);
       setTotalPages(pdfInfo.totalPages);
@@ -328,7 +324,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
       console.log(`📄 PDF cargado: ${file.name} - ${pdfInfo.totalPages} páginas`);
     } catch (error) {
       console.error('Error cargando PDF:', error);
-      // Fallback: simular páginas si falla la carga real
       const simulatedPages = Math.floor(Math.random() * 45) + 5;
       setTotalPages(simulatedPages);
       setPageToProcess(1);
@@ -351,14 +346,12 @@ const PDFImport: React.FC<PDFImportProps> = ({
     const processor = new PDFProcessorService(geminiApiKey);
     
     try {
-      // Obtener estado inicial del modelo
       const initialStatus = processor.getGeminiService()?.getFallbackStatus();
       if (initialStatus) {
         setFallbackStatus(initialStatus);
         setCurrentGeminiModel(initialStatus.currentModel);
       }
       
-      // Procesar página específica
       const result = await processor.processPDF(
         selectedFile, 
         (progress) => {
@@ -370,7 +363,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
         }
       );
 
-      // Obtener estado final del modelo (en caso de que haya cambiado)
       const finalStatus = processor.getGeminiService()?.getFallbackStatus();
       if (finalStatus) {
         setFallbackStatus(finalStatus);
@@ -379,7 +371,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
 
       console.log('✅ Procesamiento completado:', result);
       
-      // DEBUG: Log de todas las páginas y sus opciones
       result.pages.forEach(page => {
         console.log(`📄 Página ${page.pageNumber}:`, {
           hasText: page.hasText,
@@ -390,13 +381,11 @@ const PDFImport: React.FC<PDFImportProps> = ({
         });
       });
       
-      // Extraer todas las preguntas de todas las páginas procesadas
       const allQuestions = result.pages.flatMap(page => page.extractedQuestions || []);
       
       console.log('📋 Páginas procesadas:', result.pages.length);
       
       if (allQuestions.length > 0) {
-        // Convertir las preguntas al formato esperado, usando la numeración consecutiva
         const convertedQuestions: Question[] = allQuestions.map((q, index) => ({
           question_number: nextQuestionNumber + index,
           question_text: q.question_text,
@@ -426,7 +415,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
       console.error('Error procesando PDF:', error);
       const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
       
-      // Obtener estado final del modelo en caso de error
       const errorStatus = processor.getGeminiService()?.getFallbackStatus();
       if (errorStatus) {
         setFallbackStatus(errorStatus);
@@ -486,17 +474,14 @@ const PDFImport: React.FC<PDFImportProps> = ({
       `🎯 Resultado: ${isTextOnly ? 'Preguntas de texto con explicaciones' : 'Análisis completo incluyendo imágenes'}`,
       async () => {
         if (isTextOnly) {
-          // Usar procesamiento manual para texto
           await handleStartProcessing();
         } else {
-          // Usar procesamiento directo con Gemini para contenido complejo - función interna
           setIsProcessing(true);
           setProcessingProgress('🚀 Iniciando procesamiento directo de PDF...');
           setIndividualProcessingProgress(null);
           console.log(`🚀 Iniciando procesamiento directo de PDF: ${selectedFile.name}`);
 
           try {
-            // Paso 1: Extraer preguntas del PDF
             setProcessingProgress('📄 Preparando archivo PDF...');
             const pdfService = new GeminiPdfService(geminiApiKey);
             
@@ -514,7 +499,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
             console.log(`📋 Se extrajeron ${extractedQuestions.length} preguntas del PDF`);
             setProcessingProgress(`✅ PDF analizado: ${extractedQuestions.length} preguntas encontradas`);
         
-        // Paso 2: Procesar preguntas individualmente
         setProcessingProgress('🔄 Procesando preguntas individualmente...');
         const questionProcessor = new GeminiQuestionProcessor(geminiApiKey);
         
@@ -534,7 +518,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
         setProcessingProgress('✅ Todas las preguntas procesadas exitosamente');
         setIndividualProcessingProgress(null);
         
-        // Paso 3: Guardar las preguntas
         onImportQuestions(processedQuestions);
         
         showAlert(
@@ -571,9 +554,10 @@ const PDFImport: React.FC<PDFImportProps> = ({
         cancelText: 'Cancelar'
       }
     );
-  }, [selectedFile, geminiApiKey, totalPages, handleStartProcessing, nextQuestionNumber, onImportQuestions, showAlert, showConfirm]);  return (
+  }, [selectedFile, geminiApiKey, totalPages, handleStartProcessing, nextQuestionNumber, onImportQuestions, showAlert, showConfirm]);
+
+  return (
     <div className="max-w-4xl mx-auto p-6">
-      {/* Configuración API */}
       <ApiKeyConfigSection 
         geminiApiKey={geminiApiKey}
         saveGeminiApiKey={saveGeminiApiKey}
@@ -581,14 +565,10 @@ const PDFImport: React.FC<PDFImportProps> = ({
         fallbackStatus={fallbackStatus}
       />
 
-      {/* Información sobre los modelos de fallback */}
       {geminiApiKey && geminiApiKey.trim() !== '' && (
         <AutomaticModelsSection />
       )}
 
-      {/* Área de carga de archivos */}
-
-      {/* Área de carga de archivos */}
       <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 mb-6">
         <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Arrastra un archivo PDF aquí</h3>
@@ -636,7 +616,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
         </label>
       </div>
 
-      {/* Información del archivo cargado - SEPARADO del área de carga */}
       {selectedFile && (
         <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
           <p className="text-sm text-blue-800">
@@ -648,16 +627,13 @@ const PDFImport: React.FC<PDFImportProps> = ({
         </div>
       )}
 
-      {/* Mensaje de próximo paso */}
       <NextStepMessage 
         geminiApiKey={geminiApiKey}
         selectedFile={selectedFile}
       />
 
-      {/* Espaciador visual */}
       {selectedFile && <div className="h-6"></div>}
 
-      {/* Configuración de procesamiento - Solo visible en modo manual */}
       {selectedFile && showManualProcessing && (
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
           <div className="flex items-center space-x-2 mb-3">
@@ -729,7 +705,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
         </div>
       )}
 
-      {/* Nueva opción: Procesamiento inteligente */}
       {selectedFile && (
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
           <div className="flex items-center space-x-2 mb-3">
@@ -743,7 +718,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Card Solo texto */}
               <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                 <div className="flex items-center space-x-2 mb-3">
                   <span className="text-2xl">📝</span>
@@ -794,7 +768,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
                 </button>
               </div>
               
-              {/* Card Con imágenes */}
               <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
                 <div className="flex items-center space-x-2 mb-3">
                   <span className="text-2xl">�️</span>
@@ -846,7 +819,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
               </div>
             </div>
             
-            {/* Opción para mostrar configuración manual */}
             <div className="text-center">
               <button
                 onClick={() => setShowManualProcessing(!showManualProcessing)}
@@ -874,7 +846,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
               </button>
             </div>
             
-            {/* Indicador de progreso */}
             {isProcessing && processingProgress && (
               <div className="mt-4 p-3 bg-green-100 border border-green-200 rounded-md">
                 <div className="flex items-center space-x-2">
@@ -882,7 +853,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
                   <span className="text-sm text-green-700">{processingProgress}</span>
                 </div>
                 
-                {/* Progreso individual de preguntas */}
                 {individualProcessingProgress && individualProcessingProgress.stage === 'processing' && (
                   <div className="mt-3 space-y-2">
                     <div className="flex justify-between text-xs text-green-600">
