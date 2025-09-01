@@ -31,6 +31,8 @@ export { default as ErrorIcon } from './ErrorIcon';
 export { default as TargetIcon } from './TargetIcon';
 export { default as RobotIcon } from './RobotIcon';
 export { default as ChartIcon } from './ChartIcon';
+export { default as LoadingIcon } from './LoadingIcon';
+export { default as UnlockIcon } from './UnlockIcon';
 
 // Iconos de documentos y archivos
 export { default as FileTextIcon } from './FileTextIcon';
