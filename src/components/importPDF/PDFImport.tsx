@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { Upload, AlertCircle, Settings, FileText, ChevronDown, ChevronUp, Check, Clock } from 'lucide-react';
-import { PDFProcessorService } from '../utils/pdfProcessor';
-import { GeminiPdfService } from '../utils/geminiPdfService';
-import { GeminiQuestionProcessor, type ProcessingProgress } from '../utils/geminiQuestionProcessor';
-import type { Question } from '../types/Question';
+import { PDFProcessorService } from '../../utils/pdfProcessor';
+import { GeminiPdfService } from '../../utils/geminiPdfService';
+import { GeminiQuestionProcessor, type ProcessingProgress } from '../../utils/geminiQuestionProcessor';
+import type { Question } from '../../types/Question';
 
 interface PDFImportProps {
   onImportQuestions: (questions: Question[]) => void;
