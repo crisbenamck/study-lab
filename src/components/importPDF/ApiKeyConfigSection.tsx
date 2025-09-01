@@ -30,29 +30,25 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
   const isValidApiKey = hasApiKey && validationResult.isValid;
   const hasValidationError = hasApiKey && validationResult.error;
 
-  // Auto-validate when API key changes, but only if not locked and not in edit mode
   useEffect(() => {
     if (!hasApiKey) {
       resetValidation();
       return;
     }
 
-    // Don't auto-validate if the API key is locked (already validated)
     if (isApiKeyLocked && !isEditMode) {
       return;
     }
 
-    // Only validate if we haven't validated this exact API key before
     const timeoutId = setTimeout(() => {
       if (hasApiKey && !validationResult.isValidating && !isApiKeyLocked) {
         validateApiKey(geminiApiKey);
       }
-    }, 1000); // Wait 1 second after user stops typing
+    }, 1000);
 
     return () => clearTimeout(timeoutId);
   }, [geminiApiKey, hasApiKey, resetValidation, validateApiKey, validationResult.isValidating, isApiKeyLocked, isEditMode]);
 
-  // Determine the main icon based on validation state
   const getMainIcon = () => {
     if (validationResult.isValidating) {
       return <LoadingIcon className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />;
@@ -66,7 +62,6 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
     return <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />;
   };
 
-  // Determine container colors based on validation state
   const getContainerColors = () => {
     if (validationResult.isValidating) {
       return 'bg-blue-50 border-blue-200';
@@ -80,7 +75,6 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
     return 'bg-yellow-50 border-yellow-200';
   };
 
-  // Determine text colors based on validation state
   const getTextColors = () => {
     if (validationResult.isValidating) {
       return { title: 'text-blue-800', description: 'text-blue-700', chevron: 'text-blue-600' };
@@ -96,7 +90,6 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
 
   const colors = getTextColors();
 
-  // Determine title text based on validation state
   const getTitleText = () => {
     if (validationResult.isValidating) {
       return { main: 'Validando API Key...', additional: null };
@@ -113,13 +106,12 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
     return { main: 'Configuración API Key', additional: null };
   };
 
-  // Determine description text based on validation state
   const getDescriptionText = () => {
     if (validationResult.isValidating) {
       return "Verificando la validez de la API key...";
     }
     if (isValidApiKey) {
-      return null; // No mostrar descripción cuando está validada
+      return null;
     }
     if (hasValidationError) {
       return `Error: ${validationResult.error}. Haz clic para corregir.`;
@@ -213,14 +205,14 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
 
           {isEditMode && isApiKeyLocked && (
             <div className="mt-2 p-2 bg-yellow-50 rounded border border-yellow-200">
-              <p className="text-xs text-yellow-700 mb-2">
-                ⚠️ Estás editando una API key ya validada. Los cambios requerirán nueva validación.
+              <p className="text-xs text-yellow-700 mb-2 flex items-center">
+                <WarningIcon className="w-4 h-4 mr-1" />
+                Estás editando una API key ya validada. Los cambios requerirán nueva validación.
               </p>
               <div className="flex gap-2">
                 <button
                   onClick={() => {
                     setIsEditMode(false);
-                    // Restore original API key if needed
                   }}
                   className="px-2 py-1 text-xs text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded transition-colors"
                 >
