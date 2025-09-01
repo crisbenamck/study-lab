@@ -573,11 +573,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
     );
   }, [selectedFile, geminiApiKey, totalPages, handleStartProcessing, nextQuestionNumber, onImportQuestions, showAlert, showConfirm]);  return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Importar Preguntas desde PDF</h1>
-        <p className="text-gray-600">Sube un archivo PDF para extraer preguntas automáticamente usando IA</p>
-      </div>
-
       {/* Configuración API */}
       <ApiKeyConfigSection 
         geminiApiKey={geminiApiKey}

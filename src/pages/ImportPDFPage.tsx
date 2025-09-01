@@ -1,5 +1,6 @@
 import React from 'react';
 import PDFImport from '../components/PDFImport';
+import PageHeader from '../components/common/PageHeader';
 import type { Question } from '../types/Question';
 import type { AppState } from '../types/AppState';
 
@@ -19,23 +20,20 @@ const ImportPDFPage: React.FC<ImportPDFPageProps> = ({
   showConfirm
 }) => {
   return (
-    <div className="container space-y-6">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          Importar Preguntas desde PDF
-        </h1>
-        <p className="text-gray-600">
-          Sube un archivo PDF para extraer preguntas automáticamente
-        </p>
+    <div className="py-16">
+      <div className="max-w-4xl mx-auto px-4">
+        <PageHeader
+          title="Importar preguntas desde PDF"
+          description="Sube un archivo PDF para extraer preguntas automáticamente."
+        />
+        <PDFImport 
+          onImportQuestions={onImportQuestions}
+          appState={appState}
+          nextQuestionNumber={nextQuestionNumber}
+          showAlert={showAlert}
+          showConfirm={showConfirm}
+        />
       </div>
-      
-      <PDFImport 
-        onImportQuestions={onImportQuestions}
-        appState={appState}
-        nextQuestionNumber={nextQuestionNumber}
-        showAlert={showAlert}
-        showConfirm={showConfirm}
-      />
     </div>
   );
 };
