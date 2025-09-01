@@ -160,6 +160,16 @@ const PDFImport: React.FC<PDFImportProps> = ({
 
       {selectedFile && <div className="h-6"></div>}
 
+      <ProcessingOptionsSection 
+        selectedFile={selectedFile}
+        isProcessing={hookIsProcessing}
+        processingProgress={hookProcessingProgress}
+        individualProcessingProgress={hookIndividualProgress}
+        onIntelligentProcessing={handleIntelligentProcessing}
+        showManualProcessing={showManualProcessing}
+        setShowManualProcessing={setShowManualProcessing}
+      />
+
       <ManualProcessingSection 
         showManualProcessing={showManualProcessing}
         selectedFile={selectedFile}
@@ -169,16 +179,6 @@ const PDFImport: React.FC<PDFImportProps> = ({
         isProcessing={hookIsProcessing}
         geminiApiKey={geminiApiKey}
         onStartProcessing={handleStartProcessing}
-      />
-
-      <ProcessingOptionsSection 
-        selectedFile={selectedFile}
-        isProcessing={hookIsProcessing}
-        processingProgress={hookProcessingProgress}
-        individualProcessingProgress={hookIndividualProgress}
-        onIntelligentProcessing={handleIntelligentProcessing}
-        showManualProcessing={showManualProcessing}
-        setShowManualProcessing={setShowManualProcessing}
       />
 
       <UserProgressSection 
