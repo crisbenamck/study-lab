@@ -1,6 +1,37 @@
 import React from 'react';
 import { Settings } from 'lucide-react';
 
+interface StartProcessingButtonProps {
+  isProcessing: boolean;
+  isDisabled: boolean;
+  onClick: () => void;
+}
+
+const StartProcessingButton: React.FC<StartProcessingButtonProps> = ({ 
+  isProcessing, 
+  isDisabled, 
+  onClick 
+}) => (
+  <button
+    onClick={onClick}
+    disabled={isDisabled}
+    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 w-full justify-center text-white border shadow-sm ${
+      isDisabled 
+        ? 'bg-gray-400 border-gray-400 text-gray-500 cursor-not-allowed' 
+        : 'bg-blue-600 border-blue-600 hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0'
+    }`}
+  >
+    {isProcessing ? (
+      <span className="flex items-center justify-center space-x-2">
+        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+        <span>Procesando...</span>
+      </span>
+    ) : (
+      '🚀 Iniciar procesamiento'
+    )}
+  </button>
+);
+
 interface ManualProcessingSectionProps {
   showManualProcessing: boolean;
   selectedFile: File | null;
@@ -55,43 +86,11 @@ const ManualProcessingSection: React.FC<ManualProcessingSectionProps> = ({
         </div>
 
         <div className="flex items-end">
-          <button
+          <StartProcessingButton
+            isProcessing={isProcessing}
+            isDisabled={isProcessing || !selectedFile || !geminiApiKey.trim()}
             onClick={onStartProcessing}
-            disabled={isProcessing || !selectedFile || !geminiApiKey.trim()}
-            className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 w-full justify-center"
-            style={{
-              backgroundColor: (isProcessing || !selectedFile || !geminiApiKey.trim()) ? '#e5e7eb' : '#2563eb',
-              color: (isProcessing || !selectedFile || !geminiApiKey.trim()) ? '#9ca3af' : '#ffffff',
-              border: `1px solid ${(isProcessing || !selectedFile || !geminiApiKey.trim()) ? '#e5e7eb' : '#2563eb'}`,
-              boxShadow: (isProcessing || !selectedFile || !geminiApiKey.trim()) ? 'none' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-              cursor: (isProcessing || !selectedFile || !geminiApiKey.trim()) ? 'not-allowed' : 'pointer'
-            }}
-            onMouseEnter={(e) => {
-              if (!isProcessing && selectedFile && geminiApiKey.trim()) {
-                e.currentTarget.style.backgroundColor = '#1d4ed8';
-                e.currentTarget.style.borderColor = '#1d4ed8';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(37, 99, 235, 0.3)';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (!isProcessing && selectedFile && geminiApiKey.trim()) {
-                e.currentTarget.style.backgroundColor = '#2563eb';
-                e.currentTarget.style.borderColor = '#2563eb';
-                e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }
-            }}
-          >
-            {isProcessing ? (
-              <span className="flex items-center justify-center space-x-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                <span>Procesando...</span>
-              </span>
-            ) : (
-              '🚀 Iniciar procesamiento'
-            )}
-          </button>
+          />
         </div>
       </div>
     </div>

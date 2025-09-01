@@ -2,6 +2,36 @@ import React from 'react';
 import { FileText } from 'lucide-react';
 import type { ProcessingProgress } from '../../utils/geminiQuestionProcessor';
 
+interface ProcessingButtonProps {
+  isProcessing: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}
+
+const ProcessingButton: React.FC<ProcessingButtonProps> = ({ isProcessing, onClick, children }) => (
+  <button
+    onClick={onClick}
+    disabled={isProcessing}
+    className={`w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300 text-white border shadow-sm ${
+      isProcessing 
+        ? 'bg-gray-400 border-gray-400 cursor-not-allowed' 
+        : 'bg-emerald-500 border-emerald-500 hover:bg-emerald-600 hover:border-emerald-600 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0'
+    }`}
+  >
+    {isProcessing ? (
+      <span className="flex items-center gap-2">
+        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+        Procesando...
+      </span>
+    ) : (
+      <span className="flex items-center gap-2">
+        <span>🚀</span>
+        {children || 'Procesar PDF'}
+      </span>
+    )}
+  </button>
+);
+
 interface ProcessingOptionsSectionProps {
   selectedFile: File | null;
   isProcessing: boolean;
@@ -46,46 +76,12 @@ const ProcessingOptionsSection: React.FC<ProcessingOptionsSectionProps> = ({
             <p className="text-sm text-gray-600 mb-4">
               PDF con preguntas en texto simple, sin imágenes complejas
             </p>
-            <button
+            <ProcessingButton
+              isProcessing={isProcessing}
               onClick={() => onIntelligentProcessing('text-only')}
-              disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300"
-              style={{
-                backgroundColor: isProcessing ? '#e5e7eb' : '#10b981',
-                color: '#ffffff',
-                border: `1px solid ${isProcessing ? '#e5e7eb' : '#10b981'}`,
-                boxShadow: isProcessing ? 'none' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                cursor: isProcessing ? 'not-allowed' : 'pointer'
-              }}
-              onMouseEnter={(e) => {
-                if (!isProcessing) {
-                  e.currentTarget.style.backgroundColor = '#059669';
-                  e.currentTarget.style.borderColor = '#059669';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isProcessing) {
-                  e.currentTarget.style.backgroundColor = '#10b981';
-                  e.currentTarget.style.borderColor = '#10b981';
-                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }
-              }}
             >
-              {isProcessing ? (
-                <span className="flex items-center gap-2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  Procesando...
-                </span>
-              ) : (
-                <span className="flex items-center gap-2">
-                  <span>🚀</span>
-                  Procesar PDF
-                </span>
-              )}
-            </button>
+              Solo texto
+            </ProcessingButton>
           </div>
           
           <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
@@ -96,46 +92,12 @@ const ProcessingOptionsSection: React.FC<ProcessingOptionsSectionProps> = ({
             <p className="text-sm text-gray-600 mb-4">
               PDF con diagramas, tablas complejas o preguntas con imágenes
             </p>
-            <button
+            <ProcessingButton
+              isProcessing={isProcessing}
               onClick={() => onIntelligentProcessing('with-images')}
-              disabled={isProcessing}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300"
-              style={{
-                backgroundColor: isProcessing ? '#e5e7eb' : '#10b981',
-                color: '#ffffff',
-                border: `1px solid ${isProcessing ? '#e5e7eb' : '#10b981'}`,
-                boxShadow: isProcessing ? 'none' : '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-                cursor: isProcessing ? 'not-allowed' : 'pointer'
-              }}
-              onMouseEnter={(e) => {
-                if (!isProcessing) {
-                  e.currentTarget.style.backgroundColor = '#059669';
-                  e.currentTarget.style.borderColor = '#059669';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isProcessing) {
-                  e.currentTarget.style.backgroundColor = '#10b981';
-                  e.currentTarget.style.borderColor = '#10b981';
-                  e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }
-              }}
             >
-              {isProcessing ? (
-                <span className="flex items-center gap-2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  Procesando...
-                </span>
-              ) : (
-                <span className="flex items-center gap-2">
-                  <span>🚀</span>
-                  Procesar PDF
-                </span>
-              )}
-            </button>
+              Con imágenes
+            </ProcessingButton>
           </div>
         </div>
         
