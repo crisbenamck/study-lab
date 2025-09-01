@@ -108,30 +108,9 @@ const PDFImport: React.FC<PDFImportProps> = ({
       return;
     }
 
-    const isTextOnly = contentType === 'text-only';
-    
-    showConfirm(
-      `📄 Archivo: ${selectedFile.name} (${totalPages} página${totalPages > 1 ? 's' : ''})\n` +
-      `🔧 Método: ${isTextOnly ? 'Extracción de texto + IA para explicaciones' : 'Análisis completo con Gemini Vision'}\n` +
-      `💰 Costo: ${isTextOnly ? 'Bajo (solo explicaciones)' : 'Moderado (análisis completo)'}\n` +
-      `⏱️ Tiempo estimado: ${isTextOnly ? '1-2 minutos' : '3-5 minutos'}\n` +
-      `🎯 Resultado: ${isTextOnly ? 'Preguntas de texto con explicaciones' : 'Análisis completo incluyendo imágenes'}`,
-      async () => {
-        if (isTextOnly) {
-          await handleStartProcessing();
-        } else {
-          // Use the hook for intelligent processing with images
-          console.log(`🚀 Iniciando procesamiento inteligente de PDF: ${selectedFile.name}`);
-          await startIntelligentProcessing(selectedFile, totalPages, contentType);
-        }
-      },
-      {
-        title: `Procesar como contenido ${isTextOnly ? 'SOLO TEXTO' : 'CON IMÁGENES'}`,
-        confirmText: 'Sí, Procesar',
-        cancelText: 'Cancelar'
-      }
-    );
-  }, [selectedFile, geminiApiKey, totalPages, handleStartProcessing, showAlert, showConfirm, startIntelligentProcessing]);
+    console.log(`🚀 Iniciando procesamiento inteligente de PDF: ${selectedFile.name}`);
+    await startIntelligentProcessing(selectedFile, totalPages, contentType);
+  }, [selectedFile, geminiApiKey, totalPages, showAlert, startIntelligentProcessing]);
 
   return (
     <div className="max-w-4xl mx-auto p-6">
