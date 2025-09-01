@@ -104,25 +104,7 @@ const ProcessingOptionsSection: React.FC<ProcessingOptionsSectionProps> = ({
         <div className="text-center">
           <button
             onClick={() => setShowManualProcessing(!showManualProcessing)}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 text-xs underline"
-            style={{
-              backgroundColor: '#f3f4f6',
-              color: '#374151',
-              border: '1px solid #d1d5db',
-              boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#e5e7eb';
-              e.currentTarget.style.borderColor = '#9ca3af';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(107, 114, 128, 0.2)';
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#f3f4f6';
-              e.currentTarget.style.borderColor = '#d1d5db';
-              e.currentTarget.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 text-xs underline bg-gray-100 text-gray-700 border border-gray-300 shadow-sm hover:bg-gray-200 hover:border-gray-400 hover:shadow-md transform hover:-translate-y-0.5"
           >
             {showManualProcessing ? '🔽 Ocultar' : '⚙️ Mostrar'} configuración manual (página específica)
           </button>
@@ -145,7 +127,7 @@ const ProcessingOptionsSection: React.FC<ProcessingOptionsSectionProps> = ({
                   <div 
                     className="bg-green-600 h-2 rounded-full transition-all duration-300"
                     style={{ 
-                      width: `${(individualProcessingProgress.currentQuestion / individualProcessingProgress.totalQuestions) * 100}%` 
+                      width: `${Math.round((individualProcessingProgress.currentQuestion / individualProcessingProgress.totalQuestions) * 100)}%` 
                     }}
                   ></div>
                 </div>

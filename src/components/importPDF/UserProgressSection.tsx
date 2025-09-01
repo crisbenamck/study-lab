@@ -54,8 +54,7 @@ const UserProgressSection: React.FC<UserProgressSectionProps> = ({
 
   return (
     <div 
-      className="bg-gray-50 rounded-lg p-4"
-      style={{ marginTop: '24px' }}
+      className="bg-gray-50 rounded-lg p-4 mt-6"
     >
       <h4 className="font-medium text-gray-800 mb-3">🚀 Progreso:</h4>
       <div className="space-y-3">

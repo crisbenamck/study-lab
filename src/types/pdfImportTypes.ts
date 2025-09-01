@@ -92,3 +92,30 @@ export interface ConversionResult {
   skipped: number;
   errors: string[];
 }
+
+// Error handling types
+export type ProcessingContentType = 'text-only' | 'with-images';
+
+export type ProcessingErrorType = 
+  | 'quota_exceeded'
+  | 'server_overloaded' 
+  | 'invalid_file'
+  | 'api_key_invalid'
+  | 'network_error'
+  | 'unknown_error';
+
+export interface ProcessingError {
+  type: ProcessingErrorType;
+  message: string;
+  details?: string;
+  suggestedAction?: string;
+  retryable?: boolean;
+}
+
+export interface FallbackStatusType {
+  currentModel: string;
+  currentModelIndex: number;
+  totalModels: number;
+  remainingModels: number;
+  availableModels: string[];
+}
