@@ -3,7 +3,6 @@ import { PDFProcessorService } from '../../utils/pdfProcessor';
 import { GeminiPdfService } from '../../utils/geminiPdfService';
 import { GeminiQuestionProcessor, type ProcessingProgress } from '../../utils/geminiQuestionProcessor';
 import type { Question } from '../../types/Question';
-import { usePDFProcessing } from '../../hooks/usePDFProcessing';
 import ApiKeyConfigSection from './ApiKeyConfigSection';
 import NextStepMessage from './NextStepMessage';
 import UserProgressSection from './UserProgressSection';
@@ -37,7 +36,18 @@ const PDFImport: React.FC<PDFImportProps> = ({
   showAlert,
   showConfirm
 }) => {
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingProgress, setProcessingProgress] = useState<string>('');
+  const [individualProcessingProgress, setIndividualProcessingProgress] = useState<ProcessingProgress | null>(null);
   const [showManualProcessing, setShowManualProcessing] = useState(false);
+  const [currentGeminiModel, setCurrentGeminiModel] = useState<string>('gemini-2.5-pro');
+  const [fallbackStatus, setFallbackStatus] = useState<{
+    currentModel: string;
+    currentModelIndex: number;
+    totalModels: number;
+    remainingModels: number;
+    availableModels: string[];
+  } | null>(null);
 
   const { 
     geminiApiKey, 
@@ -50,46 +60,21 @@ const PDFImport: React.FC<PDFImportProps> = ({
     setPageToProcess 
   } = appState;
 
-  // PDF Processing Hook
-  const {
-    isProcessing,
-    processingProgress,
-    individualProcessingProgress,
-    currentGeminiModel,
-    fallbackStatus,
-    startSinglePageProcessing,
-    startIntelligentProcessing
-  } = usePDFProcessing({
-    geminiApiKey,
-    nextQuestionNumber,
-    showAlert,
-    showConfirm,
-    onImportQuestions
-  });
-
-  const handleFileSelect = useCallback(async (file: File, totalPages?: number) => {
+  const handleFileSelect = useCallback(async (file: File) => {
     updateSelectedFile(file);
     
-    if (totalPages) {
-      // If totalPages is provided by FileUploadArea, use it directly
-      setTotalPages(totalPages);
+    try {
+      const processor = new PDFProcessorService(geminiApiKey || 'temp');
+      const pdfInfo = await processor.getPDFInfo(file);
+      setTotalPages(pdfInfo.totalPages);
       setPageToProcess(1);
-      console.log(`📄 PDF cargado: ${file.name} - ${totalPages} páginas`);
-    } else {
-      // Fallback to the original logic
-      try {
-        const processor = new PDFProcessorService(geminiApiKey || 'temp');
-        const pdfInfo = await processor.getPDFInfo(file);
-        setTotalPages(pdfInfo.totalPages);
-        setPageToProcess(1);
-        console.log(`📄 PDF cargado: ${file.name} - ${pdfInfo.totalPages} páginas`);
-      } catch (error) {
-        console.error('Error cargando PDF:', error);
-        const simulatedPages = Math.floor(Math.random() * 45) + 5;
-        setTotalPages(simulatedPages);
-        setPageToProcess(1);
-        console.log(`📄 PDF cargado (simulado): ${file.name} - ${simulatedPages} páginas`);
-      }
+      console.log(`📄 PDF cargado: ${file.name} - ${pdfInfo.totalPages} páginas`);
+    } catch (error) {
+      console.error('Error cargando PDF:', error);
+      const simulatedPages = Math.floor(Math.random() * 45) + 5;
+      setTotalPages(simulatedPages);
+      setPageToProcess(1);
+      console.log(`📄 PDF cargado (simulado): ${file.name} - ${simulatedPages} páginas`);
     }
   }, [geminiApiKey, updateSelectedFile, setTotalPages, setPageToProcess]);
 
@@ -102,8 +87,7 @@ const PDFImport: React.FC<PDFImportProps> = ({
       return;
     }
 
-    console.log(`🚀 Iniciando procesamiento de página ${pageToProcess} de ${selectedFile.name}`);
-    await startSinglePageProcessing(selectedFile, pageToProcess);
+    setIsProcessing(true);
     console.log(`🚀 Iniciando procesamiento de página ${pageToProcess} de ${selectedFile.name}`);
 
     const processor = new PDFProcessorService(geminiApiKey);
