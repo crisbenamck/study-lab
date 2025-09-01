@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { CheckMarkIcon, RobotIcon, ChartIcon, NextIcon, WarningIcon } from '../../icons';
 
 interface ApiKeyConfigSectionProps {
   geminiApiKey: string;
@@ -32,8 +33,15 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
         <div className="flex items-start space-x-3 flex-1">
           <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
           <div className="flex-1">
-            <h3 className="font-medium text-yellow-800">
-              {hasApiKey ? '✅ API Key Configurada' : 'Configuración API Key'}
+            <h3 className="font-medium text-yellow-800 flex items-center">
+              {hasApiKey ? (
+                <>
+                  <CheckMarkIcon className="w-4 h-4 mr-2" />
+                  API Key Configurada
+                </>
+              ) : (
+                'Configuración API Key'
+              )}
             </h3>
             <p className="text-sm text-yellow-700 mt-1">
               {isExpanded 
@@ -76,17 +84,27 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
           />
           {hasApiKey && (
             <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-200">
-              <p className="text-xs text-blue-700 mb-1">
-                🤖 <strong>Modelo actual:</strong> {currentGeminiModel}
+              <p className="text-xs text-blue-700 mb-1 flex items-center">
+                <RobotIcon className="w-4 h-4 mr-1" />
+                <strong>Modelo actual:</strong> {currentGeminiModel}
               </p>
               {fallbackStatus && (
                 <div className="text-xs text-blue-600">
-                  <p>📊 Modelo {fallbackStatus.currentModelIndex + 1} de {fallbackStatus.totalModels}</p>
+                  <p className="flex items-center">
+                    <ChartIcon className="w-4 h-4 mr-1" />
+                    Modelo {fallbackStatus.currentModelIndex + 1} de {fallbackStatus.totalModels}
+                  </p>
                   {fallbackStatus.remainingModels > 0 && (
-                    <p>⏭️ {fallbackStatus.remainingModels} modelos de respaldo disponibles</p>
+                    <p className="flex items-center">
+                      <NextIcon className="w-4 h-4 mr-1" />
+                      {fallbackStatus.remainingModels} modelos de respaldo disponibles
+                    </p>
                   )}
                   {fallbackStatus.remainingModels === 0 && (
-                    <p className="text-amber-600">⚠️ Último modelo disponible</p>
+                    <p className="text-amber-600 flex items-center">
+                      <WarningIcon className="w-4 h-4 mr-1" />
+                      Último modelo disponible
+                    </p>
                   )}
                 </div>
               )}

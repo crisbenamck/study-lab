@@ -10,6 +10,7 @@ export { default as CloseIcon } from './CloseIcon';
 export { default as PlusIcon } from './PlusIcon';
 export { default as MinusIcon } from './MinusIcon';
 export { default as CheckIcon } from './CheckIcon';
+export { default as CheckMarkIcon } from './CheckMarkIcon';
 export { default as EraserIcon } from './EraserIcon';
 
 // Iconos de navegación
@@ -21,12 +22,15 @@ export { default as ChevronLeftIcon } from './ChevronLeftIcon';
 export { default as ChevronRightIcon } from './ChevronRightIcon';
 export { default as ChevronDoubleLeftIcon } from './ChevronDoubleLeftIcon';
 export { default as ChevronDoubleRightIcon } from './ChevronDoubleRightIcon';
+export { default as NextIcon } from './NextIcon';
 
 // Iconos de información y estado
 export { default as InfoIcon } from './InfoIcon';
 export { default as WarningIcon } from './WarningIcon';
 export { default as ErrorIcon } from './ErrorIcon';
 export { default as TargetIcon } from './TargetIcon';
+export { default as RobotIcon } from './RobotIcon';
+export { default as ChartIcon } from './ChartIcon';
 
 // Iconos de documentos y archivos
 export { default as FileTextIcon } from './FileTextIcon';
