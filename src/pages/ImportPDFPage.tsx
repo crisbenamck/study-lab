@@ -1,5 +1,5 @@
 import React from 'react';
-import PDFImport from '../components/importPDF/PDFImport';
+import { PDFImport } from '../components/importPDF';
 import PageHeader from '../components/common/PageHeader';
 import type { Question } from '../types/Question';
 import type { AppState } from '../types/AppState';
