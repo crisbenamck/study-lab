@@ -131,7 +131,9 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
     <div className={`border rounded-lg p-4 mb-6 ${getContainerColors()}`}>
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-start justify-between space-x-3 text-left focus:outline-none"
+        onMouseDown={(e) => e.preventDefault()}
+        tabIndex={-1}
+        className="w-full flex items-start justify-between space-x-3 text-left focus:outline-none focus:ring-0"
       >
         <div className="flex items-start space-x-3 flex-1">
           {getMainIcon()}
