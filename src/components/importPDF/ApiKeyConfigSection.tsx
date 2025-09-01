@@ -25,25 +25,30 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
   const hasApiKey = geminiApiKey && geminiApiKey.trim() !== '';
 
   return (
-    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+    <div className={`border rounded-lg p-4 mb-6 ${
+      hasApiKey 
+        ? 'bg-green-50 border-green-200' 
+        : 'bg-yellow-50 border-yellow-200'
+    }`}>
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full flex items-start justify-between space-x-3 text-left focus:outline-none"
       >
         <div className="flex items-start space-x-3 flex-1">
-          <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+          {hasApiKey ? (
+            <CheckMarkIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />
+          ) : (
+            <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+          )}
           <div className="flex-1">
-            <h3 className="font-medium text-yellow-800 flex items-center">
-              {hasApiKey ? (
-                <>
-                  <CheckMarkIcon className="w-4 h-4 mr-2" />
-                  API Key Configurada
-                </>
-              ) : (
-                'Configuración API Key'
-              )}
+            <h3 className={`font-medium flex items-center ${
+              hasApiKey ? 'text-green-800' : 'text-yellow-800'
+            }`}>
+              API Key {hasApiKey ? 'Configurada' : 'Configuración'}
             </h3>
-            <p className="text-sm text-yellow-700 mt-1">
+            <p className={`text-sm mt-1 ${
+              hasApiKey ? 'text-green-700' : 'text-yellow-700'
+            }`}>
               {isExpanded 
                 ? "Configura tu API key de Google Gemini para usar esta función."
                 : hasApiKey 
@@ -55,16 +60,22 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
         </div>
         <div className="flex-shrink-0 mt-0.5">
           {isExpanded ? (
-            <ChevronUp className="w-5 h-5 text-yellow-600" />
+            <ChevronUp className={`w-5 h-5 ${
+              hasApiKey ? 'text-green-600' : 'text-yellow-600'
+            }`} />
           ) : (
-            <ChevronDown className="w-5 h-5 text-yellow-600" />
+            <ChevronDown className={`w-5 h-5 ${
+              hasApiKey ? 'text-green-600' : 'text-yellow-600'
+            }`} />
           )}
         </div>
       </button>
       
       {isExpanded && (
         <div className="mt-3">
-          <p className="text-sm text-yellow-700 mb-2">
+          <p className={`text-sm mb-2 ${
+            hasApiKey ? 'text-green-700' : 'text-yellow-700'
+          }`}>
             Necesitas una API key de Google Gemini para usar esta función.
             <a 
               href="https://makersuite.google.com/app/apikey" 
@@ -80,7 +91,11 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
             placeholder="Pega tu API key de Gemini aquí..."
             value={geminiApiKey}
             onChange={(e) => saveGeminiApiKey(e.target.value)}
-            className="mt-2 w-full px-3 py-2 border border-amber-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+            className={`mt-2 w-full px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 ${
+              hasApiKey 
+                ? 'border-green-300 focus:ring-green-500 focus:border-green-500' 
+                : 'border-amber-300 focus:ring-amber-500 focus:border-amber-500'
+            }`}
           />
           {hasApiKey && (
             <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-200">
