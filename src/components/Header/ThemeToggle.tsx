@@ -1,29 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useTheme } from '../../hooks/useTheme';
 import SunIcon from '../../icons/SunIcon';
 import MoonIcon from '../../icons/MoonIcon';
 
 interface ThemeToggleProps {
   className?: string;
+  variant?: 'icon' | 'button';
+  showLabel?: boolean;
 }
 
-const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
-  const [isDark, setIsDark] = useState(false);
+const ThemeToggle: React.FC<ThemeToggleProps> = ({ 
+  className = '', 
+  variant = 'icon',
+  showLabel = false 
+}) => {
+  const { isDark, toggleTheme } = useTheme();
 
   const handleToggle = () => {
-    setIsDark(!isDark);
-    // TODO: Implementar lógica de theme toggle para toda la SPA
-    console.log('Theme toggle clicked:', !isDark ? 'dark' : 'light');
+    toggleTheme();
   };
+
+  const baseClasses = `
+    relative inline-flex items-center gap-2 p-2 rounded-lg transition-all duration-200 
+    bg-secondary hover:bg-tertiary hover:scale-105 
+    border border-primary
+    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+    group theme-transition
+  `;
+
+  const buttonClasses = variant === 'button' 
+    ? 'px-3 py-2 text-sm font-medium'
+    : '';
 
   return (
     <button
       onClick={handleToggle}
-      className={`
-        relative p-2 rounded-lg transition-all duration-200 
-        hover:bg-gray-100 hover:scale-105 
-        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-        group ${className}
-      `}
+      className={`${baseClasses} ${buttonClasses} ${className}`}
       aria-label={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
       title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
     >
@@ -31,10 +43,10 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
         {/* Sun Icon */}
         <SunIcon 
           className={`
-            absolute inset-0 w-5 h-5 transition-all duration-300 text-amber-500
+            absolute inset-0 w-5 h-5 transition-all duration-300
             ${isDark 
-              ? 'opacity-0 rotate-90 scale-75' 
-              : 'opacity-100 rotate-0 scale-100'
+              ? 'opacity-0 rotate-90 scale-75 text-amber-400' 
+              : 'opacity-100 rotate-0 scale-100 text-amber-500'
             }
           `}
         />
@@ -42,14 +54,20 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ className = '' }) => {
         {/* Moon Icon */}
         <MoonIcon 
           className={`
-            absolute inset-0 w-5 h-5 transition-all duration-300 text-slate-600
+            absolute inset-0 w-5 h-5 transition-all duration-300
             ${isDark 
-              ? 'opacity-100 rotate-0 scale-100' 
-              : 'opacity-0 -rotate-90 scale-75'
+              ? 'opacity-100 rotate-0 scale-100 text-slate-300' 
+              : 'opacity-0 -rotate-90 scale-75 text-slate-600'
             }
           `}
         />
       </div>
+      
+      {showLabel && (
+        <span className="text-primary text-sm font-medium">
+          {isDark ? 'Modo claro' : 'Modo oscuro'}
+        </span>
+      )}
     </button>
   );
 };

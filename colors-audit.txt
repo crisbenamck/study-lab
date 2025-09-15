@@ -1,0 +1,251 @@
+src/App.tsx:      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+src/App.tsx:          <p className="text-gray-600">Cargando...</p>
+src/App.tsx:    <div className="min-h-screen bg-gray-50">
+src/App.tsx:      <div className="max-w-4xl mx-auto bg-white min-h-screen">
+src/components/importPDF/NextStepMessage.tsx:              className="ml-4 inline-flex items-center px-3 py-1.5 text-xs font-medium text-blue-600 bg-white border border-blue-200 rounded-md hover:bg-blue-50 hover:border-blue-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+src/components/importPDF/UserProgressSection.tsx:      return <Clock className="w-4 h-4 text-gray-400" />;
+src/components/importPDF/UserProgressSection.tsx:      className="bg-gray-50 rounded-lg p-4 mt-6"
+src/components/importPDF/UserProgressSection.tsx:      <h4 className="font-medium text-gray-800 mb-3">🚀 Progreso:</h4>
+src/components/importPDF/UserProgressSection.tsx:              step.completed ? 'text-gray-700 font-medium' : 
+src/components/importPDF/UserProgressSection.tsx:              'text-gray-500'
+src/components/importPDF/ProcessingOptionsSection.tsx:        ? 'bg-gray-400 border-gray-400 cursor-not-allowed' 
+src/components/importPDF/ProcessingOptionsSection.tsx:          <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+src/components/importPDF/ProcessingOptionsSection.tsx:              <h4 className="font-semibold text-gray-800">Solo texto</h4>
+src/components/importPDF/ProcessingOptionsSection.tsx:            <p className="text-sm text-gray-600 mb-4">
+src/components/importPDF/ProcessingOptionsSection.tsx:          <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+src/components/importPDF/ProcessingOptionsSection.tsx:              <h4 className="font-semibold text-gray-800">Con imágenes</h4>
+src/components/importPDF/ProcessingOptionsSection.tsx:            <p className="text-sm text-gray-600 mb-4">
+src/components/importPDF/ProcessingOptionsSection.tsx:            className="flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 text-xs underline bg-gray-100 text-gray-700 border border-gray-300 shadow-sm hover:bg-gray-200 hover:border-gray-400 hover:shadow-md transform hover:-translate-y-0.5"
+src/components/importPDF/ManualProcessingSection.tsx:        ? 'bg-gray-400 border-gray-400 text-gray-500 cursor-not-allowed' 
+src/components/importPDF/ManualProcessingSection.tsx:    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+src/components/importPDF/ManualProcessingSection.tsx:        <Settings className="w-5 h-5 text-gray-600" />
+src/components/importPDF/ManualProcessingSection.tsx:        <h3 className="font-medium text-gray-800">Configuración de procesamiento</h3>
+src/components/importPDF/ManualProcessingSection.tsx:          <label className="block text-sm font-medium text-gray-700 mb-2">
+src/components/importPDF/ManualProcessingSection.tsx:              className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+src/components/importPDF/ManualProcessingSection.tsx:            <span className="text-sm text-gray-500">de {totalPages}</span>
+src/components/importPDF/ManualProcessingSection.tsx:          <p className="text-xs text-gray-500 mt-1">
+src/components/importPDF/FileUploadArea.tsx:    ? `${baseButtonClasses} bg-gray-400 border-gray-400 cursor-not-allowed`
+src/components/importPDF/FileUploadArea.tsx:      <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 mb-6">
+src/components/importPDF/FileUploadArea.tsx:        <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+src/components/importPDF/FileUploadArea.tsx:        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+src/components/importPDF/FileUploadArea.tsx:        <p className="text-gray-600 mb-6 font-medium">
+src/components/Pagination.tsx:    <div className="mt-8 pt-8 border-t border-gray-200">
+src/components/Pagination.tsx:          <div className="text-sm text-gray-600">
+src/components/Pagination.tsx:            <span className="text-sm text-gray-600">Mostrar:</span>
+src/components/Pagination.tsx:              className="px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+src/components/Pagination.tsx:            <span className="text-sm text-gray-600">por página</span>
+src/components/Pagination.tsx:                      : 'text-gray-600 hover:bg-gray-100'
+src/components/Pagination.tsx:            <span className="text-sm text-gray-600">Ir a:</span>
+src/components/Pagination.tsx:              className="w-20 px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+src/components/viewQuestions/QuestionCard.tsx:    <div className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 overflow-hidden">
+src/components/viewQuestions/QuestionCard.tsx:      <div className="bg-gray-50 px-6 py-4 border-b border-gray-100">
+src/components/viewQuestions/QuestionCard.tsx:              <span className="text-black font-semibold text-lg tracking-wide select-none">
+src/components/viewQuestions/QuestionCard.tsx:          <h4 className="text-sm font-bold text-black mb-2">Pregunta:</h4>
+src/components/viewQuestions/QuestionCard.tsx:          <p className="text-gray-900 leading-relaxed text-base">
+src/components/viewQuestions/QuestionCard.tsx:          <h4 className="text-sm font-bold text-black mb-3">Opciones de respuesta:</h4>
+src/components/viewQuestions/QuestionCard.tsx:                    : 'bg-gray-50 border-gray-200'
+src/components/viewQuestions/QuestionCard.tsx:                    : 'bg-gray-100 text-gray-600'
+src/components/viewQuestions/QuestionCard.tsx:                <span className="flex-1 text-gray-900">
+src/components/viewQuestions/QuestionCard.tsx:                    <CloseIcon className="w-5 h-5 text-gray-400" />
+src/components/viewQuestions/QuestionCard.tsx:  <h4 className="text-sm font-bold text-black mb-2">Fuente:</h4>
+src/components/viewQuestions/QuestionExplanation.tsx:        <h4 className="text-sm font-medium text-gray-700 mb-2">Explicación:</h4>
+src/components/viewQuestions/QuestionExplanation.tsx:        <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+src/components/viewQuestions/QuestionExplanation.tsx:          <p className="text-gray-500 italic">
+src/components/viewQuestions/QuestionExplanation.tsx:      <h4 className="text-sm font-bold text-black mb-2">Explicación:</h4>
+src/components/viewQuestions/QuestionExplanation.tsx:        <p className="text-gray-900 leading-relaxed">
+src/components/viewQuestions/QuestionManager.tsx:          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+src/components/viewQuestions/QuestionManager.tsx:                <h1 className="text-2xl font-bold text-gray-900">
+src/components/viewQuestions/QuestionManager.tsx:                <p className="text-gray-600">
+src/components/viewQuestions/QuestionManager.tsx:        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+src/components/viewQuestions/QuestionManager.tsx:                <h2 className="text-lg font-semibold text-gray-900">
+src/components/viewQuestions/QuestionManager.tsx:                <p className="text-sm text-gray-600">
+src/components/viewQuestions/QuestionManager.tsx:          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+src/components/viewQuestions/QuestionSource.tsx:          <LinkIcon className="w-4 h-4 text-gray-400 flex-shrink-0" />
+src/components/viewQuestions/QuestionSource.tsx:          <span className="text-gray-400 italic">
+src/components/viewQuestions/QuestionSource.tsx:        <LinkIcon className="w-4 h-4 text-gray-500 flex-shrink-0" />
+src/components/viewQuestions/QuestionSource.tsx:          <span className="text-gray-700 truncate flex-1">
+src/components/study/StudyModeCard.tsx:          : 'border-gray-200 hover:border-gray-300'
+src/components/study/StudyModeCard.tsx:          isSelected ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
+src/components/study/QuestionScopeSelector.tsx:      <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+src/components/study/QuestionScopeSelector.tsx:              : 'border border-gray-200'
+src/components/study/QuestionScopeSelector.tsx:                  : 'bg-gray-100 text-gray-600'
+src/components/study/QuestionScopeSelector.tsx:                <p className="text-gray-600 text-xs">
+src/components/study/QuestionScopeSelector.tsx:                className="scope-card-input flex-1 min-w-0 p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-blue-500 focus:outline-none"
+src/components/study/QuestionScopeSelector.tsx:              <span className="text-gray-500 text-sm flex-shrink-0">a</span>
+src/components/study/QuestionScopeSelector.tsx:                className="scope-card-input flex-1 min-w-0 p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-blue-500 focus:outline-none"
+src/components/study/QuestionScopeSelector.tsx:              : 'border border-gray-200'
+src/components/study/QuestionScopeSelector.tsx:                  : 'bg-gray-100 text-gray-600'
+src/components/study/QuestionScopeSelector.tsx:                <p className="text-gray-600 text-xs">
+src/components/study/QuestionScopeSelector.tsx:                className="scope-card-input flex-1 min-w-0 p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-blue-500 focus:outline-none"
+src/components/study/QuestionScopeSelector.tsx:              <span className="text-gray-500 text-sm flex-shrink-0">(máx. {questionsCount})</span>
+src/components/study/ExamConfiguration.tsx:			<h2 className="text-2xl font-semibold text-gray-900 mb-4">
+src/components/study/ExamConfiguration.tsx:				<div className="p-6 border border-gray-200 rounded-xl">
+src/components/study/ExamConfiguration.tsx:						<p className="mb-4 text-sm text-gray-500">
+src/components/study/ExamConfiguration.tsx:										: 'border-gray-200 hover:border-gray-300'
+src/components/study/ExamConfiguration.tsx:								<p className="text-sm text-gray-600">{mode.description}</p>
+src/components/study/ExamConfiguration.tsx:				<div className="p-6 border border-gray-200 rounded-xl">
+src/components/study/ExamConfiguration.tsx:						<p className="mb-4 text-sm text-gray-500">
+src/components/study/ExamConfiguration.tsx:							className="flex-1 p-3 border border-gray-300 rounded-lg"
+src/components/study/ExamConfiguration.tsx:						<span className="text-gray-500">minutos</span>
+src/components/study/ExamConfiguration.tsx:					<p className="text-gray-500 text-xs mt-2">
+src/components/study/TestConfiguration.tsx:    <div className="mb-10 pb-8 border-b border-gray-200">
+src/components/study/TestConfiguration.tsx:      <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+src/components/study/TestConfiguration.tsx:        <div className="p-6 border border-gray-200 rounded-xl">
+src/components/study/TestConfiguration.tsx:            <p className="mb-4 text-sm text-gray-500">
+src/components/study/TestConfiguration.tsx:                    : 'border-gray-200 hover:border-gray-300'
+src/components/study/TestConfiguration.tsx:                <p className="text-sm text-gray-600">{mode.description}</p>
+src/components/study/TestConfiguration.tsx:        <div className="p-6 border border-gray-200 rounded-xl">
+src/components/study/TestConfiguration.tsx:            <p className="mb-4 text-sm text-gray-500">
+src/components/study/TestConfiguration.tsx:              className="flex-1 p-3 border border-gray-300 rounded-lg"
+src/components/study/TestConfiguration.tsx:            <span className="text-gray-500">minutos</span>
+src/components/study/TestConfiguration.tsx:          <p className="text-gray-500 text-xs mt-2">
+src/components/study/StudyModeSelector.tsx:      <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+src/components/ExamplePDFProcessing.tsx:      <div className="space-y-2 text-sm text-gray-600">
+src/components/geminiTestAPI/ExampleButtons.tsx:    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+src/components/geminiTestAPI/ExampleButtons.tsx:        <h3 className="font-semibold text-lg mb-4 flex items-center gap-2 text-gray-800">
+src/components/geminiTestAPI/ExampleButtons.tsx:              className="text-left p-3 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+src/components/geminiTestAPI/PromptForm.tsx:    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+src/components/geminiTestAPI/PromptForm.tsx:        <h3 className="font-semibold text-lg mb-4 flex items-center gap-2 text-gray-800">
+src/components/geminiTestAPI/PromptForm.tsx:          <label htmlFor="model-select" className="block text-sm font-medium text-gray-700 mb-2">
+src/components/geminiTestAPI/PromptForm.tsx:            className="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+src/components/geminiTestAPI/PromptForm.tsx:          <label htmlFor="prompt-input" className="block text-sm font-medium text-gray-700 mb-2">
+src/components/geminiTestAPI/PromptForm.tsx:            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm resize-none"
+src/components/geminiTestAPI/ResponseDisplay.tsx:      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+src/components/geminiTestAPI/ResponseDisplay.tsx:          <h3 className="font-semibold text-lg flex items-center gap-2 text-gray-800 mb-4">
+src/components/geminiTestAPI/ResponseDisplay.tsx:      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+src/components/geminiTestAPI/ResponseDisplay.tsx:            <h3 className="font-semibold text-lg flex items-center gap-2 text-gray-800">
+src/components/geminiTestAPI/ResponseDisplay.tsx:            <span className="text-sm text-gray-500">
+src/components/geminiTestAPI/ResponseDisplay.tsx:          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+src/components/geminiTestAPI/ResponseDisplay.tsx:            <div className="text-gray-800 leading-relaxed whitespace-pre-wrap">
+src/components/geminiTestAPI/RequestInfo.tsx:    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+src/components/geminiTestAPI/RequestInfo.tsx:          <h3 className="font-semibold text-lg flex items-center gap-2 text-gray-800">
+src/components/geminiTestAPI/RequestInfo.tsx:            <span className="block text-gray-500 text-sm font-medium">Modelo:</span>
+src/components/geminiTestAPI/RequestInfo.tsx:            <div className="font-mono text-gray-900 font-semibold">
+src/components/geminiTestAPI/RequestInfo.tsx:            <span className="block text-gray-500 text-sm font-medium">Duración:</span>
+src/components/geminiTestAPI/RequestInfo.tsx:            <div className="font-mono text-gray-900 font-semibold">
+src/components/geminiTestAPI/RequestInfo.tsx:            <span className="block text-gray-500 text-sm font-medium">Hora:</span>
+src/components/geminiTestAPI/RequestInfo.tsx:            <div className="font-mono text-gray-900 font-semibold">
+src/components/geminiTestAPI/RequestInfo.tsx:              <span className="block text-gray-500 text-sm font-medium">Caracteres:</span>
+src/components/geminiTestAPI/RequestInfo.tsx:              <div className="font-mono text-gray-900 font-semibold">
+src/components/flashcards/FlashCard.tsx:    <span className="text-xs text-gray-500">{helper}</span>
+src/components/flashcards/FlashCard.tsx:    <div className="inline-flex items-center text-sm text-gray-500">
+src/components/flashcards/FlashCard.tsx:      <p className="text-xl text-gray-800 text-center leading-relaxed">
+src/components/flashcards/FlashCard.tsx:          className="block text-xl font-medium text-gray-800 text-center"
+src/components/flashcards/FlashCard.tsx:            <span className="font-bold text-lg mr-3 bg-white rounded-full w-8 h-8 inline-flex items-center justify-center border border-gray-300">
+src/components/flashcards/FlashCard.tsx:          <div className="absolute inset-0 w-full h-full backface-hidden bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:border-blue-300 transition-colors">
+src/components/flashcards/FlashCard.tsx:          <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:border-blue-300 transition-colors">
+src/components/flashcards/FlashCardsHeader.tsx:    <div className="bg-white border-b top-0 z-10">
+src/components/flashcards/FlashCardsHeader.tsx:              <h1 className="text-xl font-semibold text-gray-800">Modo Flashcards</h1>
+src/components/flashcards/FlashCardsHeader.tsx:              <p className="text-sm text-gray-600">{getScopeText()}</p>
+src/components/flashcards/LoadingState.tsx:          <p className="text-gray-600">Cargando sesión de estudio...</p>
+src/components/QuestionList.tsx:          <div className="text-gray-400 mb-4 text-2xl">📄</div>
+src/components/QuestionList.tsx:          <h3 className="text-lg font-medium text-gray-900 mb-2">No hay preguntas guardadas</h3>
+src/components/QuestionList.tsx:          <p className="text-gray-600">Agrega tu primera pregunta usando el formulario de arriba</p>
+src/components/QuestionList.tsx:            <h3 className="text-lg font-semibold text-gray-900">
+src/components/QuestionList.tsx:            <p className="text-gray-900 leading-relaxed">{question.question_text}</p>
+src/components/QuestionList.tsx:                <span className="flex-1 text-gray-900">{option.option_text}</span>
+src/components/QuestionList.tsx:                    <span className="text-gray-400">✗</span>
+src/components/QuestionList.tsx:            <h4 className="text-sm font-medium text-gray-700 mb-2">Explicación:</h4>
+src/components/QuestionList.tsx:            <p className="text-gray-600 text-sm leading-relaxed">{question.explanation}</p>
+src/components/QuestionList.tsx:            <div className="flex items-center text-sm text-gray-500">
+src/components/common/EmptyLibraryActions.tsx:  <div className="bg-white">
+src/components/common/EmptyLibraryActions.tsx:          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+src/components/common/EmptyLibraryActions.tsx:          <p className="text-lg text-gray-600 leading-relaxed">
+src/components/common/ApiKeyConfig.tsx:                ? 'bg-gray-50 cursor-not-allowed border-gray-300'
+src/components/common/ApiKeyConfig.tsx:                  className="px-2 py-1 text-xs text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded transition-colors"
+src/components/common/PageHeader.tsx:    <h1 className="text-4xl font-bold text-gray-800 mb-4">{title}</h1>
+src/components/common/PageHeader.tsx:      <p className="text-lg text-gray-600 max-w-3xl">{description}</p>
+src/components/common/ConfirmModal.tsx:				<div className="text-gray-700 whitespace-pre-wrap text-sm leading-relaxed">
+src/components/common/ActivityHeader.tsx:    <div className="bg-white border-b top-0 z-10">
+src/components/common/ActivityHeader.tsx:              <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
+src/components/common/ActivityHeader.tsx:              {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
+src/components/common/ActivityHeader.tsx:              <div className={`text-base font-mono ${timeLeft < 300 ? 'text-red-600' : 'text-gray-700'}`}>
+src/components/common/ActivityHeader.tsx:      <div className="w-full bg-white">
+src/components/common/ProgressBar.tsx:      <div className="flex justify-between text-xs text-gray-500 mb-1">
+src/components/common/ProgressBar.tsx:      <div className="w-full bg-gray-200 rounded-full h-2">
+src/components/common/Tooltip.tsx:      absolute z-50 px-4 py-3 text-sm text-gray-800 bg-white rounded-lg shadow-xl border border-gray-200
+src/components/common/ExplanationReference.tsx:          <h4 className="text-sm font-medium text-gray-700 mb-2">Explicación:</h4>
+src/components/common/ExplanationReference.tsx:            <p className="text-gray-900 leading-relaxed">{explanation}</p>
+src/components/common/ExplanationReference.tsx:            <LinkIcon className="w-4 h-4 text-gray-500 flex-shrink-0" />
+src/components/common/ExplanationReference.tsx:            <span className="text-gray-500 font-medium">Fuente:</span>
+src/components/common/AlertModal.tsx:				<div className="text-gray-700 whitespace-pre-wrap text-sm leading-relaxed">
+src/components/common/EmptyLibraryActionCard.tsx:  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 flex flex-col items-center text-center">
+src/components/common/EmptyLibraryActionCard.tsx:    <h4 className="text-xl font-bold text-gray-900 mb-2">{title}</h4>
+src/components/common/EmptyLibraryActionCard.tsx:    <p className="text-gray-600 mb-6">{description}</p>
+src/components/common/EmptyLibraryActionCard.tsx:      className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg font-semibold text-white ${variant === 'primary' ? 'bg-blue-700 hover:bg-blue-800' : 'bg-gray-500 hover:bg-gray-600'} transition-colors`}
+src/components/common/QuestionForm.tsx:              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+src/components/common/QuestionForm.tsx:          <label className="block text-md font-medium text-gray-700 mb-2">
+src/components/common/QuestionForm.tsx:            <span className="text-sm font-bold text-black mb-2">Texto de la pregunta</span> <span className="text-red-500">*</span>
+src/components/common/QuestionForm.tsx:            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-white text-gray-900"
+src/components/common/QuestionForm.tsx:          <label className="text-sm text-gray-700">
+src/components/common/QuestionForm.tsx:            <label className="block text-md font-medium text-gray-700">
+src/components/common/QuestionForm.tsx:              <span className="text-sm font-bold text-black mb-2">Opciones de respuesta</span> <span className="text-red-500">*</span>
+src/components/common/QuestionForm.tsx:                  <div className="option-letter flex items-center justify-center text-base font-semibold text-gray-500 bg-gray-100 rounded-full min-w-[32px] min-h-[32px]">
+src/components/common/QuestionForm.tsx:                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-white text-gray-900 min-h-[56px]"
+src/components/common/QuestionForm.tsx:                      <label className="text-sm text-gray-700">Correcta</label>
+src/components/common/QuestionForm.tsx:          <label className="block text-sm font-medium text-gray-700 mb-2">
+src/components/common/QuestionForm.tsx:            <span className="text-sm font-bold text-black mb-2">Enlace de referencia</span>
+src/components/common/QuestionForm.tsx:            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition bg-white text-gray-900"
+src/components/common/QuestionForm.tsx:          <label className="block text-sm font-medium text-gray-700 mb-2">
+src/components/common/QuestionForm.tsx:            <span className="text-sm font-bold text-black mb-2">Explicación</span>
+src/components/common/QuestionForm.tsx:            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-white text-gray-900"
+src/components/ButtonExample.tsx:      <h1 className="text-3xl font-bold text-gray-900 mb-8">Button Component Examples</h1>
+src/components/Header.tsx:      <div className="absolute inset-0 bg-gray-50/90 backdrop-blur-md border-b border-gray-300/60" />
+src/components/exam/ExamHeader.tsx:    <div className="bg-white border-b top-0 z-10">
+src/components/exam/ExamHeader.tsx:              <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
+src/components/exam/ExamHeader.tsx:              <p className="text-sm text-gray-600">
+src/components/exam/ExamHeader.tsx:              <div className={`text-base font-mono ${timeLeft < 300 ? 'text-red-600' : 'text-gray-700'}`}> 
+src/components/exam/ExamQuestion.tsx:      <h2 className="text-lg font-semibold text-gray-800">{questionText}</h2>
+src/components/exam/ExamQuestion.tsx:                  : 'border-gray-300 bg-white text-gray-400'}
+src/components/Modal.tsx:        className="relative bg-white rounded-lg shadow-2xl w-full max-h-[90vh] overflow-hidden animate-in fade-in zoom-in duration-200"
+src/components/Modal.tsx:                <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+src/components/Header/index.tsx:      <div className="absolute inset-0 bg-white/80 backdrop-blur-md border-b border-gray-200/50" />
+src/components/Header/ThemeToggle.tsx:        hover:bg-gray-100 hover:scale-105 
+src/components/Header/QuestionManagerDropdown.tsx:            isActive ? 'text-blue-600' : 'text-gray-700'
+src/components/Header/QuestionManagerDropdown.tsx:      <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+src/components/Header/QuestionManagerDropdown.tsx:                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+src/components/Header/Navigation.tsx:                : 'text-gray-700 hover:text-blue-600'
+src/pages/StudyResultsPage.tsx:                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
+src/pages/StudyResultsPage.tsx:                className="px-6 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors"
+src/pages/StudyResultsPage.tsx:              <div className="text-center p-4 rounded-xl bg-gray-50 border border-gray-100">
+src/pages/StudyResultsPage.tsx:                  let statusClass = 'bg-gray-100 hover:bg-gray-200 border-gray-300 text-gray-700';
+src/pages/StudyResultsPage.tsx:                  <div className="w-4 h-4 bg-gray-100 border border-gray-300 rounded"></div>
+src/pages/StudyResultsPage.tsx:                className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all duration-200"
+src/pages/StudyExamPage.tsx:          <p className="text-gray-600">Cargando test...</p>
+src/pages/IconPreviewPage.tsx:        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+src/pages/IconPreviewPage.tsx:        <p className="text-gray-600 text-lg">
+src/pages/IconPreviewPage.tsx:          <div key={variant.id} className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 hover:shadow-xl transition-shadow duration-300">
+src/pages/IconPreviewPage.tsx:              <h3 className="text-xl font-bold text-gray-900 mb-2">
+src/pages/IconPreviewPage.tsx:              <p className="text-gray-600 text-sm mb-2">
+src/pages/IconPreviewPage.tsx:              <div className="bg-gray-50 rounded-lg p-6">
+src/pages/IconPreviewPage.tsx:                <h4 className="text-xs font-semibold text-gray-700 mb-3 text-center">Vista de Detalle:</h4>
+src/pages/IconPreviewPage.tsx:                  <div className="bg-white rounded-lg p-4 shadow-inner border">
+src/pages/IconPreviewPage.tsx:              <div className="bg-gray-50 rounded-lg p-4">
+src/pages/IconPreviewPage.tsx:                <h4 className="text-xs font-semibold text-gray-700 mb-3 text-center">Tamaños:</h4>
+src/pages/IconPreviewPage.tsx:                    <span className="text-xs text-gray-500">16px</span>
+src/pages/IconPreviewPage.tsx:                    <span className="text-xs text-gray-500">24px</span>
+src/pages/IconPreviewPage.tsx:                    <span className="text-xs text-gray-500">32px</span>
+src/pages/IconPreviewPage.tsx:                    <span className="text-xs text-gray-500">48px</span>
+src/pages/IconPreviewPage.tsx:        <h3 className="text-2xl font-bold text-gray-900 mb-4">
+src/pages/IconPreviewPage.tsx:        <p className="text-gray-700 text-base mb-6">
+src/pages/IconPreviewPage.tsx:        <p className="text-gray-600 text-sm mt-6">
+src/pages/ButtonDemoPage.tsx:            <h1 className="text-4xl font-bold text-gray-900 mb-4">
+src/pages/ButtonDemoPage.tsx:            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+src/pages/ButtonDemoPage.tsx:          <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+src/pages/ButtonDemoPage.tsx:            <ul className="list-disc list-inside space-y-2 text-gray-700">
+src/pages/ButtonDemoPage.tsx:          <div className="bg-gray-50 rounded-xl p-8 mt-8">
+src/pages/ButtonDemoPage.tsx:            <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
+src/pages/HomePage.tsx:    <div className="min-h-screen bg-gray-50 w-full">
+src/pages/HomePage.tsx:          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+src/pages/HomePage.tsx:              className={`block bg-white rounded-xl border-2 ${feature.borderColor} p-6 transition-all duration-200 hover:shadow-lg hover:scale-105 group`}
+src/pages/HomePage.tsx:                <h3 className="text-xl font-bold text-gray-900 mb-2">
+src/pages/HomePage.tsx:                <p className="text-gray-600 mb-4">
+src/pages/HomePage.tsx:                  <li key={index} className="flex items-start text-sm text-gray-500">
+src/pages/HomePage.tsx:        <div className="mt-16 bg-white rounded-xl p-8 border border-gray-200">
+src/pages/HomePage.tsx:          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+src/pages/HomePage.tsx:              <h3 className="font-semibold text-gray-900 mb-2">Configura la API</h3>
+src/pages/HomePage.tsx:              <p className="text-sm text-gray-600">Realiza el test de API para asegurar la conectividad con Google AI Studio</p>
+src/pages/HomePage.tsx:              <h3 className="font-semibold text-gray-900 mb-2">Crea o Importa</h3>
+src/pages/HomePage.tsx:              <p className="text-sm text-gray-600">Añade preguntas manualmente o importa desde archivos PDF</p>
+src/pages/HomePage.tsx:              <h3 className="font-semibold text-gray-900 mb-2">Comienza a Estudiar</h3>
+src/pages/HomePage.tsx:              <p className="text-sm text-gray-600">Utiliza flashcards o exámenes simulados para practicar</p>

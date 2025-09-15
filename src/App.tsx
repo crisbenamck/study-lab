@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useTheme } from './hooks/useTheme';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import CreateQuestionPage from './pages/CreateQuestionPage';
@@ -23,6 +24,9 @@ import type { QuestionFormData, Question } from './types/Question';
 function App() {
   const navigate = useNavigate();
   
+  // Initialize theme system
+  useTheme(); // Initialize theme system without using the return value
+
   const {
     questions,
     addQuestion,
@@ -46,7 +50,7 @@ function App() {
   } = useAlert();
   
   const { 
-    isConfirmOpen, 
+    isConfirmOpen,  
     confirmMessage, 
     confirmOptions, 
     confirmCallback, 
@@ -86,18 +90,18 @@ function App() {
   // Mostrar loading mientras se cargan los datos del localStorage
   if (!questionsLoaded || !appState.isLoaded) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-primary flex items-center justify-center theme-transition">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-secondary">Cargando...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto bg-white min-h-screen">
+    <div className="min-h-screen bg-primary theme-transition">
+      <div className="max-w-4xl mx-auto bg-primary min-h-screen">
         <Header questions={questions} />
 
   <main className="main-content pt-20">

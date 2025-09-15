@@ -4,9 +4,11 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: ['class', '[data-theme="dark"]'], // Support for data-theme attribute
   theme: {
     extend: {
       colors: {
+        // Existing color palette (keep for compatibility)
         primary: {
           50: '#eff6ff',
           100: '#dbeafe',
@@ -54,7 +56,37 @@ export default {
           700: '#b91c1c',
           800: '#991b1b',
           900: '#7f1d1d',
-        }
+        },
+        
+        // New theme-aware colors using CSS variables
+        'bg-primary': 'var(--bg-primary)',
+        'bg-secondary': 'var(--bg-secondary)',
+        'bg-tertiary': 'var(--bg-tertiary)',
+        'bg-elevated': 'var(--bg-elevated)',
+        'bg-input': 'var(--bg-input)',
+        'bg-disabled': 'var(--bg-disabled)',
+        
+        'text-primary': 'var(--text-primary)',
+        'text-secondary': 'var(--text-secondary)',
+        'text-tertiary': 'var(--text-tertiary)',
+        'text-disabled': 'var(--text-disabled)',
+        'text-inverse': 'var(--text-inverse)',
+        
+        'border-primary': 'var(--border-primary)',
+        'border-secondary': 'var(--border-secondary)',
+        'border-focus': 'var(--border-focus)',
+        'border-error': 'var(--border-error)',
+        
+        'theme-primary': 'var(--color-primary)',
+        'theme-primary-hover': 'var(--color-primary-hover)',
+        'theme-success': 'var(--color-success)',
+        'theme-success-bg': 'var(--color-success-bg)',
+        'theme-warning': 'var(--color-warning)',
+        'theme-warning-bg': 'var(--color-warning-bg)',
+        'theme-error': 'var(--color-error)',
+        'theme-error-bg': 'var(--color-error-bg)',
+        'theme-info': 'var(--color-info)',
+        'theme-info-bg': 'var(--color-info-bg)',
       },
       spacing: {
         '18': '4.5rem',
@@ -68,6 +100,20 @@ export default {
       boxShadow: {
         '3xl': '0 35px 60px -12px rgba(0, 0, 0, 0.3)',
         '4xl': '0 45px 70px -12px rgba(0, 0, 0, 0.25)',
+        
+        // Theme-aware shadows
+        'theme-sm': 'var(--shadow-sm)',
+        'theme-md': 'var(--shadow-md)', 
+        'theme-lg': 'var(--shadow-lg)',
+        'theme-xl': 'var(--shadow-xl)',
+      },
+      gradientColorStops: {
+        'theme-primary': 'var(--color-primary)',
+        'theme-primary-hover': 'var(--color-primary-hover)',
+        'theme-success': 'var(--color-success)',
+        'theme-warning': 'var(--color-warning)',
+        'theme-error': 'var(--color-error)',
+        'theme-info': 'var(--color-info)',
       },
       gridTemplateColumns: {
         '13': 'repeat(13, minmax(0, 1fr))',
