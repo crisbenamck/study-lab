@@ -3,6 +3,11 @@ import { Send, Eye, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import Button from './common/Button';
 import { useApiKeyValidation } from '../hooks/useApiKeyValidation';
+import { 
+  SettingsIcon, WriteIcon, LightBulbIcon, RocketIcon, MessageIcon, 
+  KeyIcon, DocumentIcon, CheckMarkIcon, ErrorIcon, WarningIcon, 
+  LoadingIcon, RobotIcon, LinkIcon 
+} from '../icons';
 
 interface RequestInfo {
   model: string;
@@ -46,9 +51,33 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
 
   const getApiKeyValidationStatus = () => {
     if (!geminiApiKey.trim()) return { color: 'border-gray-300', status: '' };
-    if (validationResult.isValidating) return { color: 'border-blue-400', status: '🔄 Validando...' };
-    if (validationResult.isValid) return { color: 'border-success-400', status: '✅ API key válida' };
-    if (validationResult.error) return { color: 'border-error-400', status: `❌ ${validationResult.error}` };
+    if (validationResult.isValidating) return { 
+      color: 'border-blue-400', 
+      status: (
+        <span className="flex items-center gap-1">
+          <LoadingIcon className="w-3 h-3 text-blue-600" />
+          Validando...
+        </span>
+      ) 
+    };
+    if (validationResult.isValid) return { 
+      color: 'border-success-400', 
+      status: (
+        <span className="flex items-center gap-1">
+          <CheckMarkIcon className="w-3 h-3 text-success-600" />
+          API key válida
+        </span>
+      )
+    };
+    if (validationResult.error) return { 
+      color: 'border-error-400', 
+      status: (
+        <span className="flex items-center gap-1">
+          <ErrorIcon className="w-3 h-3 text-error-600" />
+          {validationResult.error}
+        </span>
+      )
+    };
     return { color: 'border-gray-300', status: '' };
   };
 
@@ -103,7 +132,7 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
       });
 
       showAlert('Respuesta generada exitosamente', {
-        title: '✅ Éxito',
+        title: 'Éxito',
         type: 'success',
         buttonText: 'Perfecto'
       });
@@ -149,7 +178,8 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
       {/* Configuración de API - Grid mejorado */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          🔧 Configuración
+          <SettingsIcon className="w-5 h-5 text-gray-700" />
+          Configuración
         </h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -219,13 +249,15 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
       {/* Sección de Prompt - Contenedor mejorado */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          ✍️ Prompt de prueba
+          <WriteIcon className="w-5 h-5 text-gray-700" />
+          Prompt de prueba
         </h2>
         
         {/* Ejemplos rápidos */}
         <div className="mb-8">
-          <p className="text-sm font-medium mb-4 text-gray-700">
-            💡 Prueba con estos ejemplos:
+          <p className="text-sm font-medium mb-4 text-gray-700 flex items-center gap-2">
+            <LightBulbIcon className="w-4 h-4 text-amber-600" />
+            Prueba con estos ejemplos:
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {samplePrompts.map((sample, index) => (
@@ -273,7 +305,8 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
       {/* Botones de acción */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          🚀 Acciones
+          <RocketIcon className="w-5 h-5 text-gray-700" />
+          Acciones
         </h2>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -305,10 +338,20 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
         </div>
         
         {(!validationResult.isValid || !prompt.trim()) && (
-          <div className="mt-4 text-center text-sm text-gray-500">
-            {!validationResult.isValid && "⚠️ Se requiere una API key válida"}
+          <div className="mt-4 text-center text-sm text-gray-500 flex items-center justify-center gap-1">
+            {!validationResult.isValid && (
+              <span className="flex items-center gap-1">
+                <WarningIcon className="w-4 h-4 text-amber-500" />
+                Se requiere una API key válida
+              </span>
+            )}
             {!validationResult.isValid && !prompt.trim() && " y "}
-            {!prompt.trim() && "⚠️ Escribe un prompt"}
+            {!prompt.trim() && (
+              <span className="flex items-center gap-1">
+                <WarningIcon className="w-4 h-4 text-amber-500" />
+                Escribe un prompt
+              </span>
+            )}
             {" para continuar"}
           </div>
         )}
@@ -322,14 +365,22 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
             : 'border-l-error-500 bg-error-50'}`}
           >
             <div className="space-y-4">
-              <h3 className={`font-semibold text-lg flex items-center gap-2
-                ${requestInfo.success ? 'text-success-700' : 'text-error-700'}`}
-              >
-                <AlertCircle size={20} />
-                {requestInfo.success ? '✅ Petición exitosa' : '❌ Error en la petición'}
-              </h3>
-              
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+            <h3 className={`font-semibold text-lg flex items-center gap-2
+              ${requestInfo.success ? 'text-success-700' : 'text-error-700'}`}
+            >
+              <AlertCircle size={20} />
+              {requestInfo.success ? (
+                <span className="flex items-center gap-1">
+                  <CheckMarkIcon className="w-5 h-5" />
+                  Petición exitosa
+                </span>
+              ) : (
+                <span className="flex items-center gap-1">
+                  <ErrorIcon className="w-5 h-5" />
+                  Error en la petición
+                </span>
+              )}
+            </h3>              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
                 <div className="bg-white/70 rounded-lg p-3">
                   <span className="block text-gray-600 text-xs font-medium">Modelo:</span>
                   <div className="font-mono mt-1 text-gray-900 font-semibold">
@@ -367,8 +418,8 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-6 border-l-4 border-l-success-500 bg-success-50">
             <h3 className="font-semibold text-lg flex items-center gap-2 text-success-700 mb-4">
-              <Send size={20} />
-              💬 Respuesta de Gemini
+              <MessageIcon className="w-5 h-5" />
+              Respuesta de Gemini
             </h3>
             <div className="bg-white rounded-lg p-6 shadow-inner border border-success-200">
               <div className="text-sm leading-relaxed whitespace-pre-wrap font-mono text-gray-900">
@@ -384,8 +435,8 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="p-6 border-l-4 border-l-error-500 bg-error-50">
             <h3 className="font-semibold text-lg flex items-center gap-2 text-error-700 mb-4">
-              <AlertCircle size={20} />
-              ⚠️ Error
+              <ErrorIcon className="w-5 h-5" />
+              Error
             </h3>
             <div className="bg-white rounded-lg p-6 shadow-inner border border-error-200">
               <div className="text-sm leading-relaxed font-mono break-words overflow-hidden text-error-600">
@@ -410,7 +461,7 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center
               group-hover:bg-primary-200 transition-colors">
-              <span className="text-lg">📖</span>
+              <DocumentIcon className="w-5 h-5 text-primary-700" />
             </div>
             <div>
               <span className="font-semibold text-base text-gray-900">
@@ -437,7 +488,8 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
                 {/* Sección 1: API Key */}
                 <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
                   <h4 className="font-semibold text-base mb-3 text-gray-900 flex items-center gap-2">
-                    🔑 API Key
+                    <KeyIcon className="w-4 h-4 text-primary-600" />
+                    API Key
                   </h4>
                   <div className="text-sm leading-relaxed text-gray-700 space-y-2">
                     <p><strong>1.</strong> Ve a Google AI Studio</p>
@@ -451,7 +503,8 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
                 {/* Sección 2: Modelos */}
                 <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
                   <h4 className="font-semibold text-base mb-3 text-gray-900 flex items-center gap-2">
-                    🤖 Modelos
+                    <RobotIcon className="w-4 h-4 text-primary-600" />
+                    Modelos
                   </h4>
                   <div className="text-sm leading-relaxed text-gray-700 space-y-2">
                     <div><strong>Flash 2.5:</strong> Rápido y eficiente</div>
@@ -464,7 +517,8 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
                 {/* Sección 3: Consejos */}
                 <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
                   <h4 className="font-semibold text-base mb-3 text-gray-900 flex items-center gap-2">
-                    💡 Consejos
+                    <LightBulbIcon className="w-4 h-4 text-primary-600" />
+                    Consejos
                   </h4>
                   <div className="text-sm leading-relaxed text-gray-700 space-y-2">
                     <p>• Prompts claros y específicos</p>
@@ -485,7 +539,8 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
                     className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white 
                       rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium shadow-sm"
                   >
-                    🔗 Google AI Studio
+                    <LinkIcon className="w-4 h-4" />
+                    Google AI Studio
                   </a>
                   <a
                     href="https://ai.google.dev/gemini-api/docs"
@@ -494,7 +549,8 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
                     className="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 text-white 
                       rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium shadow-sm"
                   >
-                    📚 Documentación
+                    <DocumentIcon className="w-4 h-4" />
+                    Documentación
                   </a>
                 </div>
               </div>

@@ -49,3 +49,12 @@ export { default as RefreshIcon } from './RefreshIcon';
 // Iconos de modos de estudio
 export { default as FlashcardsIcon } from './FlashcardsIcon';
 export { default as ExamIcon } from './TestIcon';
+
+// Iconos nuevos para Test API
+export { default as SettingsIcon } from './SettingsIcon';
+export { default as WriteIcon } from './WriteIcon';
+export { default as LightBulbIcon } from './LightBulbIcon';
+export { default as RocketIcon } from './RocketIcon';
+export { default as MessageIcon } from './MessageIcon';
+export { default as KeyIcon } from './KeyIcon';
+export { default as DocumentIcon } from './DocumentIcon';
