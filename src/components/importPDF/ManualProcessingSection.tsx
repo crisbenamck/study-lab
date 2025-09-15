@@ -15,10 +15,10 @@ const StartProcessingButton: React.FC<StartProcessingButtonProps> = ({
   <button
     onClick={onClick}
     disabled={isDisabled}
-    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 w-full justify-center text-white border shadow-sm ${
+    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 w-full justify-center text-white border shadow-sm theme-transition ${
       isDisabled 
-        ? 'bg-gray-400 border-gray-400 text-gray-500 cursor-not-allowed' 
-        : 'bg-blue-600 border-blue-600 hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0'
+        ? 'bg-gray-disabled border-gray-disabled text-tertiary cursor-not-allowed' 
+        : 'bg-primary-600 border-primary-600 hover:bg-primary-700 hover:border-primary-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0'
     }`}
   >
     {isProcessing ? (
@@ -58,15 +58,15 @@ const ManualProcessingSection: React.FC<ManualProcessingSectionProps> = ({
   }
 
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+    <div className="bg-surface border border-gray-light rounded-lg p-4 mb-6 theme-transition">
       <div className="flex items-center space-x-2 mb-3">
-        <Settings className="w-5 h-5 text-gray-600" />
-        <h3 className="font-medium text-gray-800">Configuración de procesamiento</h3>
+        <Settings className="w-5 h-5 text-secondary" />
+        <h3 className="font-medium text-primary">Configuración de procesamiento</h3>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-primary mb-2">
             Página a procesar
           </label>
           <div className="flex items-center space-x-2">
@@ -76,11 +76,11 @@ const ManualProcessingSection: React.FC<ManualProcessingSectionProps> = ({
               max={totalPages}
               value={pageToProcess}
               onChange={(e) => setPageToProcess(parseInt(e.target.value) || 1)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-3 py-2 border border-gray rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-background text-primary theme-transition"
             />
-            <span className="text-sm text-gray-500">de {totalPages}</span>
+            <span className="text-sm text-secondary">de {totalPages}</span>
           </div>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-secondary mt-1">
             Especifica qué página del PDF quieres procesar
           </p>
         </div>

@@ -47,10 +47,10 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
     }
   }, [handleFileChange]);
 
-  const baseButtonClasses = "inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-md cursor-pointer transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-white border shadow-sm";
+  const baseButtonClasses = "inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-md cursor-pointer transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 text-white border shadow-sm theme-transition";
   const buttonClasses = isLoadingFile
-    ? `${baseButtonClasses} bg-gray-400 dark:bg-gray-600 border-gray-400 dark:border-gray-600 cursor-not-allowed theme-transition`
-    : `${baseButtonClasses} bg-blue-600 border-blue-600 hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0`;
+    ? `${baseButtonClasses} bg-gray-disabled border-gray-disabled cursor-not-allowed`
+    : `${baseButtonClasses} bg-primary-600 border-primary-600 hover:bg-primary-700 hover:border-primary-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0`;
 
   if (selectedFile) {
     return (
@@ -66,15 +66,15 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
   return (
     <>
       {fileError && (
-        <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <div className="text-sm text-red-800 flex items-center">
-            <ErrorIcon className="w-4 h-4 text-red-600 mr-2 flex-shrink-0" />
+        <div className="mb-4 p-4 bg-danger-50 border border-danger-200 rounded-lg theme-transition">
+          <div className="text-sm text-danger-800 flex items-center">
+            <ErrorIcon className="w-4 h-4 text-danger-600 mr-2 flex-shrink-0" />
             <strong>Error:</strong> {fileError}
           </div>
         </div>
       )}
 
-      <div className="border-2 border-dashed border-primary rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 transition-all duration-300 mb-6 theme-transition">
+      <div className="border-2 border-dashed border-primary rounded-xl p-8 text-center hover:border-primary-400 hover:bg-primary-50 transition-all duration-300 mb-6 theme-transition">
         <Upload className="w-12 h-12 text-tertiary mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-primary mb-2">
           Arrastra un archivo PDF aquí
