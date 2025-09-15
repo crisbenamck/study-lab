@@ -8,9 +8,9 @@
 :root {
   /* === BACKGROUNDS === */
   --bg-primary: #ffffff;          /* Main background */
-  --bg-secondary: #f8fafc;        /* Secondary background */
+  --bg-secondary: #f8fafc;        /* Secondary background - gray-50 */
   --bg-tertiary: #f1f5f9;         /* Tertiary background */
-  --bg-elevated: #ffffff;         /* Elevated surfaces */
+  --bg-elevated: #f8fafc;         /* Elevated surfaces - cambiar a gray-50 para mejor contraste */
   --bg-input: #ffffff;            /* Input fields */
   --bg-disabled: #f3f4f6;         /* Disabled elements */
   
