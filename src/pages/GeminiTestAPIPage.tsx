@@ -1,5 +1,5 @@
 import React from 'react';
-import GeminiTest from '../components/GeminiTest';
+import { GeminiTest } from '../components/geminiTestAPI';
 import PageHeader from '../components/common/PageHeader';
 import Layout from '../components/Layout';
 import type { AppState } from '../types/AppState';
