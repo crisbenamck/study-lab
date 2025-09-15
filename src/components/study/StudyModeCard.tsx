@@ -18,15 +18,15 @@ const StudyModeCard: React.FC<StudyModeCardProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`p-6 rounded-xl border-2 transition-all duration-200 text-left hover:shadow-md ${
+      className={`p-6 rounded-xl border-2 transition-all duration-200 text-left hover:shadow-md theme-transition ${
         isSelected
-          ? 'border-blue-500 bg-blue-50 shadow-lg ring-2 ring-blue-200'
-          : 'border-gray-200 hover:border-gray-300'
+          ? 'border-primary bg-primary-50 shadow-lg ring-2 ring-primary-200'
+          : 'border-gray-light hover:border-gray'
       }`}
     >
       <div className="flex items-top gap-3">
         <div className={`w-12 h-12 min-w-12 min-h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
-          isSelected ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
+          isSelected ? 'bg-primary-100 text-primary-600' : 'bg-gray-light text-secondary'
         }`}>
           <div className="w-6 h-6">
             {icon}

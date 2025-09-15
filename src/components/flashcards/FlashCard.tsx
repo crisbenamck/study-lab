@@ -8,17 +8,17 @@ import ExplanationReference from '../common/ExplanationReference';
 // Card header subcomponent
 const CardHeader: React.FC<{ label: string; helper: string }> = ({ label, helper }) => (
   <div className="flex items-center justify-between mb-4">
-    <span className="text-sm font-medium text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
+    <span className="text-sm font-medium text-primary-600 bg-primary-100 px-3 py-1 rounded-full">
       {label}
     </span>
-    <span className="text-xs text-gray-500">{helper}</span>
+    <span className="text-xs text-tertiary">{helper}</span>
   </div>
 );
 
 // Card footer subcomponent
 const CardFooter: React.FC<{ helper: string }> = ({ helper }) => (
   <div className="text-center">
-    <div className="inline-flex items-center text-sm text-gray-500">
+    <div className="inline-flex items-center text-sm text-secondary">
       <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
       </svg>
@@ -32,7 +32,7 @@ const QuestionFace: React.FC<{ question: Question }> = ({ question }) => (
   <div className="p-6 h-full flex flex-col">
     <CardHeader label={`Pregunta #${question.question_number}`} helper="Click para ver respuesta" />
     <div className="flex-1 flex items-center justify-center">
-      <p className="text-xl text-gray-800 text-center leading-relaxed">
+      <p className="text-xl text-primary text-center leading-relaxed">
         {question.question_text}
       </p>
     </div>
@@ -47,7 +47,7 @@ const AnswerFace: React.FC<{ correctOptions: Question['options']; multi: boolean
     <div className="flex-1 flex flex-col justify-center space-y-4">
       {multi && (
         <div className="text-center mb-2">
-          <span className="text-sm font-medium" data-testid="flashcard-answer">
+          <span className="text-sm font-medium text-primary" data-testid="flashcard-answer">
             {correctOptions.length} respuestas correctas
           </span>
         </div>
@@ -55,11 +55,11 @@ const AnswerFace: React.FC<{ correctOptions: Question['options']; multi: boolean
       {correctOptions.map((option, index) => (
         <span
           key={index}
-          className="block text-xl font-medium text-gray-800 text-center"
+          className="block text-xl font-medium text-primary text-center"
           data-testid="flashcard-answer"
         >
           {multi && (
-            <span className="font-bold text-lg mr-3 bg-white rounded-full w-8 h-8 inline-flex items-center justify-center border border-gray-300">
+            <span className="font-bold text-lg mr-3 bg-surface rounded-full w-8 h-8 inline-flex items-center justify-center border border-gray">
               {index + 1}
             </span>
           )}
@@ -114,12 +114,12 @@ const FlashCard: React.FC<FlashCardProps> = ({
           onClick={handleFlip}
         >
           {/* Card front - Question */}
-          <div className="absolute inset-0 w-full h-full backface-hidden bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:border-blue-300 transition-colors">
+          <div className="absolute inset-0 w-full h-full backface-hidden bg-surface rounded-lg shadow-lg border-2 border-gray-light hover:border-primary-300 transition-colors theme-transition">
             <QuestionFace question={question} />
           </div>
 
           {/* Card back - Only correct answers */}
-          <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-white rounded-lg shadow-lg border-2 border-gray-200 hover:border-blue-300 transition-colors">
+          <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-surface rounded-lg shadow-lg border-2 border-gray-light hover:border-primary-300 transition-colors theme-transition">
             <AnswerFace correctOptions={correctOptions} multi={correctOptions.length > 1} />
           </div>
         </div>
@@ -166,7 +166,7 @@ const FlashCard: React.FC<FlashCardProps> = ({
       </div>
 
       {/* Additional info below buttons */}
-      <div className="w-full space-y-4 border-t pt-6">
+      <div className="w-full space-y-4 border-t border-gray-light pt-6 theme-transition">
         <ExplanationReference explanation={question.explanation} link={question.link} />
       </div>
     </div>

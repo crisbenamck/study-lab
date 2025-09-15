@@ -25,7 +25,7 @@ const ExamQuestion: React.FC<ExamQuestionProps> = ({
 }) => (
   <div className="mb-6 h-auto md:h-[400px] overflow-y-auto">
     <div className="mb-4">
-      <h2 className="text-lg font-semibold text-gray-800">{questionText}</h2>
+      <h2 className="text-lg font-semibold text-primary">{questionText}</h2>
     </div>
     <div className="space-y-3">
       {options.map((option) => {
@@ -36,26 +36,26 @@ const ExamQuestion: React.FC<ExamQuestionProps> = ({
         return (
           <div
             key={option.option_letter}
-            className={`p-2 cursor-pointer transition-all ${
+            className={`p-2 cursor-pointer transition-all theme-transition ${
               shouldShowCorrect
-                ? 'bg-green-50'
+                ? 'bg-success-50'
                 : shouldShowIncorrect
-                ? 'bg-red-50'
+                ? 'bg-danger-50'
                 : isSelected
-                ? 'bg-blue-50'
+                ? 'bg-primary-50'
                 : ''
             } ${showAnswers ? 'cursor-default' : ''}`}
             onClick={() => onSelect(option.option_letter)}
           >
             <div className="flex items-center">
-              <div className={`w-6 h-6 flex items-center justify-center mr-3 rounded-full border-2 transition-colors
+              <div className={`w-6 h-6 flex items-center justify-center mr-3 rounded-full border-2 transition-colors theme-transition
                 ${shouldShowCorrect
-                  ? 'border-green-500 bg-green-50 text-green-600'
+                  ? 'border-success-500 bg-success-50 text-success-600'
                   : shouldShowIncorrect
-                  ? 'border-red-500 bg-red-50 text-red-600'
+                  ? 'border-danger-500 bg-danger-50 text-danger-600'
                   : isSelected
-                  ? 'border-blue-500 bg-blue-50 text-blue-600'
-                  : 'border-gray-300 bg-white text-gray-400'}
+                  ? 'border-primary-500 bg-primary-50 text-primary-600'
+                  : 'border-gray bg-surface text-tertiary'}
               `}>
                 {requiresMultipleAnswers ? (
                   (isSelected || shouldShowCorrect) ? (
@@ -71,13 +71,13 @@ const ExamQuestion: React.FC<ExamQuestionProps> = ({
                   ) : null
                 )}
               </div>
-              <span className="font-medium mr-2">{option.option_letter})</span>
-              <span className="flex-1">{option.option_text}</span>
+              <span className="font-medium mr-2 text-primary">{option.option_letter})</span>
+              <span className="flex-1 text-primary">{option.option_text}</span>
               {showAnswers && isCorrect && (
-                <span className="text-green-600 ml-2">✓ Correcta</span>
+                <span className="text-success-600 ml-2">✓ Correcta</span>
               )}
               {showAnswers && isSelected && !isCorrect && (
-                <span className="text-red-600 ml-2">✗ Incorrecta</span>
+                <span className="text-danger-600 ml-2">✗ Incorrecta</span>
               )}
             </div>
           </div>

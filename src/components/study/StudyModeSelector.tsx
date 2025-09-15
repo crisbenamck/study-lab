@@ -25,8 +25,8 @@ const StudyModeSelector: React.FC<StudyModeSelectorProps> = ({ mode, onModeChang
   ];
 
   return (
-    <div className="mb-10 pb-8 border-b">
-      <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+    <div className="mb-10 pb-8 border-b border-gray-light theme-transition">
+      <h2 className="text-2xl font-semibold text-primary mb-4">
         Tipo de Práctica
       </h2>
       
