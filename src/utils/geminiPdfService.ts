@@ -3,11 +3,140 @@ import type { ExtractedQuestion } from '../types/PDFProcessor';
 
 export class GeminiPdfService {
   private ai: GoogleGenAI;
-  private readonly GEMINI_MODEL = 'gemini-2.5-pro';
+  private currentModelIndex: number = 0;
+  private readonly FALLBACK_MODELS = [
+    'gemini-2.5-pro',
+    'gemini-2.5-flash',
+    'gemini-2.5-flash-lite',
+    'gemini-2.0-flash-15',
+    'gemini-2.0-flash-lite'
+  ];
+  private onRetryProgress?: (modelIndex: number, attempt: number, model: string, isRetrying: boolean) => void;
 
-  constructor(apiKey: string) {
+  constructor(apiKey: string, onRetryProgress?: (modelIndex: number, attempt: number, model: string, isRetrying: boolean) => void) {
     this.ai = new GoogleGenAI({ apiKey });
-    console.log('🤖 Gemini PDF Service configurado con modelo:', this.GEMINI_MODEL);
+    this.onRetryProgress = onRetryProgress;
+    console.log('🤖 GeminiPdfService configurado con modelo inicial:', this.FALLBACK_MODELS[0]);
+  }
+
+  /**
+   * Verifica si el error es temporal y permite reintentos
+   */
+  private isRetryableError(error: unknown): boolean {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return errorMessage.includes('overloaded') || 
+           errorMessage.includes('503') || 
+           errorMessage.includes('502') ||
+           errorMessage.includes('UNAVAILABLE') ||
+           errorMessage.includes('temporarily');
+  }
+
+  /**
+   * Verifica si el error es de límite de cuota
+   */
+  private isQuotaExceededError(error: unknown): boolean {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return errorMessage.includes('429') || 
+           errorMessage.includes('quota') || 
+           errorMessage.includes('requests per day') ||
+           errorMessage.includes('QUOTA_EXCEEDED') ||
+           errorMessage.includes('Resource has been exhausted');
+  }
+
+  /**
+   * Utility para esperar
+   */
+  private sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  /**
+   * Obtiene el modelo actual
+   */
+  getCurrentModel(): string {
+    return this.FALLBACK_MODELS[this.currentModelIndex];
+  }
+
+  /**
+   * Hace una llamada a Gemini con reintentos automáticos y fallback de modelos
+   */
+  private async callGeminiWithRetry(content: (string | ReturnType<typeof createPartFromUri>)[], maxRetries: number = 3): Promise<string> {
+    let lastError: unknown = null;
+
+    // Intentar con cada modelo disponible
+    for (let modelAttempt = this.currentModelIndex; modelAttempt < this.FALLBACK_MODELS.length; modelAttempt++) {
+      // Asegurar que estamos usando el modelo correcto
+      if (modelAttempt !== this.currentModelIndex) {
+        this.currentModelIndex = modelAttempt;
+        console.log(`🔄 Probando con modelo: ${this.FALLBACK_MODELS[this.currentModelIndex]}`);
+      }
+
+      // Intentar con el modelo actual
+      for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+          console.log(`🔄 Modelo ${this.getCurrentModel()} - Intento ${attempt}/${maxRetries}`);
+          
+          // Notificar progreso si hay callback
+          if (this.onRetryProgress) {
+            this.onRetryProgress(modelAttempt, attempt, this.getCurrentModel(), true);
+          }
+          
+          const response = await this.ai.models.generateContent({
+            model: this.getCurrentModel(),
+            contents: content,
+          });
+          
+          const responseText = response.text;
+          
+          if (!responseText || responseText.trim() === '') {
+            throw new Error('Gemini devolvió una respuesta vacía');
+          }
+          
+          console.log(`✅ Exitoso con modelo ${this.getCurrentModel()} en intento ${attempt}`);
+          return responseText;
+          
+        } catch (error: unknown) {
+          lastError = error;
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          
+          console.log(`❌ Error con modelo ${this.getCurrentModel()}, intento ${attempt}:`, errorMessage);
+
+          // Notificar error si hay callback
+          if (this.onRetryProgress && attempt === maxRetries) {
+            this.onRetryProgress(modelAttempt, attempt, this.getCurrentModel(), false);
+          }
+
+          // Si es error de cuota, intentar con el siguiente modelo inmediatamente
+          if (this.isQuotaExceededError(error)) {
+            console.log(`🚫 Error de cuota detectado con modelo ${this.getCurrentModel()}`);
+            break; // Salir del loop de reintentos y probar siguiente modelo
+          }
+
+          // Si es error de sobrecarga o temporal, esperar y reintentar con el mismo modelo
+          if (this.isRetryableError(error) && attempt < maxRetries) {
+            const delay = Math.pow(2, attempt) * 2000; // 4s, 8s, 16s
+            console.log(`⏳ Modelo sobrecargado, reintentando en ${delay}ms...`);
+            await this.sleep(delay);
+            continue;
+          }
+
+          // Para otros errores, reintentar hasta maxRetries
+          if (attempt < maxRetries && !this.isQuotaExceededError(error)) {
+            const delay = 1000 * attempt; // 1s, 2s, 3s
+            console.log(`⏳ Reintentando en ${delay}ms...`);
+            await this.sleep(delay);
+            continue;
+          }
+        }
+      }
+
+      // Si llegamos aquí, el modelo actual falló, intentar siguiente
+      console.log(`❌ Modelo ${this.getCurrentModel()} agotado, probando siguiente modelo...`);
+    }
+    
+    // Todos los modelos fallaron
+    console.error('❌ Todos los modelos de Gemini han fallado');
+    throw new Error(`Todos los modelos de Gemini fallaron. Último error: ${lastError instanceof Error ? lastError.message : 'Error desconocido'}`);
   }
 
   /**
@@ -92,8 +221,8 @@ IMPORTANT:
         throw new Error('No se pudo obtener la URI del archivo procesado');
       }
 
-      // Generar respuesta con Gemini
-      console.log('🤖 Generando análisis con Gemini...');
+      // Generar respuesta con Gemini usando reintentos y fallback
+      console.log('🤖 Generando análisis con Gemini con reintentos automáticos...');
       console.log('📄 Enviando contenido:', { 
         promptLength: prompt.length, 
         hasFileContent: !!fileStatus.uri,
@@ -103,29 +232,19 @@ IMPORTANT:
       const startTime = Date.now();
       
       try {
-        console.log('⏳ Enviando solicitud a Gemini...');
+        console.log('⏳ Enviando solicitud a Gemini con sistema de reintentos...');
         
-        // Crear timeout para evitar colgado
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Timeout: Gemini tardó más de 2 minutos')), 300000)
+        // Usar el sistema de reintentos con timeout
+        const timeoutPromise = new Promise<string>((_, reject) =>
+          setTimeout(() => reject(new Error('Timeout: Gemini tardó más de 5 minutos')), 300000)
         );
         
-        const geminiPromise = this.ai.models.generateContent({
-          model: this.GEMINI_MODEL,
-          contents: content,
-        });
+        const geminiPromise = this.callGeminiWithRetry(content);
         
-        const response = await Promise.race([geminiPromise, timeoutPromise]);
+        const responseText = await Promise.race([geminiPromise, timeoutPromise]);
         
         const endTime = Date.now();
-        console.log(`⏱️ Gemini respondió en ${endTime - startTime}ms`);
-
-        const responseText = (response as { text: string }).text;
-        
-        if (!responseText || responseText.trim() === '') {
-          console.error('❌ Respuesta vacía de Gemini');
-          throw new Error('Gemini devolvió una respuesta vacía');
-        }
+        console.log(`⏱️ Gemini respondió exitosamente en ${endTime - startTime}ms`);
         
         console.log('📝 Respuesta de Gemini PDF recibida:', {
           length: responseText.length,

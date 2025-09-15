@@ -71,17 +71,27 @@ export const usePDFProcessing = ({
     }
     
     if (errorMessage.includes('503') || errorMessage.includes('overloaded')) {
-      showAlert('⚠️ El servicio de Gemini está temporalmente sobrecargado. Intenta de nuevo en unos minutos.', {
-        title: 'Servicio sobrecargado',
+      showAlert('⚠️ El servicio de Gemini está temporalmente sobrecargado.\n\n🔄 El sistema reintentará automáticamente con diferentes modelos.\n\n⏱️ Esto puede tomar unos minutos adicionales.', {
+        title: 'Servicio sobrecargado - Reintentando',
         type: 'warning'
       });
-    } else if (errorMessage.includes('429') || errorMessage.includes('quota') || errorMessage.includes('Todos los modelos de Gemini fallaron')) {
+    } else if (errorMessage.includes('Todos los modelos de Gemini fallaron')) {
+      showAlert(`❌ Todos los modelos de Gemini han fallado después de múltiples intentos.\n\n🕐 Espera unos minutos y vuelve a intentar.\n\n💡 Posibles causas:\n• Sobrecarga temporal del servicio\n• Límite de cuota alcanzado\n• Problemas de conectividad`, {
+        title: 'Error en todos los modelos',
+        type: 'error'
+      });
+    } else if (errorMessage.includes('429') || errorMessage.includes('quota')) {
       showAlert(`⚠️ Se agotó la cuota de todos los modelos de Gemini disponibles.\n\n🕐 Espera unas horas para que se restablezcan las cuotas diarias.\n\n💡 Tip: Las cuotas se restablecen automáticamente cada 24 horas.`, {
         title: 'Cuota agotada',
         type: 'warning'
       });
+    } else if (errorMessage.includes('Timeout')) {
+      showAlert(`⏰ El procesamiento tardó demasiado tiempo.\n\n🔄 El sistema intentó con múltiples modelos pero no pudo completarse.\n\n💡 Sugerencias:\n• Intenta con un PDF más pequeño\n• Verifica tu conexión a internet\n• Vuelve a intentar en unos minutos`, {
+        title: 'Tiempo de espera agotado',
+        type: 'error'
+      });
     } else {
-      showAlert(`❌ Error procesando PDF: ${errorMessage}`, {
+      showAlert(`❌ Error procesando PDF: ${errorMessage}\n\n🔄 Si el error persiste, intenta:\n• Verificar tu API key de Gemini\n• Usar un archivo PDF diferente\n• Intentar nuevamente en unos minutos`, {
         title: 'Error de procesamiento',
         type: 'error'
       });
