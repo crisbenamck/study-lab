@@ -145,10 +145,12 @@ export class GeminiPdfService {
   async extractQuestionsFromPDF(file: File): Promise<ExtractedQuestion[]> {
     console.log('📄 Iniciando procesamiento directo de PDF con Gemini...');
     
+    let uploadedFile: { name?: string } | null = null;
+    
     try {
       // Subir el archivo PDF a Gemini
       console.log('📤 Subiendo PDF a Gemini...');
-      const uploadedFile = await this.ai.files.upload({
+      uploadedFile = await this.ai.files.upload({
         file: file,
         config: {
           displayName: file.name,
@@ -231,64 +233,57 @@ IMPORTANT:
       
       const startTime = Date.now();
       
+      console.log('⏳ Enviando solicitud a Gemini con sistema de reintentos...');
+      
+      // Usar el sistema de reintentos con timeout
+      const timeoutPromise = new Promise<string>((_, reject) =>
+        setTimeout(() => reject(new Error('Timeout: Gemini tardó más de 5 minutos')), 300000)
+      );
+      
+      const geminiPromise = this.callGeminiWithRetry(content);
+      
+      const responseText = await Promise.race([geminiPromise, timeoutPromise]);
+      
+      const endTime = Date.now();
+      console.log(`⏱️ Gemini respondió exitosamente en ${endTime - startTime}ms`);
+      
+      console.log('📝 Respuesta de Gemini PDF recibida:', {
+        length: responseText.length,
+        preview: responseText.substring(0, 300) + '...',
+        endsWithBracket: responseText.trim().endsWith(']'),
+        startsWithBracket: responseText.trim().startsWith('[')
+      });
+
+      // Parsear la respuesta JSON
+      const questions = this.parseQuestionsResponse(responseText);
+      
+      console.log(`✅ Extraídas ${questions.length} preguntas del PDF completo`);
+
+      // Limpiar el archivo temporal (opcional)
       try {
-        console.log('⏳ Enviando solicitud a Gemini con sistema de reintentos...');
-        
-        // Usar el sistema de reintentos con timeout
-        const timeoutPromise = new Promise<string>((_, reject) =>
-          setTimeout(() => reject(new Error('Timeout: Gemini tardó más de 5 minutos')), 300000)
-        );
-        
-        const geminiPromise = this.callGeminiWithRetry(content);
-        
-        const responseText = await Promise.race([geminiPromise, timeoutPromise]);
-        
-        const endTime = Date.now();
-        console.log(`⏱️ Gemini respondió exitosamente en ${endTime - startTime}ms`);
-        
-        console.log('📝 Respuesta de Gemini PDF recibida:', {
-          length: responseText.length,
-          preview: responseText.substring(0, 300) + '...',
-          endsWithBracket: responseText.trim().endsWith(']'),
-          startsWithBracket: responseText.trim().startsWith('[')
-        });
-
-        // Parsear la respuesta JSON
-        const questions = this.parseQuestionsResponse(responseText);
-        
-        console.log(`✅ Extraídas ${questions.length} preguntas del PDF completo`);
-
-        // Limpiar el archivo temporal (opcional)
-        try {
-          if (uploadedFile.name) {
-            await this.ai.files.delete({ name: uploadedFile.name });
-            console.log('🗑️ Archivo temporal eliminado de Gemini');
-          }
-        } catch (cleanupError) {
-          console.warn('⚠️ No se pudo eliminar el archivo temporal:', cleanupError);
+        if (uploadedFile.name) {
+          await this.ai.files.delete({ name: uploadedFile.name });
+          console.log('🗑️ Archivo temporal eliminado de Gemini');
         }
-
-        return questions;
-        
-      } catch (genError) {
-        console.error('❌ Error específico de Gemini:', genError);
-        
-        // Intentar limpiar archivo en caso de error
-        try {
-          if (uploadedFile.name) {
-            await this.ai.files.delete({ name: uploadedFile.name });
-            console.log('🗑️ Archivo temporal eliminado tras error');
-          }
-        } catch (cleanupError) {
-          console.warn('⚠️ No se pudo eliminar archivo tras error:', cleanupError);
-        }
-        
-        // Re-lanzar el error con más contexto
-        throw new Error(`Error en generación de Gemini: ${genError instanceof Error ? genError.message : 'Error desconocido'}`);
+      } catch (cleanupError) {
+        console.warn('⚠️ No se pudo eliminar el archivo temporal:', cleanupError);
       }
+
+      return questions;
 
     } catch (error) {
       console.error('❌ Error en procesamiento de PDF con Gemini:', error);
+      
+      // Intentar limpiar archivo en caso de error
+      try {
+        if (uploadedFile?.name) {
+          await this.ai.files.delete({ name: uploadedFile.name });
+          console.log('🗑️ Archivo temporal eliminado tras error');
+        }
+      } catch (cleanupError) {
+        console.warn('⚠️ No se pudo eliminar archivo tras error:', cleanupError);
+      }
+      
       throw new Error(`Error procesando PDF: ${error instanceof Error ? error.message : 'Error desconocido'}`);
     }
   }

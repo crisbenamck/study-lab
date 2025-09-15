@@ -38,6 +38,13 @@ export const ExamplePDFProcessing = () => {
     }
   }, [startRetrySequence, endRetrySequence, setRetryAttempt]);
 
+  const handleTestProcess = useCallback(async () => {
+    // Función de prueba para usar processPDFWithRetries
+    console.log('Esta función usaría processPDFWithRetries con un archivo real');
+    // En un uso real, aquí llamarías a processPDFWithRetries(file, apiKey)
+    return processPDFWithRetries;
+  }, [processPDFWithRetries]);
+
   return (
     <div className="p-4">
       <h2 className="text-xl font-bold mb-4">Procesamiento de PDF con Reintentos</h2>
@@ -76,6 +83,13 @@ export const ExamplePDFProcessing = () => {
           <li>Indicador visual del progreso de reintentos</li>
           <li>Mensajes de error mejorados y actionables</li>
         </ul>
+        
+        <button 
+          onClick={handleTestProcess}
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Probar sistema (demo)
+        </button>
       </div>
     </div>
   );
