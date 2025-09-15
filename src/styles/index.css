@@ -90,25 +90,25 @@
 /* Dark Theme */
 [data-theme="dark"] {
   /* === BACKGROUNDS === */
-  --bg-primary: #0f172a;          /* Main background - más oscuro */
-  --bg-secondary: #1e293b;        /* Secondary background */  
-  --bg-tertiary: #334155;         /* Tertiary background */
-  --bg-elevated: #1e293b;         /* Elevated surfaces */
-  --bg-input: #334155;            /* Input fields */
-  --bg-disabled: #475569;         /* Disabled elements */
+  --bg-primary: #1e293b;          /* slate-800 - más suave que slate-900 */
+  --bg-secondary: #334155;        /* slate-700 - mejor balance */  
+  --bg-tertiary: #475569;         /* slate-600 - más visible */
+  --bg-elevated: #374151;         /* gray-700 - para cards y elementos elevados */
+  --bg-input: #374151;            /* gray-700 - inputs más visibles */
+  --bg-disabled: #4b5563;         /* gray-600 - disabled elements */
   
   /* === TEXT COLORS === */
-  --text-primary: #f8fafc;        /* Texto principal - SUAVIZADO: blanco más cálido y menos agresivo */
-  --text-secondary: #e2e8f0;      /* Texto secundario - mantiene buena legibilidad */
-  --text-tertiary: #cbd5e1;       /* Texto terciario - más visible */
-  --text-disabled: #64748b;       /* Disabled text */
-  --text-inverse: #0f172a;        /* Text on light backgrounds */
+  --text-primary: #e2e8f0;        /* slate-200 - menos agresivo que #f8fafc */
+  --text-secondary: #cbd5e1;      /* slate-300 - más suave */
+  --text-tertiary: #94a3b8;       /* slate-400 - mejor jerarquía visual */
+  --text-disabled: #64748b;       /* slate-500 - disabled text */
+  --text-inverse: #1f2937;        /* gray-800 - texto on light backgrounds */
   
   /* === BORDERS === */
-  --border-primary: #475569;      /* Primary borders */
-  --border-secondary: #64748b;    /* Secondary borders */
-  --border-focus: #60a5fa;        /* Focus borders */
-  --border-error: #f87171;        /* Error borders */
+  --border-primary: #475569;      /* slate-600 - más visible */
+  --border-secondary: #64748b;    /* slate-500 - mejor definición */
+  --border-focus: #60a5fa;        /* blue-400 - focus borders */
+  --border-error: #f87171;        /* red-400 - error borders */
   
   /* === SEMANTIC COLORS === */
   --color-primary: #60a5fa;       /* Primary color */
@@ -129,7 +129,7 @@
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
   
   /* === OVERLAY === */
-  --overlay: rgba(0, 0, 0, 0.8);   /* For modals */
+  --overlay: rgba(0, 0, 0, 0.6);   /* Más suave que 0.8 para modals */
   
   /* === GRADIENTS === */
   --gradient-primary: linear-gradient(135deg, #60a5fa, #3b82f6);
@@ -141,7 +141,7 @@
   /* === BUTTON SPECIFIC COLORS - DARK THEME === */
   --btn-primary-bg: #3b82f6;
   --btn-primary-border: #3b82f6;
-  --btn-primary-text: #f8fafc;        /* Texto de botón primary suavizado */
+  --btn-primary-text: #e2e8f0;        /* slate-200 - texto de botón suavizado */
   --btn-primary-hover-bg: #2563eb;
   --btn-primary-hover-border: #2563eb;
   --btn-primary-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
@@ -149,7 +149,7 @@
   
   --btn-secondary-bg: #6b7280;
   --btn-secondary-border: #6b7280;
-  --btn-secondary-text: #f8fafc;      /* Texto de botón secondary suavizado */
+  --btn-secondary-text: #e2e8f0;      /* slate-200 - texto de botón secondary suavizado */
   --btn-secondary-hover-bg: #4b5563;
   --btn-secondary-hover-border: #4b5563;
   --btn-secondary-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);

@@ -57,7 +57,7 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
       </div>
 
       {/* Dropdown Menu */}
-      <div className="absolute right-0 mt-2 w-52 bg-card rounded-lg shadow-xl border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+      <div className="absolute right-0 mt-2 w-52 bg-elevated rounded-lg shadow-2xl border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden backdrop-blur-sm">
         <div className="py-2">
           {items.map((item) => {
             const isItemActive = location.pathname === item.path;

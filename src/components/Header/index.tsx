@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
       }`}
     >
       {/* Glass effect background */}
-      <div className="absolute inset-0 bg-background/80 backdrop-blur-md border-b border-border" />
+      <div className="absolute inset-0 bg-background/95 backdrop-blur-md border-b border-border" />
       
       {/* Content */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
