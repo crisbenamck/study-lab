@@ -49,7 +49,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
 
   const baseButtonClasses = "inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-md cursor-pointer transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-white border shadow-sm";
   const buttonClasses = isLoadingFile
-    ? `${baseButtonClasses} bg-gray-400 border-gray-400 cursor-not-allowed`
+    ? `${baseButtonClasses} bg-gray-400 dark:bg-gray-600 border-gray-400 dark:border-gray-600 cursor-not-allowed theme-transition`
     : `${baseButtonClasses} bg-blue-600 border-blue-600 hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0`;
 
   if (selectedFile) {
@@ -74,12 +74,12 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
         </div>
       )}
 
-      <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 mb-6">
-        <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+      <div className="border-2 border-dashed border-primary rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 transition-all duration-300 mb-6 theme-transition">
+        <Upload className="w-12 h-12 text-tertiary mx-auto mb-4" />
+        <h3 className="text-lg font-semibold text-primary mb-2">
           Arrastra un archivo PDF aquí
         </h3>
-        <p className="text-gray-600 mb-6 font-medium">
+        <p className="text-secondary mb-6 font-medium">
           o haz clic para seleccionar un archivo
         </p>
 

@@ -23,20 +23,20 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   onDelete 
 }) => {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all duration-200 overflow-hidden">
+    <div className="bg-elevated rounded-xl shadow-theme-sm border border-primary hover:shadow-theme-md transition-all duration-200 overflow-hidden theme-transition">
       {/* Header de la pregunta */}
-      <div className="bg-gray-50 px-6 py-4 border-b border-gray-100">
+      <div className="bg-secondary px-6 py-4 border-b border-primary">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-16 h-10 bg-blue-200 rounded-xl flex items-center justify-center mx-2 my-0.5">
-              <span className="text-black font-semibold text-lg tracking-wide select-none">
+            <div className="w-16 h-10 bg-blue-200 dark:bg-blue-800 rounded-xl flex items-center justify-center mx-2 my-0.5 theme-transition">
+              <span className="text-primary font-semibold text-lg tracking-wide select-none">
                 {formatQuestionNumber(question.question_number)}
               </span>
             </div>
             <div>
               <div className="flex items-center gap-3 mt-1">
                 {question.requires_multiple_answers && (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 theme-transition">
                     Múltiples respuestas
                   </span>
                 )}
@@ -69,40 +69,40 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
       <div className="p-6">
         {/* Texto de la pregunta */}
         <div className="mb-6">
-          <h4 className="text-sm font-bold text-black mb-2">Pregunta:</h4>
-          <p className="text-gray-900 leading-relaxed text-base">
+          <h4 className="text-sm font-bold text-primary mb-2">Pregunta:</h4>
+          <p className="text-primary leading-relaxed text-base">
             {question.question_text}
           </p>
         </div>
 
         {/* Opciones de respuesta */}
         <div className="mb-6">
-          <h4 className="text-sm font-bold text-black mb-3">Opciones de respuesta:</h4>
+          <h4 className="text-sm font-bold text-primary mb-3">Opciones de respuesta:</h4>
           <div className="grid gap-3">
             {question.options.map((option, optionIndex) => (
               <div
                 key={`${question.question_number}-${option.option_letter}-${optionIndex}`}
-                className={`flex items-center gap-3 p-3 rounded-lg border transition-colors ${
+                className={`flex items-center gap-3 p-3 rounded-lg border transition-colors theme-transition ${
                   option.is_correct 
-                    ? 'bg-green-50 border-green-200' 
-                    : 'bg-gray-50 border-gray-200'
+                    ? 'bg-theme-success border-green-200 dark:border-green-700' 
+                    : 'bg-secondary border-primary'
                 }`}
               >
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold theme-transition ${
                   option.is_correct 
-                    ? 'bg-green-100 text-green-700' 
-                    : 'bg-gray-100 text-gray-600'
+                    ? 'bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-200' 
+                    : 'bg-tertiary text-secondary'
                 }`}>
                   {option.option_letter}
                 </div>
-                <span className="flex-1 text-gray-900">
+                <span className="flex-1 text-primary">
                   {option.option_text}
                 </span>
                 <div className="flex items-center">
                   {option.is_correct ? (
-                    <CheckIcon className="w-5 h-5 text-green-600" />
+                    <CheckIcon className="w-5 h-5 text-green-600 dark:text-green-400" />
                   ) : (
-                    <CloseIcon className="w-5 h-5 text-gray-400" />
+                    <CloseIcon className="w-5 h-5 text-tertiary" />
                   )}
                 </div>
               </div>
@@ -114,7 +114,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   <QuestionExplanation explanation={question.explanation} />
 
   {/* Fuente/Link */}
-  <h4 className="text-sm font-bold text-black mb-2">Fuente:</h4>
+  <h4 className="text-sm font-bold text-primary mb-2">Fuente:</h4>
   <QuestionSource link={question.link} />
       </div>
     </div>

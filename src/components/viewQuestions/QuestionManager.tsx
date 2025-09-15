@@ -190,16 +190,16 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
             Volver a la lista
           </Button>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-elevated rounded-xl shadow-theme-sm border border-primary p-6 theme-transition">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <EditIcon className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center theme-transition">
+                <EditIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">
+                <h1 className="text-2xl font-bold text-primary">
                   Editando Pregunta {formatQuestionNumber(editingQuestion.question_number)}
                 </h1>
-                <p className="text-gray-600">
+                <p className="text-secondary">
                   Modifica los campos necesarios y guarda los cambios
                 </p>
               </div>
@@ -224,17 +224,17 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
       <div className="mb-8">
 
         {/* Actions bar */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+        <div className="bg-elevated rounded-xl shadow-theme-sm border border-primary p-6 mb-8 theme-transition">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                <EyeIcon className="w-5 h-5 text-blue-600" />
+              <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center theme-transition">
+                <EyeIcon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-primary">
                   Biblioteca de Preguntas
                 </h2>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-secondary">
                   {questions.length} {questions.length === 1 ? 'pregunta guardada' : 'preguntas guardadas'}
                 </p>
               </div>
@@ -266,7 +266,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
 
         <div className="text-center mb-8">
           {/* Quick stats */}
-          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+          <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-secondary">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span>Total: {questions.length} preguntas</span>

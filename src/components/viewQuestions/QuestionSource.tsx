@@ -8,10 +8,10 @@ interface QuestionSourceProps {
 const QuestionSource: React.FC<QuestionSourceProps> = ({ link }) => {
   if (!link || link.trim() === '') {
     return (
-      <div className="border-t pt-4">
+      <div className="border-t border-primary pt-4">
         <div className="flex items-center gap-2 text-sm">
-          <LinkIcon className="w-4 h-4 text-gray-400 flex-shrink-0" />
-          <span className="text-gray-400 italic">
+          <LinkIcon className="w-4 h-4 text-tertiary flex-shrink-0" />
+          <span className="text-tertiary italic">
             No se proporcionó fuente para esta pregunta
           </span>
         </div>
@@ -30,20 +30,20 @@ const QuestionSource: React.FC<QuestionSourceProps> = ({ link }) => {
   };
 
   return (
-    <div className="border-t pt-4">
+    <div className="border-t border-primary pt-4">
       <div className="flex items-center gap-2 text-sm">
-        <LinkIcon className="w-4 h-4 text-gray-500 flex-shrink-0" />
+        <LinkIcon className="w-4 h-4 text-secondary flex-shrink-0" />
         {isValidUrl(link) ? (
           <a
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:text-blue-800 transition-colors truncate flex-1 hover:underline"
+            className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors truncate flex-1 hover:underline theme-transition"
           >
             {link}
           </a>
         ) : (
-          <span className="text-gray-700 truncate flex-1">
+          <span className="text-secondary truncate flex-1">
             {link}
           </span>
         )}
