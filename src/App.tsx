@@ -31,7 +31,6 @@ function App() {
     updateQuestion,
     clearAllQuestions,
     getNextQuestionNumber,
-    setCustomInitialNumber,
     isLoaded: questionsLoaded
   } = useLocalStorage();
 
@@ -114,8 +113,6 @@ function App() {
                 <CreateQuestionPage
                   onSubmit={handleSubmitQuestion}
                   nextQuestionNumber={getNextQuestionNumber()}
-                  onSetInitialNumber={setCustomInitialNumber}
-                  showInitialNumberField={questions.length === 0}
                 />
               } 
             />

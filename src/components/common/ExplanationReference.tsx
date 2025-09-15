@@ -1,5 +1,5 @@
 
-import React, { type FC } from 'react';
+import { type FC } from 'react';
 import { LinkIcon } from '../../icons';
 
 interface ExplanationReferenceProps {

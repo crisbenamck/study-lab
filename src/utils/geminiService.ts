@@ -21,17 +21,18 @@ export class GeminiService {
 
   /**
    * Cambia al siguiente modelo en caso de error de cuota
+   * Currently unused but kept for potential future use
    */
-  private switchToNextModel(): boolean {
-    if (this.currentModelIndex < this.FALLBACK_MODELS.length - 1) {
-      this.currentModelIndex++;
-      const newModel = this.FALLBACK_MODELS[this.currentModelIndex];
-      this.model = this.genAI.getGenerativeModel({ model: newModel });
-      console.log('🔄 Cambiando a modelo de respaldo:', newModel);
-      return true;
-    }
-    return false;
-  }
+  // private switchToNextModel(): boolean {
+  //   if (this.currentModelIndex < this.FALLBACK_MODELS.length - 1) {
+  //     this.currentModelIndex++;
+  //     const newModel = this.FALLBACK_MODELS[this.currentModelIndex];
+  //     this.model = this.genAI.getGenerativeModel({ model: newModel });
+  //     console.log('🔄 Cambiando a modelo de respaldo:', newModel);
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
   /**
    * Verifica si el error es de límite de cuota

@@ -1,5 +1,4 @@
 import React from 'react';
-import type { ReactNode } from 'react';
 import EmptyLibraryActionCard from './EmptyLibraryActionCard';
 import { PlusIcon, UploadIcon } from '../../icons';
 

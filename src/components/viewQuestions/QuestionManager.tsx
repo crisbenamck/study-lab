@@ -206,7 +206,6 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
             <QuestionForm
               onSubmit={handleSaveEdit}
               nextQuestionNumber={editingQuestion.question_number}
-              showInitialNumberField={false}
               initialData={questionToFormData(editingQuestion)}
               isEditing={true}
               onCancel={handleCancelEdit}
