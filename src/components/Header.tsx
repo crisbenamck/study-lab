@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
     { path: '/study-lab/study', label: 'Estudiar' }
   ];
 
-  const testApiItem = { path: '/study-lab/api-test', label: 'Test API' };
+  const testApiItem = { path: '/study-lab/gemini-api-test', label: 'Gemini Test API' };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">

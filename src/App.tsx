@@ -5,7 +5,7 @@ import HomePage from './pages/HomePage';
 import CreateQuestionPage from './pages/CreateQuestionPage';
 import ViewQuestionsPage from './pages/ViewQuestionsPage';
 import ImportPDFPage from './pages/ImportPDFPage';
-import TestAPIPage from './pages/TestAPIPage';
+import GeminiTestAPIPage from './pages/GeminiTestAPIPage';
 import StudyPage from './pages/StudyPage';
 import StudyFlashCardsPage from './pages/StudyFlashCardsPage';
 import StudyExamPage from './pages/StudyExamPage';
@@ -142,9 +142,9 @@ function App() {
               } 
             />
             <Route 
-              path="/study-lab/api-test" 
+              path="/study-lab/gemini-api-test" 
               element={
-                <TestAPIPage
+                <GeminiTestAPIPage
                   appState={appState}
                   showAlert={showAlert}
                 />
@@ -154,7 +154,7 @@ function App() {
             <Route 
               path="/study-lab/test" 
               element={
-                <TestAPIPage
+                <GeminiTestAPIPage
                   appState={appState}
                   showAlert={showAlert}
                 />

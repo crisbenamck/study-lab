@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import type { Question } from '../../types/Question';
 import { usePDFProcessing } from '../../hooks/usePDFProcessing';
-import ApiKeyConfigSection from './ApiKeyConfigSection';
+import ApiKeyConfig from '../common/ApiKeyConfig';
 import UserProgressSection from './UserProgressSection';
 import AutomaticModelsSection from './AutomaticModelsSection';
 import FileUploadArea from './FileUploadArea';
@@ -102,11 +102,12 @@ const PDFImport: React.FC<PDFImportProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
-      <ApiKeyConfigSection
+      <ApiKeyConfig
         geminiApiKey={geminiApiKey}
         saveGeminiApiKey={saveGeminiApiKey}
         currentGeminiModel={currentGeminiModel}
         fallbackStatus={fallbackStatus}
+        showModelInfo={true}
       />
 
       {hasApiKey && <AutomaticModelsSection />}

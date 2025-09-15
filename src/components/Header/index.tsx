@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
   const navItems = [
     { path: '/study-lab/', label: 'Inicio' },
     { path: '/study-lab/study', label: 'Estudiar' },
-    { path: '/study-lab/api-test', label: 'Test API' }
+    { path: '/study-lab/gemini-api-test', label: 'Gemini Test API' }
   ];
 
   return (

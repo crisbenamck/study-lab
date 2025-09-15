@@ -14,7 +14,7 @@ import ViewQuestionsPage from './pages/ViewQuestionsPage';
 import ImportPDFPage from './pages/ImportPDFPage';
 import StudyTestPage from './pages/StudyTestPage';
 import StudyFlashCardsPage from './pages/StudyFlashCardsPage';
-import TestAPIPage from './pages/TestAPIPage';
+import GeminiTestAPIPage from './pages/GeminiTestAPIPage';
 
 // Componentes mejorados
 import Layout from './components/Layout';
@@ -85,7 +85,7 @@ function App() {
             path="/test" 
             element={
               <Layout>
-                <TestAPIPage />
+                <GeminiTestAPIPage />
               </Layout>
             } 
           />
