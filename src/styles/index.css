@@ -178,13 +178,20 @@
    ======================== */
 
 @layer utilities {
-  /* Background utilities */
+  /* Background color utilities */
   .bg-primary { background-color: var(--bg-primary); }
   .bg-secondary { background-color: var(--bg-secondary); }
-  .bg-tertiary { background-color: var(--bg-tertiary); }
   .bg-elevated { background-color: var(--bg-elevated); }
+  .bg-modal { background-color: var(--bg-modal); }
   .bg-input { background-color: var(--bg-input); }
-  .bg-disabled { background-color: var(--bg-disabled); }
+  
+  /* Semantic background utilities */
+  .bg-background { background-color: var(--bg-primary); }
+  .bg-foreground { background-color: var(--text-primary); }
+  .bg-card { background-color: var(--bg-elevated); }
+  .bg-muted { background-color: var(--bg-secondary); }
+  .bg-primary-bg { background-color: var(--btn-primary-bg); }
+  .bg-secondary-bg { background-color: var(--btn-secondary-bg); }
   
   /* Text color utilities */
   .text-primary { color: var(--text-primary); }
