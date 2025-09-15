@@ -35,13 +35,13 @@ const ExamConfiguration: React.FC<ExamConfigurationProps> = ({
 
 			<div className="grid md:grid-cols-2 gap-6">
 				{/* Card: Mostrar respuestas */}
-				<div className="p-6 border border-gray-200 rounded-xl">
+				<div className="p-6 border border-border rounded-xl">
 					<div className="mb-3">
 						<h3 className="text-base font-semibold">
 							Mostrar Respuestas
 						</h3>
 					</div>
-						<p className="mb-4 text-sm text-gray-500">
+						<p className="mb-4 text-sm text-muted-foreground">
 						Elige cuándo quieres ver las respuestas correctas durante el examen
 						</p>
 
@@ -52,8 +52,8 @@ const ExamConfiguration: React.FC<ExamConfigurationProps> = ({
 								onClick={() => onShowAnswersModeChange(mode.id)}
 								className={`w-full p-3 rounded-lg border transition-colors text-left ${
 									showAnswersMode === mode.id
-										? 'border-blue-500 bg-blue-50'
-										: 'border-gray-200 hover:border-gray-300'
+										? 'border-primary bg-primary-light'
+										: 'border-border hover:border-border/60'
 								}`}
 							>
 								<h4 className="font-medium mb-1">{mode.title}</h4>
@@ -64,13 +64,13 @@ const ExamConfiguration: React.FC<ExamConfigurationProps> = ({
 				</div>
 
 				{/* Card: Límite de tiempo */}
-				<div className="p-6 border border-gray-200 rounded-xl">
+				<div className="p-6 border border-border rounded-xl">
 					<div className="mb-3">
 						<h3 className="text-base font-semibold">
 							Límite de Tiempo (opcional)
 						</h3>
 					</div>
-						<p className="mb-4 text-sm text-gray-500">
+						<p className="mb-4 text-sm text-muted-foreground">
 						Establece un tiempo límite para completar el examen. <b>Deja vacío para tiempo ilimitado</b>
 						</p>
 

@@ -56,8 +56,8 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({
           className={`
             absolute inset-0 w-5 h-5 transition-all duration-300
             ${isDark 
-              ? 'opacity-100 rotate-0 scale-100 text-slate-300' 
-              : 'opacity-0 -rotate-90 scale-75 text-slate-600'
+              ? 'opacity-100 rotate-0 scale-100 text-muted-foreground' 
+              : 'opacity-0 -rotate-90 scale-75 text-muted-foreground'
             }
           `}
         />

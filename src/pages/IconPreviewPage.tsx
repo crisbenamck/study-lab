@@ -71,12 +71,12 @@ const IconPreviewPage = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
         {icons.map((variant) => (
-          <div key={variant.id} className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 hover:shadow-xl transition-shadow duration-300">
+          <div key={variant.id} className="bg-card rounded-xl shadow-lg p-6 border border-border hover:shadow-xl transition-shadow duration-300">
             <div className="text-center mb-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-2">
+              <h3 className="text-xl font-bold text-card-foreground mb-2">
                 {variant.name}
               </h3>
-              <p className="text-gray-600 text-sm mb-2">
+              <p className="text-muted-foreground text-sm mb-2">
                 {variant.description}
               </p>
               <p className="text-blue-600 text-xs font-medium italic">
@@ -142,11 +142,11 @@ const IconPreviewPage = () => {
         ))}
       </div>
 
-      <div className="text-center mt-12 p-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-200">
-        <h3 className="text-2xl font-bold text-gray-900 mb-4">
+      <div className="text-center mt-12 p-8 bg-secondary-light rounded-xl border border-secondary">
+        <h3 className="text-2xl font-bold text-card-foreground mb-4">
           🎨 Paleta de Colores Educativos Study Lab
         </h3>
-        <p className="text-gray-700 text-base mb-6">
+        <p className="text-muted-foreground text-base mb-6">
           Cada color está diseñado con psicología educativa específica para diferentes momentos del aprendizaje
         </p>
         

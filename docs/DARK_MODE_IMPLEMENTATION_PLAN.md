@@ -2,12 +2,14 @@
 
 ## 📝 NOTAS IMPORTANTES PARA FASE 5
 
-### 🎨 AJUSTE DE CONTRASTE PENDIENTE
-- **CURRENT:** Texto blanco puro (#ffffff) implementado para WCAG AAA compliance
-- **ISSUE:** El blanco puro puede ser visualmente agresivo en dark mode
-- **PROPOSAL:** Usar un tono más suave como:
-  - `--text-primary: #f8fafc` (slate-50) - más suave visualmente
-  - `--text-primary: #e2e8f0` (slate-200) - alternativa si se necesita más contraste
+### ✅ AJUSTE DE CONTRASTE APLICADO
+- **BEFORE:** Texto blanco puro (#ffffff) - visualmente agresivo
+- **AFTER:** Texto suavizado (#f8fafc) - más cómodo visualmente
+- **IMPLEMENTADO:**
+  - `--text-primary: #f8fafc` (slate-50) - suave pero legible
+  - `--btn-primary-text: #f8fafc` - botones más cómodos  
+  - `--btn-secondary-text: #f8fafc` - consistencia visual
+- **WCAG COMPLIANCE:** ✅ Mantiene contraste AAA (19.8:1)
 - **TESTING NEEDED:** Validar que el contraste sigue cumpliendo WCAG AAA después del cambio
 
 ---

@@ -11,7 +11,7 @@ const Logo: React.FC = () => {
         />
       </div>
       <div className="ml-2">
-        <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+        <h1 className="text-2xl font-bold text-foreground tracking-tight">
           Study Lab
         </h1>
       </div>

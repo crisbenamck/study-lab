@@ -98,8 +98,8 @@
   --bg-disabled: #475569;         /* Disabled elements */
   
   /* === TEXT COLORS === */
-  --text-primary: #ffffff;        /* Texto principal - BLANCO PURO para máximo contraste */
-  --text-secondary: #e2e8f0;      /* Texto secundario - mucho más claro */
+  --text-primary: #f8fafc;        /* Texto principal - SUAVIZADO: blanco más cálido y menos agresivo */
+  --text-secondary: #e2e8f0;      /* Texto secundario - mantiene buena legibilidad */
   --text-tertiary: #cbd5e1;       /* Texto terciario - más visible */
   --text-disabled: #64748b;       /* Disabled text */
   --text-inverse: #0f172a;        /* Text on light backgrounds */
@@ -141,7 +141,7 @@
   /* === BUTTON SPECIFIC COLORS - DARK THEME === */
   --btn-primary-bg: #3b82f6;
   --btn-primary-border: #3b82f6;
-  --btn-primary-text: #ffffff;
+  --btn-primary-text: #f8fafc;        /* Texto de botón primary suavizado */
   --btn-primary-hover-bg: #2563eb;
   --btn-primary-hover-border: #2563eb;
   --btn-primary-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
@@ -149,7 +149,7 @@
   
   --btn-secondary-bg: #6b7280;
   --btn-secondary-border: #6b7280;
-  --btn-secondary-text: #ffffff;
+  --btn-secondary-text: #f8fafc;      /* Texto de botón secondary suavizado */
   --btn-secondary-hover-bg: #4b5563;
   --btn-secondary-hover-border: #4b5563;
   --btn-secondary-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);

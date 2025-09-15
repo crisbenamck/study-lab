@@ -23,15 +23,15 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
     <div className="relative group">
       <div className="relative">
         <div
-          className={`relative py-2 text-sm font-medium transition-all duration-200 cursor-pointer flex items-center group-hover:text-blue-600 ${
-            isActive ? 'text-blue-600' : 'text-gray-700'
+          className={`relative py-2 text-sm font-medium transition-all duration-200 cursor-pointer flex items-center group-hover:text-primary ${
+            isActive ? 'text-primary' : 'text-foreground'
           }`}
         >
           Gestor de Preguntas
           
           {/* Badge entre el texto y el ícono */}
           {questions.length > 0 && (
-            <div className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold ml-2 min-w-[20px]">
+            <div className="bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold ml-2 min-w-[20px]">
               {questions.length}
             </div>
           )}
@@ -48,7 +48,7 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
         
         {/* Underline indicator for active state */}
         <span 
-          className={`absolute bottom-0 left-0 h-0.5 bg-blue-600 transition-all duration-200 ${
+          className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-200 ${
             isActive 
               ? 'w-full' 
               : 'w-0 group-hover:w-full'
@@ -57,7 +57,7 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
       </div>
 
       {/* Dropdown Menu */}
-      <div className="absolute right-0 mt-2 w-52 bg-white rounded-lg shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+      <div className="absolute right-0 mt-2 w-52 bg-card rounded-lg shadow-xl border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
         <div className="py-2">
           {items.map((item) => {
             const isItemActive = location.pathname === item.path;
@@ -69,15 +69,15 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
                   to={item.path}
                   className={`block px-4 py-3 text-sm transition-colors relative focus:outline-none focus:ring-0 ${
                     isItemActive 
-                      ? 'bg-blue-50 text-blue-700 font-medium' 
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-primary-light text-primary font-medium' 
+                      : 'text-card-foreground hover:bg-muted hover:text-card-foreground'
                   }`}
                 >
                   {item.label}
                   
                   {/* Badge individual para Ver Preguntas en el dropdown */}
                   {isQuestionsPage && questions.length > 0 && (
-                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium px-1 min-w-[24px]">
+                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-primary text-primary-foreground text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium px-1 min-w-[24px]">
                       {questions.length}
                     </span>
                   )}
@@ -85,7 +85,7 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
                 
                 {/* Active indicator */}
                 {isItemActive && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-600" />
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />
                 )}
               </div>
             );

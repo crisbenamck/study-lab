@@ -27,15 +27,15 @@ const Navigation: React.FC<NavigationProps> = ({ items }) => {
             to={item.path}
             className={`relative py-2 text-sm font-medium transition-all duration-200 group focus:outline-none focus:ring-0 ${
               isActive 
-                ? 'text-blue-600' 
-                : 'text-gray-700 hover:text-blue-600'
+                ? 'text-primary' 
+                : 'text-foreground hover:text-primary'
             }`}
           >
             {item.label}
             
             {/* Underline indicator for active state */}
             <span 
-              className={`absolute bottom-0 left-0 h-0.5 bg-blue-600 transition-all duration-200 ${
+              className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-200 ${
                 isActive 
                   ? 'w-full' 
                   : 'w-0 group-hover:w-full'
