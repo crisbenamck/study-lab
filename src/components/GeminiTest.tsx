@@ -4,8 +4,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import Button from './common/Button';
 import ApiKeyConfig from './common/ApiKeyConfig';
 import { 
-  WriteIcon, LightBulbIcon, MessageIcon, 
-  CheckMarkIcon, ErrorIcon, WarningIcon
+  WriteIcon, LightBulbIcon, MessageIcon, ErrorIcon, WarningIcon
 } from '../icons';
 
 interface RequestInfo {
@@ -281,64 +280,51 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
 
       {/* Información de la petición */}
       {requestInfo && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
           <div className={`p-6 border-l-4 ${requestInfo.success 
-            ? 'border-l-success-500 bg-gradient-to-r from-success-50 to-success-25' 
-            : 'border-l-error-500 bg-gradient-to-r from-error-50 to-error-25'}`}
+            ? 'border-l-green-500' 
+            : 'border-l-red-500'}`}
           >
-            <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h3 className={`font-semibold text-lg flex items-center gap-2
-                ${requestInfo.success ? 'text-success-700' : 'text-error-700'}`}
-              >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-lg flex items-center gap-2 text-gray-800">
                 <AlertCircle size={20} />
-                {requestInfo.success ? 'Información de la petición' : 'Error en la petición'}
+                Información de la petición
               </h3>
-              <div className={`flex items-center gap-2 text-xs px-3 py-1 rounded-full font-medium
+              <span className={`text-sm px-2 py-1 rounded font-medium
                 ${requestInfo.success 
-                  ? 'text-success-600 bg-success-100' 
-                  : 'text-error-600 bg-error-100'}`}
+                  ? 'text-green-700 bg-green-100' 
+                  : 'text-red-700 bg-red-100'}`}
               >
-                {requestInfo.success ? (
-                  <>
-                    <CheckMarkIcon className="w-4 h-4" />
-                    Petición exitosa
-                  </>
-                ) : (
-                  <>
-                    <ErrorIcon className="w-4 h-4" />
-                    Error en la petición
-                  </>
-                )}
+                {requestInfo.success ? 'Exitosa' : 'Error'}
+              </span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div>
+                <span className="block text-gray-500 text-sm font-medium">Modelo:</span>
+                <div className="font-mono text-gray-900 font-semibold">
+                  {requestInfo.model}
+                </div>
               </div>
-            </div>              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-                <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-                  <span className="block text-gray-500 text-xs font-medium uppercase tracking-wide">Modelo:</span>
-                  <div className="font-mono mt-2 text-gray-900 font-bold text-sm">
-                    {requestInfo.model}
-                  </div>
+              <div>
+                <span className="block text-gray-500 text-sm font-medium">Duración:</span>
+                <div className="font-mono text-gray-900 font-semibold">
+                  {requestInfo.duration}
                 </div>
-                <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-                  <span className="block text-gray-500 text-xs font-medium uppercase tracking-wide">Duración:</span>
-                  <div className="font-mono mt-2 text-gray-900 font-bold text-sm">
-                    {requestInfo.duration}
-                  </div>
-                </div>
-                <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-                  <span className="block text-gray-500 text-xs font-medium uppercase tracking-wide">Hora:</span>
-                  <div className="font-mono mt-2 text-gray-900 font-bold text-sm">
-                    {requestInfo.timestamp}
-                  </div>
-                </div>
-                {requestInfo.responseLength && (
-                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
-                    <span className="block text-gray-500 text-xs font-medium uppercase tracking-wide">Caracteres:</span>
-                    <div className="font-mono mt-2 text-gray-900 font-bold text-sm">
-                      {requestInfo.responseLength.toLocaleString()}
-                    </div>
-                  </div>
-                )}
               </div>
+              <div>
+                <span className="block text-gray-500 text-sm font-medium">Hora:</span>
+                <div className="font-mono text-gray-900 font-semibold">
+                  {requestInfo.timestamp}
+                </div>
+              </div>
+              {requestInfo.responseLength && (
+                <div>
+                  <span className="block text-gray-500 text-sm font-medium">Caracteres:</span>
+                  <div className="font-mono text-gray-900 font-semibold">
+                    {requestInfo.responseLength.toLocaleString()}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -346,26 +332,20 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
 
       {/* Respuesta */}
       {response && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-6 border-l-4 border-l-success-500 bg-gradient-to-r from-success-50 to-success-25">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="p-6 border-l-4 border-l-green-500">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-lg flex items-center gap-2 text-success-700">
+              <h3 className="font-semibold text-lg flex items-center gap-2 text-gray-800">
                 <MessageIcon className="w-5 h-5" />
                 Respuesta de Gemini
               </h3>
-              <div className="flex items-center gap-2 text-xs text-success-600 bg-success-100 px-3 py-1 rounded-full">
-                <CheckMarkIcon className="w-4 h-4" />
-                Petición exitosa
-              </div>
-            </div>
-            <div className="bg-white rounded-lg p-8 shadow-inner border border-success-200 relative">
-              <div className="absolute top-4 right-4 text-xs text-gray-400 font-medium">
+              <span className="text-sm text-gray-500">
                 {response.length.toLocaleString()} caracteres
-              </div>
-              <div className="text-base leading-relaxed text-gray-800 max-w-none prose prose-sm">
-                <div className="whitespace-pre-wrap break-words">
-                  {response}
-                </div>
+              </span>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="text-gray-800 leading-relaxed whitespace-pre-wrap">
+                {response}
               </div>
             </div>
           </div>
@@ -374,14 +354,14 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
 
       {/* Error */}
       {error && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="p-6 border-l-4 border-l-error-500 bg-error-50">
-            <h3 className="font-semibold text-lg flex items-center gap-2 text-error-700 mb-4">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div className="p-6 border-l-4 border-l-red-500">
+            <h3 className="font-semibold text-lg flex items-center gap-2 text-gray-800 mb-4">
               <ErrorIcon className="w-5 h-5" />
               Error
             </h3>
-            <div className="bg-white rounded-lg p-6 shadow-inner border border-error-200">
-              <div className="text-sm leading-relaxed font-mono break-words overflow-hidden text-error-600">
+            <div className="bg-red-50 rounded-lg p-4 border border-red-200">
+              <div className="text-red-700 text-sm leading-relaxed break-words">
                 {error}
               </div>
             </div>
