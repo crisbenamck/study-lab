@@ -3,7 +3,7 @@ import type { ExtractedQuestion } from '../types/PDFProcessor';
 
 export class GeminiPdfService {
   private ai: GoogleGenAI;
-  private readonly GEMINI_MODEL = 'gemini-2.5-flash';
+  private readonly GEMINI_MODEL = 'gemini-2.5-pro';
 
   constructor(apiKey: string) {
     this.ai = new GoogleGenAI({ apiKey });
@@ -107,7 +107,7 @@ IMPORTANT:
         
         // Crear timeout para evitar colgado
         const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Timeout: Gemini tardó más de 2 minutos')), 120000)
+          setTimeout(() => reject(new Error('Timeout: Gemini tardó más de 2 minutos')), 300000)
         );
         
         const geminiPromise = this.ai.models.generateContent({
