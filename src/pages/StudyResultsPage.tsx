@@ -34,7 +34,7 @@ const StudyResultsPage: React.FC = () => {
               </p>
             </div>
             <button
-              onClick={() => navigate('/study')}
+              onClick={() => navigate('/study-lab/study')}
               className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -89,9 +89,9 @@ const StudyResultsPage: React.FC = () => {
     localStorage.setItem('repeat-session-config', JSON.stringify(sessionConfig));
     
     if (sessionConfig.mode === 'flashcards') {
-      navigate('/study/flashcards');
+      navigate('/study-lab/study/flashcards');
     } else {
-      navigate('/study/exam');
+      navigate('/study-lab/study/exam');
     }
   };
 
@@ -100,7 +100,7 @@ const StudyResultsPage: React.FC = () => {
     if (failedQuestions.length === 0) return;
     
     localStorage.setItem('failed-questions-practice', JSON.stringify(failedQuestions));
-    navigate('/study');
+    navigate('/study-lab/study');
   };
 
   // Función para obtener configuración de color según el puntaje
@@ -438,7 +438,7 @@ const StudyResultsPage: React.FC = () => {
             {/* ACCIONES */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 border-t" style={{ borderColor: 'var(--border-light)' }}>
               <button
-                onClick={() => navigate('/study')}
+                onClick={() => navigate('/study-lab/study')}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

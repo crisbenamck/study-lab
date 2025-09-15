@@ -12,17 +12,17 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ questions }) => {
 
   const questionManagerItems = [
-    { path: '/create', label: 'Crear Preguntas' },
-    { path: '/questions', label: 'Ver Preguntas' },
-    { path: '/import', label: 'Importar PDF' }
+    { path: '/study-lab/create', label: 'Crear Preguntas' },
+    { path: '/study-lab/questions', label: 'Ver Preguntas' },
+    { path: '/study-lab/import', label: 'Importar PDF' }
   ];
 
   const navItems = [
-    { path: '/', label: 'Inicio' },
-    { path: '/study', label: 'Estudiar' }
+    { path: '/study-lab/', label: 'Inicio' },
+    { path: '/study-lab/study', label: 'Estudiar' }
   ];
 
-  const testApiItem = { path: '/api-test', label: 'Test API' };
+  const testApiItem = { path: '/study-lab/api-test', label: 'Test API' };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">

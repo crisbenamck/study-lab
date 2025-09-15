@@ -49,13 +49,13 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
           localStorage.removeItem('repeat-session-config');
         } catch {
           localStorage.removeItem('repeat-session-config');
-          navigate('/study');
+          navigate('/study-lab/study');
         }
       } else {
         // Add a small delay to ensure the session is created
         setTimeout(() => {
           if (!currentSession || currentSession.config.mode !== 'flashcards') {
-            navigate('/study');
+            navigate('/study-lab/study');
           }
         }, 100);
       }
@@ -92,7 +92,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
           };
 
           completeSession(updatedSession);
-          navigate('/study/session-results');
+          navigate('/study-lab/study/session-results');
         }
       );
     } catch {
@@ -107,7 +107,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
         '¿Estás seguro de que quieres salir?',
         () => {
           abandonSession();
-          navigate('/study');
+          navigate('/study-lab/study');
         }
       );
     } catch {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { Question, QuestionFormData } from '../../types/Question';
 import { formatQuestionNumber, downloadQuestionsAsJSON } from '../../utils/downloadUtils';
 import QuestionForm from '../common/QuestionForm';
@@ -33,6 +34,7 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
   showAlert,
   showConfirmModal
 }) => {
+  const navigate = useNavigate();
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [questionsPerPage, setQuestionsPerPage] = useState(5);
@@ -166,8 +168,8 @@ const QuestionManager: React.FC<QuestionManagerProps> = ({
   if (questions.length === 0) {
     return (
       <EmptyLibraryActions
-        onCreate={() => window.location.href = '/create'}
-        onImport={() => window.location.href = '/import'}
+        onCreate={() => navigate('/study-lab/create')}
+        onImport={() => navigate('/study-lab/import')}
       />
     );
   }

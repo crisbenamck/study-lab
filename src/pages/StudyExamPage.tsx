@@ -47,7 +47,7 @@ const StudyTestPage: React.FC = () => {
           localStorage.removeItem('repeat-session-config');
         } catch {
           localStorage.removeItem('repeat-session-config');
-          navigate('/study');
+          navigate('/study-lab/study');
         }
       } else {
         setTimeout(() => {
@@ -69,7 +69,7 @@ const StudyTestPage: React.FC = () => {
           }
           // Only allow mode 'exam' for this page
           if (!session || session.config.mode !== 'exam') {
-            navigate('/study');
+            navigate('/study-lab/study');
           } else {
             if (session.config.timeLimit) {
               setTimeLeft(session.config.timeLimit * 60);
@@ -89,7 +89,7 @@ const StudyTestPage: React.FC = () => {
           // Time is up, finish the exam automatically
           if (currentSession) {
             completeSession(currentSession);
-            navigate('/study/session-results');
+            navigate('/study-lab/study/session-results');
           }
           return 0;
         }
@@ -221,7 +221,7 @@ const StudyTestPage: React.FC = () => {
       // If last question, finish exam automatically
       if (currentSession) {
         completeSession(currentSession);
-        navigate('/study/session-results');
+        navigate('/study-lab/study/session-results');
       }
     }
   };
@@ -267,7 +267,7 @@ const StudyTestPage: React.FC = () => {
     } else {
   // If last question, finish exam
       completeSession(currentSession);
-      navigate('/study/session-results');
+      navigate('/study-lab/study/session-results');
     }
   };
 
@@ -292,9 +292,9 @@ const StudyTestPage: React.FC = () => {
   const handleExit = () => {
     if (currentSession) {
       completeSession(currentSession);
-      navigate('/study/session-results');
+      navigate('/study-lab/study/session-results');
     } else {
-      navigate('/study');
+      navigate('/study-lab/study');
     }
   };
 

@@ -24,7 +24,7 @@ const EmptyQuestionsState: React.FC = () => {
         </div>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button
-            onClick={() => navigate('/create')}
+            onClick={() => navigate('/study-lab/create')}
             variant="primary"
             size="lg"
             icon={<PlusIcon />}
@@ -33,7 +33,7 @@ const EmptyQuestionsState: React.FC = () => {
             Crear Preguntas
           </Button>
           <Button
-            onClick={() => navigate('/import')}
+            onClick={() => navigate('/study-lab/import')}
             variant="secondary"
             buttonType="outline"
             size="lg"

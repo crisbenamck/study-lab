@@ -80,7 +80,7 @@ function App() {
     addQuestionsWithNumbers(importedQuestions);
 
     // Navegar a la página de ver preguntas para ver las preguntas agregadas
-    navigate('/questions');
+    navigate('/study-lab/questions');
   };
 
   // Mostrar loading mientras se cargan los datos del localStorage
@@ -104,11 +104,11 @@ function App() {
           <div className="px-4 sm:px-6 lg:px-8">
             <Routes>
             <Route 
-              path="/" 
+              path="/study-lab/" 
               element={<HomePage />} 
             />
             <Route 
-              path="/create" 
+              path="/study-lab/create" 
               element={
                 <CreateQuestionPage
                   onSubmit={handleSubmitQuestion}
@@ -117,7 +117,7 @@ function App() {
               } 
             />
             <Route 
-              path="/questions" 
+              path="/study-lab/questions" 
               element={
                 <ViewQuestionsPage
                   questions={questions}
@@ -130,7 +130,7 @@ function App() {
               } 
             />
             <Route 
-              path="/import" 
+              path="/study-lab/import" 
               element={
                 <ImportPDFPage
                   onImportQuestions={handleImportQuestions}
@@ -142,7 +142,7 @@ function App() {
               } 
             />
             <Route 
-              path="/api-test" 
+              path="/study-lab/api-test" 
               element={
                 <TestAPIPage
                   appState={appState}
@@ -152,7 +152,7 @@ function App() {
             />
             {/* Mantener /test como alias para compatibilidad */}
             <Route 
-              path="/test" 
+              path="/study-lab/test" 
               element={
                 <TestAPIPage
                   appState={appState}
@@ -161,38 +161,38 @@ function App() {
               } 
             />
             <Route 
-              path="/study" 
+              path="/study-lab/study" 
               element={<StudyPage />} 
             />
             <Route 
-              path="/study/flashcards" 
+              path="/study-lab/study/flashcards" 
               element={<StudyFlashCardsPage showConfirm={showConfirm} />} 
             />
             <Route 
-              path="/study/exam" 
+              path="/study-lab/study/exam" 
               element={<StudyExamPage />} 
             />
             {/* Mantener /study/test como alias para compatibilidad */}
             <Route 
-              path="/study/test" 
+              path="/study-lab/study/test" 
               element={<StudyExamPage />} 
             />
             <Route 
-              path="/study/session-results" 
+              path="/study-lab/study/session-results" 
               element={<StudyResultsPage />} 
             />
             {/* Mantener /study/results como alias para compatibilidad */}
             <Route 
-              path="/study/results" 
+              path="/study-lab/study/results" 
               element={<StudyResultsPage />} 
             />
             {/* Rutas de desarrollo/demo */}
             <Route 
-              path="/dev/buttons" 
+              path="/study-lab/dev/buttons" 
               element={<ButtonDemoPage />} 
             />
             <Route 
-              path="/dev/icons" 
+              path="/study-lab/dev/icons" 
               element={<IconPreviewPage />} 
             />
           </Routes>

@@ -151,8 +151,8 @@ const StudyPage: React.FC = () => {
           {/* Show empty state if there are no questions */}
           {questions.length === 0 ? (
             <EmptyLibraryActions
-              onCreate={() => window.location.href = '/create'}
-              onImport={() => window.location.href = '/import'}
+              onCreate={() => navigate('/study-lab/create')}
+              onImport={() => navigate('/study-lab/import')}
             />
           ) : (
             <>
