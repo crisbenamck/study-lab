@@ -17,8 +17,8 @@ const HomePage: React.FC = () => {
       description: 'Diseña preguntas efectivas para tus exámenes con opciones múltiples, explicaciones y referencias educativas.',
       icon: <EditIcon className="w-8 h-8" />,
       link: '/study-lab/create',
-      color: 'bg-primary-light text-primary',
-      borderColor: 'border-primary-light hover:border-primary',
+      color: 'bg-blue-50 text-blue-600',
+      borderColor: 'border-blue-200 hover:border-blue-300',
       features: [
         'Formulario intuitivo con validación',
         'Opciones de respuesta dinámicas',
@@ -32,8 +32,8 @@ const HomePage: React.FC = () => {
       description: 'Organiza y gestiona tu biblioteca de preguntas de manera eficiente. Edita, elimina y descarga tu contenido.',
       icon: <InfoIcon className="w-8 h-8" />,
       link: '/study-lab/questions',
-      color: 'bg-success-light text-success',
-      borderColor: 'border-success-light hover:border-success',
+      color: 'bg-green-50 text-green-600',
+      borderColor: 'border-green-200 hover:border-green-300',
       features: [
         'Vista completa de todas las preguntas',
         'Edición in-situ de contenido',
@@ -47,8 +47,8 @@ const HomePage: React.FC = () => {
       description: 'Sube archivos PDF para extraer preguntas automáticamente usando inteligencia artificial.',
       icon: <UploadIcon className="w-8 h-8" />,
       link: '/study-lab/import',
-      color: 'bg-secondary-light text-secondary',
-      borderColor: 'border-secondary-light hover:border-secondary',
+      color: 'bg-purple-50 text-purple-600',
+      borderColor: 'border-purple-200 hover:border-purple-300',
       features: [
         'Procesamiento automático de PDF',
         'Extracción inteligente con IA',
@@ -62,8 +62,8 @@ const HomePage: React.FC = () => {
       description: 'Practica con tus preguntas usando diferentes modalidades: flashcards interactivas o exámenes simulados.',
       icon: <BookIcon className="w-8 h-8" />,
       link: '/study-lab/study',
-      color: 'bg-warning-light text-warning',
-      borderColor: 'border-warning-light hover:border-warning',
+      color: 'bg-orange-50 text-orange-600',
+      borderColor: 'border-orange-200 hover:border-orange-300',
       features: [
         'Modo Flashcards: estudio interactivo',
         'Modo Examen: simulacros con tiempo',
@@ -77,8 +77,8 @@ const HomePage: React.FC = () => {
       description: 'Revisa tu desempeño en sesiones completadas con estadísticas detalladas y análisis de progreso.',
       icon: <ChartIcon className="w-8 h-8" />,
       link: '/study-lab/study/session-results',
-      color: 'bg-info-light text-info',
-      borderColor: 'border-info-light hover:border-info',
+      color: 'bg-indigo-50 text-indigo-600',
+      borderColor: 'border-indigo-200 hover:border-indigo-300',
       features: [
         'Estadísticas detalladas de rendimiento',
         'Análisis de respuestas incorrectas',
@@ -92,8 +92,8 @@ const HomePage: React.FC = () => {
       description: 'Prueba la conexión y configuración de la API de Google AI Studio para asegurar el correcto funcionamiento.',
       icon: <ExamIcon className="w-8 h-8" />,
       link: '/study-lab/gemini-api-test',
-      color: 'bg-danger-light text-danger',
-      borderColor: 'border-danger-light hover:border-danger',
+      color: 'bg-red-50 text-red-600',
+      borderColor: 'border-red-200 hover:border-red-300',
       features: [
         'Verificación de conectividad',
         'Validación de API key',
@@ -157,20 +157,20 @@ const HomePage: React.FC = () => {
             🚀 Primeros pasos recomendados
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-4 bg-primary-light rounded-lg">
-              <div className="text-2xl font-bold text-primary mb-2">1</div>
-              <h3 className="font-semibold text-card-foreground mb-2">Configura la API</h3>
-              <p className="text-sm text-muted-foreground">Realiza el test de API para asegurar la conectividad con Google AI Studio</p>
+            <div className="text-center p-4 bg-blue-50 rounded-lg">
+              <div className="text-2xl font-bold text-blue-600 mb-2">1</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Configura la API</h3>
+              <p className="text-sm text-gray-600">Realiza el test de API para asegurar la conectividad con Google AI Studio</p>
             </div>
-            <div className="text-center p-4 bg-success-light rounded-lg">
-              <div className="text-2xl font-bold text-success mb-2">2</div>
-              <h3 className="font-semibold text-card-foreground mb-2">Crea o Importa</h3>
-              <p className="text-sm text-muted-foreground">Añade preguntas manualmente o importa desde archivos PDF</p>
+            <div className="text-center p-4 bg-green-50 rounded-lg">
+              <div className="text-2xl font-bold text-green-600 mb-2">2</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Crea o Importa</h3>
+              <p className="text-sm text-gray-600">Añade preguntas manualmente o importa desde archivos PDF</p>
             </div>
-            <div className="text-center p-4 bg-warning-light rounded-lg">
-              <div className="text-2xl font-bold text-warning mb-2">3</div>
-              <h3 className="font-semibold text-card-foreground mb-2">Comienza a Estudiar</h3>
-              <p className="text-sm text-muted-foreground">Utiliza flashcards o exámenes simulados para practicar</p>
+            <div className="text-center p-4 bg-orange-50 rounded-lg">
+              <div className="text-2xl font-bold text-orange-600 mb-2">3</div>
+              <h3 className="font-semibold text-gray-900 mb-2">Comienza a Estudiar</h3>
+              <p className="text-sm text-gray-600">Utiliza flashcards o exámenes simulados para practicar</p>
             </div>
           </div>
         </div>
