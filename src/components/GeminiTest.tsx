@@ -178,7 +178,7 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
       {/* Configuración de API - Grid mejorado */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          <SettingsIcon className="w-5 h-5 text-gray-700" />
+          <SettingsIcon className="w-5 h-5 text-gray-800" />
           Configuración
         </h2>
         
@@ -202,11 +202,11 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
             />
             <div className="mt-2 min-h-[1.5rem]">
               {getApiKeyValidationStatus().status ? (
-                <p className="text-xs font-medium text-gray-700">
+                <p className="text-xs font-medium text-gray-900">
                   {getApiKeyValidationStatus().status}
                 </p>
               ) : (
-                <p className="text-xs text-gray-600">
+                <p className="text-xs text-gray-800">
                   Obtén tu clave en Google AI Studio
                 </p>
               )}
@@ -249,13 +249,13 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
       {/* Sección de Prompt - Contenedor mejorado */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          <WriteIcon className="w-5 h-5 text-gray-700" />
+          <WriteIcon className="w-5 h-5 text-gray-800" />
           Prompt de prueba
         </h2>
         
         {/* Ejemplos rápidos */}
         <div className="mb-8">
-          <p className="text-sm font-medium mb-4 text-gray-700 flex items-center gap-2">
+          <p className="text-sm font-medium mb-4 text-gray-900 flex items-center gap-2">
             <LightBulbIcon className="w-4 h-4 text-amber-600" />
             Prueba con estos ejemplos:
           </p>
@@ -305,7 +305,7 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
       {/* Botones de acción */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
-          <RocketIcon className="w-5 h-5 text-gray-700" />
+          <RocketIcon className="w-5 h-5 text-gray-800" />
           Acciones
         </h2>
         
@@ -491,12 +491,12 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
                     <KeyIcon className="w-4 h-4 text-primary-600" />
                     API Key
                   </h4>
-                  <div className="text-sm leading-relaxed text-gray-700 space-y-2">
-                    <p><strong>1.</strong> Ve a Google AI Studio</p>
-                    <p><strong>2.</strong> Inicia sesión con Google</p>
-                    <p><strong>3.</strong> Crea/selecciona proyecto</p>
-                    <p><strong>4.</strong> Genera nueva API key</p>
-                    <p><strong>5.</strong> Copia y pégala arriba</p>
+                  <div className="text-sm leading-relaxed text-gray-900 space-y-2">
+                    <p><strong className="text-gray-900">1.</strong> Ve a Google AI Studio</p>
+                    <p><strong className="text-gray-900">2.</strong> Inicia sesión con Google</p>
+                    <p><strong className="text-gray-900">3.</strong> Crea/selecciona proyecto</p>
+                    <p><strong className="text-gray-900">4.</strong> Genera nueva API key</p>
+                    <p><strong className="text-gray-900">5.</strong> Copia y pégala arriba</p>
                   </div>
                 </div>
 
@@ -506,11 +506,12 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
                     <RobotIcon className="w-4 h-4 text-primary-600" />
                     Modelos
                   </h4>
-                  <div className="text-sm leading-relaxed text-gray-700 space-y-2">
-                    <div><strong>Flash 2.5:</strong> Rápido y eficiente</div>
-                    <div><strong>Pro 2.5:</strong> Máximo rendimiento</div>
-                    <div><strong>Flash 1.5:</strong> Estable y rápido</div>
-                    <div><strong>Pro 1.5:</strong> Completo y robusto</div>
+                  <div className="text-sm leading-relaxed text-gray-900 space-y-2">
+                    <div><strong className="text-gray-900">Pro 2.5:</strong> Máximo rendimiento y capacidades avanzadas</div>
+                    <div><strong className="text-gray-900">Flash 2.5:</strong> Rápido y eficiente para tareas generales</div>
+                    <div><strong className="text-gray-900">Flash 2.5 Lite:</strong> Versión ligera y optimizada</div>
+                    <div><strong className="text-gray-900">Flash 2.0:</strong> Rendimiento equilibrado</div>
+                    <div><strong className="text-gray-900">Flash 2.0 Lite:</strong> Rápido para tareas básicas</div>
                   </div>
                 </div>
 
@@ -520,7 +521,7 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
                     <LightBulbIcon className="w-4 h-4 text-primary-600" />
                     Consejos
                   </h4>
-                  <div className="text-sm leading-relaxed text-gray-700 space-y-2">
+                  <div className="text-sm leading-relaxed text-gray-900 space-y-2">
                     <p>• Prompts claros y específicos</p>
                     <p>• Flash para tareas simples</p>
                     <p>• Pro para tareas complejas</p>
@@ -531,25 +532,29 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
 
               {/* Enlaces útiles */}
               <div className="border-t border-gray-200 pt-6">
-                <div className="flex flex-wrap gap-4 justify-center">
+                <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
                   <a
                     href="https://makersuite.google.com/app/apikey"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white 
-                      rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium shadow-sm"
+                    className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 
+                      bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl 
+                      hover:from-primary-700 hover:to-primary-800 transition-all duration-200 
+                      text-sm font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                   >
-                    <LinkIcon className="w-4 h-4" />
+                    <LinkIcon className="w-4 h-4 group-hover:rotate-12 transition-transform duration-200" />
                     Google AI Studio
                   </a>
                   <a
                     href="https://ai.google.dev/gemini-api/docs"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 text-white 
-                      rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium shadow-sm"
+                    className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 
+                      bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-xl 
+                      hover:from-gray-700 hover:to-gray-800 transition-all duration-200 
+                      text-sm font-medium shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                   >
-                    <DocumentIcon className="w-4 h-4" />
+                    <DocumentIcon className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
                     Documentación
                   </a>
                 </div>
