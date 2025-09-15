@@ -61,7 +61,7 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
         <div className="py-2">
           {items.map((item) => {
             const isItemActive = location.pathname === item.path;
-            const isQuestionsPage = item.path === '/questions';
+            const isQuestionsPage = item.path === '/study-lab/questions';
             
             return (
               <div key={item.path} className="relative">

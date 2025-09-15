@@ -16,7 +16,7 @@ const HomePage: React.FC = () => {
       title: 'Crear Preguntas',
       description: 'Diseña preguntas efectivas para tus exámenes con opciones múltiples, explicaciones y referencias educativas.',
       icon: <EditIcon className="w-8 h-8" />,
-      link: '/create',
+      link: '/study-lab/create',
       color: 'bg-blue-50 text-blue-600',
       borderColor: 'border-blue-200 hover:border-blue-300',
       features: [
@@ -31,7 +31,7 @@ const HomePage: React.FC = () => {
       title: 'Gestión de Preguntas',
       description: 'Organiza y gestiona tu biblioteca de preguntas de manera eficiente. Edita, elimina y descarga tu contenido.',
       icon: <InfoIcon className="w-8 h-8" />,
-      link: '/questions',
+      link: '/study-lab/questions',
       color: 'bg-green-50 text-green-600',
       borderColor: 'border-green-200 hover:border-green-300',
       features: [
@@ -46,7 +46,7 @@ const HomePage: React.FC = () => {
       title: 'Importar desde PDF',
       description: 'Sube archivos PDF para extraer preguntas automáticamente usando inteligencia artificial.',
       icon: <UploadIcon className="w-8 h-8" />,
-      link: '/import',
+      link: '/study-lab/import',
       color: 'bg-purple-50 text-purple-600',
       borderColor: 'border-purple-200 hover:border-purple-300',
       features: [
@@ -61,7 +61,7 @@ const HomePage: React.FC = () => {
       title: 'Sistema de Estudio',
       description: 'Practica con tus preguntas usando diferentes modalidades: flashcards interactivas o exámenes simulados.',
       icon: <BookIcon className="w-8 h-8" />,
-      link: '/study',
+      link: '/study-lab/study',
       color: 'bg-orange-50 text-orange-600',
       borderColor: 'border-orange-200 hover:border-orange-300',
       features: [
@@ -76,7 +76,7 @@ const HomePage: React.FC = () => {
       title: 'Resultados y Análisis',
       description: 'Revisa tu desempeño en sesiones completadas con estadísticas detalladas y análisis de progreso.',
       icon: <ChartIcon className="w-8 h-8" />,
-      link: '/study/session-results',
+      link: '/study-lab/study/session-results',
       color: 'bg-indigo-50 text-indigo-600',
       borderColor: 'border-indigo-200 hover:border-indigo-300',
       features: [
@@ -91,7 +91,7 @@ const HomePage: React.FC = () => {
       title: 'Test de API',
       description: 'Prueba la conexión y configuración de la API de Google AI Studio para asegurar el correcto funcionamiento.',
       icon: <ExamIcon className="w-8 h-8" />,
-      link: '/api-test',
+      link: '/study-lab/api-test',
       color: 'bg-red-50 text-red-600',
       borderColor: 'border-red-200 hover:border-red-300',
       features: [

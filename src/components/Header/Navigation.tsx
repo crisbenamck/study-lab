@@ -16,9 +16,9 @@ const Navigation: React.FC<NavigationProps> = ({ items }) => {
   return (
     <nav className="flex items-center gap-8">
       {items.map((item) => {
-        // Para el menú "Estudiar", verificar si la ruta actual comienza con "/study"
-        const isActive = item.path === '/study' 
-          ? location.pathname.startsWith('/study')
+        // Para el menú "Estudiar", verificar si la ruta actual comienza con "/study-lab/study"
+        const isActive = item.path === '/study-lab/study' 
+          ? location.pathname.startsWith('/study-lab/study')
           : location.pathname === item.path;
         
         return (

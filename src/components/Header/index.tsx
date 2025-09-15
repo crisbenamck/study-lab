@@ -13,15 +13,15 @@ const Header: React.FC<HeaderProps> = ({ questions }) => {
   const { isVisible } = useScrollDirection();
 
   const questionManagerItems = [
-    { path: '/create', label: 'Crear Preguntas' },
-    { path: '/questions', label: 'Ver Preguntas' },
-    { path: '/import', label: 'Importar PDF' }
+    { path: '/study-lab/create', label: 'Crear Preguntas' },
+    { path: '/study-lab/questions', label: 'Ver Preguntas' },
+    { path: '/study-lab/import', label: 'Importar PDF' }
   ];
 
   const navItems = [
-    { path: '/', label: 'Inicio' },
-    { path: '/study', label: 'Estudiar' },
-    { path: '/test', label: 'Test API' }
+    { path: '/study-lab/', label: 'Inicio' },
+    { path: '/study-lab/study', label: 'Estudiar' },
+    { path: '/study-lab/api-test', label: 'Test API' }
   ];
 
   return (

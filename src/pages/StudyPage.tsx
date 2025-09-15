@@ -135,7 +135,7 @@ const StudyPage: React.FC = () => {
     };
     createStudySession(config, questions);
     // Navigate to the corresponding page
-    const targetPath = mode === 'flashcards' ? '/study/flashcards' : '/study/exam';
+    const targetPath = mode === 'flashcards' ? '/study-lab/study/flashcards' : '/study-lab/study/exam';
     navigate(targetPath);
   };
 
