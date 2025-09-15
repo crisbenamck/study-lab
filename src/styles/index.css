@@ -412,7 +412,8 @@ select:focus {
   color: #2563eb !important; /* blue-600 */
 }
 
-.dropdown-btn:hover {
+.dropdown-btn:hover,
+.group:hover .dropdown-btn {
   color: #2563eb !important; /* blue-600 */
 }
 
@@ -425,7 +426,8 @@ select:focus {
   color: #e5e7eb !important; /* gray-200 */
 }
 
-[data-theme="dark"] .dropdown-btn:hover {
+[data-theme="dark"] .dropdown-btn:hover,
+[data-theme="dark"] .group:hover .dropdown-btn {
   color: #e5e7eb !important; /* gray-200 */
 }
 
@@ -440,7 +442,7 @@ select:focus {
 }
 
 .dropdown-item:hover {
-  color: #111827 !important; /* gray-900 */
+  color: #2563eb !important; /* blue-600 */
   background-color: #f8fafc !important; /* gray-50 */
 }
 
