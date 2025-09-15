@@ -21,8 +21,8 @@ const StudyResultsPage: React.FC = () => {
         <div className="content-container py-16">
           <div className="surface-elevated card-spacing text-center max-w-2xl mx-auto">
             <div className="mb-6">
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                <svg className="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-primary-light flex items-center justify-center">
+                <svg className="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
@@ -35,7 +35,7 @@ const StudyResultsPage: React.FC = () => {
             </div>
             <button
               onClick={() => navigate('/study-lab/study')}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -106,33 +106,33 @@ const StudyResultsPage: React.FC = () => {
   // Función para obtener configuración de color según el puntaje
   const getScoreConfig = (score: number) => {
     if (score >= 80) return {
-      gradient: 'from-green-500 to-emerald-600',
-      bg: 'bg-green-50',
-      text: 'text-green-700',
+      gradient: 'bg-success text-success-foreground',
+      bg: 'bg-success-light',
+      text: 'text-success',
       icon: '🎉',
       title: '¡Excelente dominio!',
       message: 'Tienes un gran conocimiento del material. ¡Sigue así!'
     };
     if (score >= 60) return {
-      gradient: 'from-blue-500 to-blue-600',
-      bg: 'bg-blue-50',
-      text: 'text-blue-700',
+      gradient: 'bg-primary text-primary-foreground',
+      bg: 'bg-primary-light',
+      text: 'text-primary',
       icon: '💪',
       title: '¡Muy buen progreso!',
       message: 'Vas por excelente camino. Con un poco más de práctica serás un experto.'
     };
     if (score >= 40) return {
-      gradient: 'from-yellow-500 to-orange-500',
-      bg: 'bg-yellow-50',
-      text: 'text-orange-700',
+      gradient: 'bg-warning text-warning-foreground',
+      bg: 'bg-warning-light',
+      text: 'text-warning',
       icon: '📚',
       title: 'En buen camino',
       message: 'Tienes una buena base. Repasa las preguntas falladas para mejorar aún más.'
     };
     return {
-      gradient: 'from-red-500 to-red-600',
-      bg: 'bg-red-50',
-      text: 'text-red-700',
+      gradient: 'bg-danger text-danger-foreground',
+      bg: 'bg-danger-light',
+      text: 'text-danger',
       icon: '🚀',
       title: '¡Sigue adelante!',
       message: 'Cada intento te acerca más al éxito. Dedica más tiempo al estudio y verás resultados.'
@@ -150,17 +150,16 @@ const StudyResultsPage: React.FC = () => {
     if (!question || !sessionData) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div className="surface-elevated max-w-4xl w-full max-h-[90vh] overflow-y-auto">
           <div className="card-spacing">
-            <div className="flex justify-between items-center element-spacing pb-4 border-b" style={{ borderColor: 'var(--border-light)' }}>
+            <div className="flex justify-between items-center element-spacing pb-4 border-b border-border">
               <h3 style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 'var(--font-weight-semibold)' }}>
                 Pregunta {question.question_number}
               </h3>
               <button
                 onClick={closeQuestionModal}
-                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
-                style={{ color: 'var(--text-tertiary)' }}
+                className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors text-muted-foreground"
               >
                 ×
               </button>
@@ -184,14 +183,14 @@ const StudyResultsPage: React.FC = () => {
                   if (isCorrect) {
                     containerClass += ' status-success';
                     statusBadge = (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-success-light text-success">
                         {isSelected ? 'Tu respuesta - Correcta' : 'Respuesta correcta'}
                       </span>
                     );
                   } else if (isSelected) {
                     containerClass += ' status-error';
                     statusBadge = (
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-danger-light text-danger">
                         Tu respuesta - Incorrecta
                       </span>
                     );
@@ -220,7 +219,7 @@ const StudyResultsPage: React.FC = () => {
               </div>
 
               {question.explanation && (
-                <div className="status-info surface-elevated card-spacing border-l-4 border-blue-400 mb-6">
+                <div className="status-info surface-elevated card-spacing border-l-4 border-info mb-6">
                   <h4 className="font-semibold mb-3 text-lg">
                     Explicación
                   </h4>
@@ -231,7 +230,7 @@ const StudyResultsPage: React.FC = () => {
               )}
 
               {sessionData.skipped && (
-                <div className="status-warning surface-elevated p-4 border-l-4 border-yellow-400">
+                <div className="status-warning surface-elevated p-4 border-l-4 border-warning">
                   <p className="font-medium">
                     Esta pregunta fue saltada durante el test
                   </p>
@@ -239,10 +238,10 @@ const StudyResultsPage: React.FC = () => {
               )}
             </div>
 
-            <div className="flex justify-center pt-4 border-t" style={{ borderColor: 'var(--border-light)' }}>
+            <div className="flex justify-center pt-4 border-t border-border">
               <button
                 onClick={closeQuestionModal}
-                className="px-6 py-2.5 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors"
+                className="px-6 py-2.5 bg-secondary text-secondary-foreground font-medium rounded-lg hover:bg-secondary/90 transition-colors"
               >
                 Cerrar
               </button>
@@ -299,7 +298,7 @@ const StudyResultsPage: React.FC = () => {
 
             {/* MÉTRICAS PRINCIPALES */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 section-spacing">
-              <div className="text-center p-4 rounded-xl bg-gray-50 border border-gray-100">
+              <div className="text-center p-4 rounded-xl bg-muted border border-border">
                 <div style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-primary)' }}>
                   {lastSession.totalQuestions}
                 </div>
@@ -308,8 +307,8 @@ const StudyResultsPage: React.FC = () => {
                 </div>
               </div>
               
-              <div className="text-center p-4 rounded-xl bg-green-50 border border-green-100">
-                <div style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 'var(--font-weight-bold)' }} className="text-green-600">
+              <div className="text-center p-4 rounded-xl bg-success-light border border-success/20">
+                <div style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 'var(--font-weight-bold)' }} className="text-success">
                   {lastSession.correctAnswers}
                 </div>
                 <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)', fontWeight: 'var(--font-weight-medium)' }}>
@@ -317,8 +316,8 @@ const StudyResultsPage: React.FC = () => {
                 </div>
               </div>
               
-              <div className="text-center p-4 rounded-xl bg-red-50 border border-red-100">
-                <div style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 'var(--font-weight-bold)' }} className="text-red-600">
+              <div className="text-center p-4 rounded-xl bg-danger-light border border-danger/20">
+                <div style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 'var(--font-weight-bold)' }} className="text-danger">
                   {lastSession.totalQuestions - lastSession.correctAnswers}
                 </div>
                 <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)', fontWeight: 'var(--font-weight-medium)' }}>
@@ -326,8 +325,8 @@ const StudyResultsPage: React.FC = () => {
                 </div>
               </div>
               
-              <div className="text-center p-4 rounded-xl bg-yellow-50 border border-yellow-100">
-                <div style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 'var(--font-weight-bold)' }} className="text-yellow-600">
+              <div className="text-center p-4 rounded-xl bg-warning-light border border-warning/20">
+                <div style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 'var(--font-weight-bold)' }} className="text-warning">
                   {lastSession.questions.filter(q => q.skipped).length}
                 </div>
                 <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--text-secondary)', fontWeight: 'var(--font-weight-medium)' }}>
@@ -388,14 +387,14 @@ const StudyResultsPage: React.FC = () => {
                   const question = getQuestionById(sessionQuestion.questionId);
                   if (!question) return null;
 
-                  let statusClass = 'bg-gray-100 hover:bg-gray-200 border-gray-300 text-gray-700';
+                  let statusClass = 'bg-muted hover:bg-muted/80 border-border text-muted-foreground';
 
                   if (sessionQuestion.skipped) {
-                    statusClass = 'bg-yellow-100 hover:bg-yellow-200 border-yellow-300 text-yellow-800';
+                    statusClass = 'bg-warning-light hover:bg-warning-light/80 border-warning text-warning';
                   } else if (sessionQuestion.answered && sessionQuestion.isCorrect) {
-                    statusClass = 'bg-green-100 hover:bg-green-200 border-green-300 text-green-800';
+                    statusClass = 'bg-success-light hover:bg-success-light/80 border-success text-success';
                   } else if (sessionQuestion.answered && !sessionQuestion.isCorrect) {
-                    statusClass = 'bg-red-100 hover:bg-red-200 border-red-300 text-red-800';
+                    statusClass = 'bg-danger-light hover:bg-danger-light/80 border-danger text-danger';
                   }
 
                   return (
@@ -417,19 +416,19 @@ const StudyResultsPage: React.FC = () => {
               {/* Leyenda */}
               <div className="flex flex-wrap justify-center gap-6 text-sm">
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
+                  <div className="w-4 h-4 bg-success-light border border-success rounded"></div>
                   <span style={{ color: 'var(--text-secondary)', fontWeight: 'var(--font-weight-medium)' }}>Correcta</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
+                  <div className="w-4 h-4 bg-danger-light border border-danger rounded"></div>
                   <span style={{ color: 'var(--text-secondary)', fontWeight: 'var(--font-weight-medium)' }}>Incorrecta</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-yellow-100 border border-yellow-300 rounded"></div>
+                  <div className="w-4 h-4 bg-warning-light border border-warning rounded"></div>
                   <span style={{ color: 'var(--text-secondary)', fontWeight: 'var(--font-weight-medium)' }}>Saltada</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-gray-100 border border-gray-300 rounded"></div>
+                  <div className="w-4 h-4 bg-muted border border-border rounded"></div>
                   <span style={{ color: 'var(--text-secondary)', fontWeight: 'var(--font-weight-medium)' }}>No respondida</span>
                 </div>
               </div>
@@ -449,7 +448,7 @@ const StudyResultsPage: React.FC = () => {
               
               <button
                 onClick={startNewSession}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all duration-200"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground font-medium rounded-xl hover:bg-secondary/90 transition-all duration-200"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

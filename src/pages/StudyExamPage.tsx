@@ -119,7 +119,7 @@ const StudyTestPage: React.FC = () => {
     return (
       <div className="container py-8">
         <div className="text-center">
-          <p className="text-gray-600">Cargando test...</p>
+          <p className="text-muted-foreground">Cargando test...</p>
         </div>
       </div>
     );
