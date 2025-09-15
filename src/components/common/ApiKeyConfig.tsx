@@ -3,24 +3,32 @@ import { AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { CheckMarkIcon, RobotIcon, ChartIcon, NextIcon, WarningIcon, LoadingIcon, ErrorIcon, UnlockIcon } from '../../icons';
 import { useApiKeyValidation } from '../../hooks/useApiKeyValidation';
 
-interface ApiKeyConfigSectionProps {
+interface ApiKeyConfigProps {
   geminiApiKey: string;
   saveGeminiApiKey: (key: string) => void;
-  currentGeminiModel: string;
-  fallbackStatus: {
+  currentGeminiModel?: string;
+  fallbackStatus?: {
     currentModel: string;
     currentModelIndex: number;
     totalModels: number;
     remainingModels: number;
     availableModels: string[];
   } | null;
+  showModelInfo?: boolean;
+  title?: string;
+  description?: string;
+  className?: string;
 }
 
-const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({ 
+const ApiKeyConfig: React.FC<ApiKeyConfigProps> = ({ 
   geminiApiKey, 
   saveGeminiApiKey, 
-  currentGeminiModel, 
-  fallbackStatus 
+  currentGeminiModel,
+  fallbackStatus,
+  showModelInfo = false,
+  title = "Configuración API Key",
+  description,
+  className = ""
 }) => {
   const [isExpanded, setIsExpanded] = useState(!geminiApiKey || geminiApiKey.trim() === '');
   const { validationResult, validateApiKey, resetValidation, isApiKeyLocked } = useApiKeyValidation();
@@ -54,7 +62,7 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
       return <LoadingIcon className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />;
     }
     if (isValidApiKey) {
-      return <CheckMarkIcon className="w-5 h-5 flex-shrink-0 mt-0.5" />;
+      return <CheckMarkIcon className="w-5 h-5 flex-shrink-0" />;
     }
     if (hasValidationError) {
       return <ErrorIcon className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />;
@@ -103,7 +111,7 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
     if (hasValidationError) {
       return { main: 'API Key Inválida', additional: null };
     }
-    return { main: 'Configuración API Key', additional: null };
+    return { main: title, additional: null };
   };
 
   const getDescriptionText = () => {
@@ -116,11 +124,11 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
     if (hasValidationError) {
       return `Error: ${validationResult.error}. Haz clic para corregir.`;
     }
-    return "Se requiere API key de Google Gemini. Haz clic para configurar.";
+    return description || "Se requiere API key de Google Gemini. Haz clic para configurar.";
   };
 
   return (
-    <div className={`border rounded-lg p-4 mb-6 ${getContainerColors()}`}>
+    <div className={`border rounded-lg p-4 ${getContainerColors()} ${className}`}>
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         onMouseDown={(e) => e.preventDefault()}
@@ -238,7 +246,7 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
               </p>
             </div>
           )}
-          {isValidApiKey && (
+          {isValidApiKey && showModelInfo && currentGeminiModel && (
             <div className="mt-3 p-2 bg-blue-50 rounded border border-blue-200">
               <p className="text-xs text-blue-700 mb-1 flex items-center">
                 <RobotIcon className="w-4 h-4 mr-1" />
@@ -272,4 +280,4 @@ const ApiKeyConfigSection: React.FC<ApiKeyConfigSectionProps> = ({
   );
 };
 
-export default ApiKeyConfigSection;
+export default ApiKeyConfig;
