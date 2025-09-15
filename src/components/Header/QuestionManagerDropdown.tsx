@@ -23,8 +23,8 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
     <div className="relative group">
       <div className="relative">
         <div
-          className={`relative py-2 text-sm font-medium transition-all duration-200 cursor-pointer flex items-center group-hover:text-primary ${
-            isActive ? 'text-primary' : 'text-foreground'
+          className={`dropdown-btn relative py-2 text-sm font-medium transition-all duration-200 cursor-pointer flex items-center ${
+            isActive ? 'dropdown-btn-active font-semibold' : ''
           }`}
         >
           Gestor de Preguntas
@@ -50,7 +50,7 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
         
         {/* Underline indicator for active state */}
         <span 
-          className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-200 ${
+          className={`nav-border absolute bottom-0 left-0 h-0.5 transition-all duration-200 ${
             isActive 
               ? 'w-full' 
               : 'w-0 group-hover:w-full'
@@ -69,10 +69,10 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
               <div key={item.path} className="relative">
                 <Link
                   to={item.path}
-                  className={`block px-4 py-3 text-sm transition-colors relative focus:outline-none focus:ring-0 ${
+                  className={`dropdown-item block px-4 py-3 text-sm transition-colors relative focus:outline-none focus:ring-0 ${
                     isItemActive 
-                      ? 'bg-primary-light text-primary font-medium' 
-                      : 'text-card-foreground hover:bg-muted hover:text-card-foreground'
+                      ? 'dropdown-item-active font-medium' 
+                      : ''
                   }`}
                 >
                   {item.label}
@@ -89,7 +89,7 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
                 
                 {/* Active indicator */}
                 {isItemActive && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />
+                  <div className="dropdown-indicator absolute left-0 top-0 bottom-0 w-1" />
                 )}
               </div>
             );

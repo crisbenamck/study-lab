@@ -25,20 +25,20 @@ const Navigation: React.FC<NavigationProps> = ({ items }) => {
           <Link
             key={item.path}
             to={item.path}
-            className={`relative py-2 text-sm font-medium transition-all duration-200 group focus:outline-none focus:ring-0 ${
+            className={`nav-link relative py-2 text-sm font-medium transition-all duration-200 group focus:outline-none focus:ring-0 ${
               isActive 
-                ? 'text-primary' 
-                : 'text-foreground hover:text-primary'
+                ? 'nav-link-active font-semibold' 
+                : ''
             }`}
           >
             {item.label}
             
             {/* Underline indicator for active state */}
             <span 
-              className={`absolute bottom-0 left-0 h-0.5 bg-primary transition-all duration-200 ${
+              className={`nav-border absolute bottom-0 left-0 h-0.5 transition-all duration-200 ${
                 isActive 
-                  ? 'w-full' 
-                  : 'w-0 group-hover:w-full'
+                ? 'w-full' 
+                : 'w-0 group-hover:w-full'
               }`}
             />
           </Link>

@@ -367,6 +367,108 @@ select:focus {
    COMPONENT-SPECIFIC STYLES
    ======================== */
 
+/* Navigation Links - Light Mode */
+.nav-link {
+  color: #111827 !important; /* gray-900 */
+}
+
+.nav-link.nav-link-active {
+  color: #2563eb !important; /* blue-600 */
+}
+
+.nav-link:hover {
+  color: #2563eb !important; /* blue-600 */
+}
+
+/* Navigation Border Indicator - Light Mode */
+.nav-border {
+  background-color: #2563eb !important; /* blue-600 */
+}
+
+/* Navigation Links - Dark Mode */
+[data-theme="dark"] .nav-link {
+  color: #d1d5db !important; /* gray-300 */
+}
+
+[data-theme="dark"] .nav-link.nav-link-active {
+  color: #e5e7eb !important; /* gray-200 */
+}
+
+[data-theme="dark"] .nav-link:hover {
+  color: #e5e7eb !important; /* gray-200 */
+}
+
+/* Navigation Border Indicator - Dark Mode */
+[data-theme="dark"] .nav-border {
+  background-color: #e5e7eb !important; /* gray-200 */
+}
+
+/* Dropdown Button - Light Mode */
+.dropdown-btn {
+  color: #111827 !important; /* gray-900 */
+}
+
+.dropdown-btn.dropdown-btn-active {
+  color: #2563eb !important; /* blue-600 */
+}
+
+.dropdown-btn:hover {
+  color: #2563eb !important; /* blue-600 */
+}
+
+/* Dropdown Button - Dark Mode */
+[data-theme="dark"] .dropdown-btn {
+  color: #d1d5db !important; /* gray-300 */
+}
+
+[data-theme="dark"] .dropdown-btn.dropdown-btn-active {
+  color: #e5e7eb !important; /* gray-200 */
+}
+
+[data-theme="dark"] .dropdown-btn:hover {
+  color: #e5e7eb !important; /* gray-200 */
+}
+
+/* Dropdown Items - Light Mode */
+.dropdown-item {
+  color: #111827 !important; /* gray-900 */
+}
+
+.dropdown-item.dropdown-item-active {
+  color: #2563eb !important; /* blue-600 */
+  background-color: #dbeafe !important; /* blue-50 */
+}
+
+.dropdown-item:hover {
+  color: #111827 !important; /* gray-900 */
+  background-color: #f8fafc !important; /* gray-50 */
+}
+
+/* Dropdown Items - Dark Mode */
+[data-theme="dark"] .dropdown-item {
+  color: #d1d5db !important; /* gray-300 */
+}
+
+[data-theme="dark"] .dropdown-item.dropdown-item-active {
+  color: #e5e7eb !important; /* gray-200 */
+  background-color: #1e40af !important; /* blue-800 */
+}
+
+[data-theme="dark"] .dropdown-item:hover {
+  color: #e5e7eb !important; /* gray-200 */
+  background-color: #374151 !important; /* gray-700 */
+}
+
+/* Dropdown Active Indicator - Light Mode */
+.dropdown-indicator {
+  background-color: #2563eb !important; /* blue-600 */
+}
+
+/* Dropdown Active Indicator - Dark Mode */
+[data-theme="dark"] .dropdown-indicator {
+  background-color: #e5e7eb !important; /* gray-200 */
+}
+
 /* FlashCard 3D animations */
 .transform-style-preserve-3d {
   transform-style: preserve-3d;
