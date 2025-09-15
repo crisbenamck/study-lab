@@ -4,23 +4,19 @@
     <meta charset="utf-8">
     <title>Study Lab</title>
     <script type="text/javascript">
-      // GitHub Pages SPA redirect hack
-      // https://github.com/rafgraph/spa-github-pages
-      // This script takes the current url and redirects to the index.html page with the url as a hash
-      // for React Router to handle client-side routing
-      var pathSegmentsToKeep = 1; // /study-lab/ is 1 segment
+      // Simple redirect for GitHub Pages SPA
+      // Capture the current path and redirect to index.html with a special parameter
+      var currentPath = window.location.pathname;
       
-      var l = window.location;
-      l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') +
-        '/?/' +
-        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
-      );
+      // Remove the /study-lab/ prefix and redirect to index
+      var actualPath = currentPath.replace('/study-lab', '');
+      if (actualPath === '') actualPath = '/';
+      
+      // Redirect to index.html with the path as a parameter
+      window.location.replace('/study-lab/?p=' + encodeURIComponent(actualPath));
     </script>
   </head>
   <body>
+    <p>Redirecting...</p>
   </body>
 </html>
