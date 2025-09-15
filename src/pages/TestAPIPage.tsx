@@ -1,6 +1,6 @@
 import React from 'react';
-import { Zap } from 'lucide-react';
 import GeminiTest from '../components/GeminiTest';
+import PageHeader from '../components/common/PageHeader';
 import type { AppState } from '../types/AppState';
 
 interface TestAPIPageProps {
@@ -13,37 +13,13 @@ const TestAPIPage: React.FC<TestAPIPageProps> = ({
   showAlert
 }) => {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--color-background)' }}>
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto p-8">
-        {/* Header unificado sin sombra */}
-        <div 
-          className="rounded-lg mb-8 text-center p-8"
-          style={{ 
-            backgroundColor: 'var(--surface-elevated)',
-            border: '1px solid var(--border-subtle)'
-          }}
-        >
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div 
-              className="w-12 h-12 rounded-lg flex items-center justify-center"
-              style={{ backgroundColor: 'var(--color-primary-100)' }}
-            >
-              <Zap className="w-6 h-6" style={{ color: 'var(--color-primary-600)' }} />
-            </div>
-            <h1 
-              className="text-3xl font-bold"
-              style={{ color: 'var(--color-text-primary)' }}
-            >
-              Test de API Gemini
-            </h1>
-          </div>
-          <p 
-            className="text-lg"
-            style={{ color: 'var(--color-text-secondary)' }}
-          >
-            Prueba la conexión y configuración de la API de Google AI Studio
-          </p>
-        </div>
+        {/* Header mejorado usando PageHeader */}
+        <PageHeader
+          title="Test de API Gemini"
+          description="Prueba la conexión y configuración de la API de Google AI Studio"
+        />
         
         <GeminiTest 
           appState={appState}

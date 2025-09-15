@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Send, Eye, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import Button from './common/Button';
+import { useApiKeyValidation } from '../hooks/useApiKeyValidation';
 
 interface RequestInfo {
   model: string;
@@ -22,6 +24,8 @@ interface GeminiTestProps {
 
 const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
   const { geminiApiKey, saveGeminiApiKey } = appState;
+  const { validationResult, validateApiKey } = useApiKeyValidation();
+  
   const [prompt, setPrompt] = useState('Explain how AI works in a few words');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +33,24 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
   const [requestInfo, setRequestInfo] = useState<RequestInfo | null>(null);
   const [model, setModel] = useState('gemini-2.5-flash');
   const [isDocumentationExpanded, setIsDocumentationExpanded] = useState(false);
+
+  // Validate API key when it changes
+  React.useEffect(() => {
+    if (geminiApiKey && geminiApiKey.trim().length > 10) {
+      const timeoutId = setTimeout(() => {
+        validateApiKey(geminiApiKey);
+      }, 1000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [geminiApiKey, validateApiKey]);
+
+  const getApiKeyValidationStatus = () => {
+    if (!geminiApiKey.trim()) return { color: 'border-gray-300', status: '' };
+    if (validationResult.isValidating) return { color: 'border-blue-400', status: '🔄 Validando...' };
+    if (validationResult.isValid) return { color: 'border-success-400', status: '✅ API key válida' };
+    if (validationResult.error) return { color: 'border-error-400', status: `❌ ${validationResult.error}` };
+    return { color: 'border-gray-300', status: '' };
+  };
 
   const testModels = [
     'gemini-2.5-flash',
@@ -123,399 +145,359 @@ const GeminiTest: React.FC<GeminiTestProps> = ({ appState, showAlert }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 space-y-12">
-      {/* Configuración de API */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <label 
-            htmlFor="api-key-input"
-            className="block text-sm font-semibold mb-4"
-            style={{ color: 'var(--secondary-900)' }}
-          >
-            API Key
-          </label>
-          <input
-            id="api-key-input"
-            type="password"
-            value={geminiApiKey}
-            onChange={(e) => saveGeminiApiKey(e.target.value)}
-            placeholder="Ingresa tu API key de Google AI Studio"
-            className="w-full px-4 py-4 rounded-lg border-2 focus:outline-none focus:border-blue-500 transition-all"
-            style={{
-              backgroundColor: 'white',
-              borderColor: geminiApiKey.trim() ? 'var(--success-400)' : 'var(--secondary-300)',
-              color: 'var(--secondary-900)',
-              fontSize: '14px',
-              boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)'
-            }}
-          />
-          <p 
-            className="mt-3 text-xs"
-            style={{ color: 'var(--secondary-600)' }}
-          >
-            Obtén tu clave en Google AI Studio
-          </p>
-        </div>
+    <div className="max-w-4xl mx-auto space-y-8">
+      {/* Configuración de API - Grid mejorado */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+          🔧 Configuración
+        </h2>
         
-        <div>
-          <label 
-            htmlFor="model-select"
-            className="block text-sm font-semibold mb-4"
-            style={{ color: 'var(--secondary-900)' }}
-          >
-            Modelo
-          </label>
-          <select
-            id="model-select"
-            value={model}
-            onChange={(e) => setModel(e.target.value)}
-            className="w-full p-4 rounded-lg border-2 focus:outline-none focus:border-blue-500 transition-all appearance-none"
-            style={{
-              backgroundColor: 'white',
-              borderColor: 'var(--secondary-300)',
-              color: 'var(--secondary-900)',
-              fontSize: '14px',
-              boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)',
-              backgroundImage: 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")',
-              backgroundPosition: 'right 0.75rem center',
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: '1.25em 1.25em',
-              paddingRight: '2.5rem'
-            }}
-          >
-            {testModels.map(m => (
-              <option key={m} value={m}>{m}</option>
-            ))}
-          </select>
-          <p 
-            className="mt-3 text-xs"
-            style={{ color: 'var(--secondary-600)' }}
-          >
-            Selecciona el modelo a usar
-          </p>
-        </div>
-      </div>
-
-      {/* Prompt */}
-      <div className="space-y-6">
-        <div>
-          <label 
-            htmlFor="prompt-textarea"
-            className="block text-sm font-semibold mb-4"
-            style={{ color: 'var(--secondary-900)' }}
-          >
-            Prompt de prueba
-          </label>
-          
-          <div className="mb-6">
-            <p 
-              className="text-sm font-medium mb-4"
-              style={{ color: 'var(--secondary-900)' }}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
+            <label 
+              htmlFor="api-key-input"
+              className="block text-sm font-semibold mb-4 text-gray-900"
             >
-              Prueba con estos ejemplos:
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {samplePrompts.map((sample, index) => (
-                <button
-                  key={index}
-                  onClick={() => setPrompt(sample)}
-                  className="text-sm px-4 py-3 rounded-lg border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 text-left"
-                  style={{
-                    backgroundColor: 'white',
-                    borderColor: 'var(--secondary-300)',
-                    color: 'var(--secondary-900)'
-                  }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    e.currentTarget.style.borderColor = 'var(--primary-400)';
-                    e.currentTarget.style.backgroundColor = 'var(--primary-50)';
-                  }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
-                    e.currentTarget.style.borderColor = 'var(--secondary-300)';
-                    e.currentTarget.style.backgroundColor = 'white';
-                  }}
-                >
-                  {sample.length > 50 ? `${sample.substring(0, 50)}...` : sample}
-                </button>
-              ))}
+              API Key
+            </label>
+            <input
+              id="api-key-input"
+              type="password"
+              value={geminiApiKey}
+              onChange={(e) => saveGeminiApiKey(e.target.value)}
+              placeholder="Ingresa tu API key de Google AI Studio"
+              className={`w-full px-4 py-4 rounded-lg border-2 transition-all duration-200 shadow-sm 
+                focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-500
+                ${getApiKeyValidationStatus().color} bg-white text-gray-900`}
+            />
+            <div className="mt-2 min-h-[1.5rem]">
+              {getApiKeyValidationStatus().status ? (
+                <p className="text-xs font-medium text-gray-700">
+                  {getApiKeyValidationStatus().status}
+                </p>
+              ) : (
+                <p className="text-xs text-gray-600">
+                  Obtén tu clave en Google AI Studio
+                </p>
+              )}
             </div>
           </div>
           
+          <div>
+            <label 
+              htmlFor="model-select"
+              className="block text-sm font-semibold mb-4 text-gray-900"
+            >
+              Modelo
+            </label>
+            <select
+              id="model-select"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              className="w-full p-4 rounded-lg border-2 bg-white text-gray-900 shadow-sm appearance-none
+                focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-500 
+                border-gray-300 transition-all duration-200"
+              style={{
+                backgroundImage: 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236b7280\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")',
+                backgroundPosition: 'right 0.75rem center',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: '1.25em 1.25em',
+                paddingRight: '2.5rem'
+              }}
+            >
+              {testModels.map(m => (
+                <option key={m} value={m}>{m}</option>
+              ))}
+            </select>
+            <p className="mt-3 text-xs text-gray-600">
+              Selecciona el modelo a usar
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Sección de Prompt - Contenedor mejorado */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+          ✍️ Prompt de prueba
+        </h2>
+        
+        {/* Ejemplos rápidos */}
+        <div className="mb-8">
+          <p className="text-sm font-medium mb-4 text-gray-700">
+            💡 Prueba con estos ejemplos:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {samplePrompts.map((sample, index) => (
+              <Button
+                key={index}
+                onClick={() => setPrompt(sample)}
+                variant="secondary"
+                buttonType="ghost"
+                size="md"
+                className="text-left whitespace-normal h-auto py-3 px-4 text-sm 
+                  border border-gray-200 hover:border-primary-300 hover:bg-primary-50"
+              >
+                {sample.length > 50 ? `${sample.substring(0, 50)}...` : sample}
+              </Button>
+            ))}
+          </div>
+        </div>
+        
+        {/* Textarea del prompt */}
+        <div>
+          <label 
+            htmlFor="prompt-textarea"
+            className="block text-sm font-semibold mb-4 text-gray-900"
+          >
+            Tu prompt personalizado
+          </label>
           <textarea
             id="prompt-textarea"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             placeholder="Escribe tu prompt aquí... Por ejemplo: 'Explica cómo funciona la IA'"
             rows={6}
-            className="w-full px-4 py-4 rounded-lg border-2 focus:outline-none focus:border-blue-500 transition-all resize-y"
-            style={{
-              backgroundColor: 'white',
-              borderColor: prompt.trim() ? 'var(--success-400)' : 'var(--secondary-300)',
-              color: 'var(--secondary-900)',
-              fontSize: '14px',
-              lineHeight: '1.6',
-              boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)',
-              fontFamily: 'ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace'
-            }}
+            className={`w-full px-4 py-4 rounded-lg border-2 transition-all duration-200 resize-y shadow-sm
+              focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-500 font-mono
+              ${prompt.trim() 
+                ? 'border-success-400 bg-white text-gray-900' 
+                : 'border-gray-300 bg-white text-gray-900'}`}
           />
-          <p 
-            className="mt-3 text-xs"
-            style={{ color: 'var(--secondary-600)' }}
-          >
+          <p className="mt-3 text-xs text-gray-600">
             Escribe una pregunta o instrucción para Gemini
           </p>
         </div>
       </div>
 
-      {/* Botones de acción con mejor espaciado */}
-      <div className="flex flex-col sm:flex-row gap-6 justify-center">
-        <button
-          onClick={testGeminiDirect}
-          disabled={isLoading || !geminiApiKey.trim() || !prompt.trim()}
-          className="flex items-center justify-center gap-3 px-8 py-4 rounded-lg border-2 font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{
-            backgroundColor: isLoading ? 'var(--secondary-100)' : 'var(--primary-500)',
-            borderColor: isLoading ? 'var(--secondary-300)' : 'var(--primary-500)',
-            color: isLoading ? 'var(--secondary-500)' : 'white',
-            boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)'
-          }}
-        >
-          <Send size={18} />
-          {isLoading ? 'Enviando...' : 'Enviar a Gemini'}
-        </button>
+      {/* Botones de acción */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+          🚀 Acciones
+        </h2>
+        
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Button
+            onClick={testGeminiDirect}
+            disabled={isLoading || !validationResult.isValid || !prompt.trim()}
+            variant="primary"
+            size="xl"
+            icon={<Send size={18} />}
+            iconPosition="left"
+            isLoading={isLoading}
+            className="min-w-[200px] shadow-md hover:shadow-lg"
+          >
+            {isLoading ? 'Enviando...' : 'Enviar a Gemini'}
+          </Button>
 
-        <button
-          onClick={testWithCurl}
-          disabled={!geminiApiKey.trim() || !prompt.trim()}
-          className="flex items-center justify-center gap-3 px-8 py-4 rounded-lg border-2 font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{
-            backgroundColor: 'white',
-            borderColor: 'var(--secondary-300)',
-            color: 'var(--secondary-700)',
-            boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.1)'
-          }}
-          onMouseEnter={(e) => {
-            if (!e.currentTarget.disabled) {
-              e.currentTarget.style.backgroundColor = 'var(--secondary-50)';
-              e.currentTarget.style.borderColor = 'var(--secondary-400)';
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!e.currentTarget.disabled) {
-              e.currentTarget.style.backgroundColor = 'white';
-              e.currentTarget.style.borderColor = 'var(--secondary-300)';
-            }
-          }}
-        >
-          <Eye size={18} />
-          Generar cURL
-        </button>
+          <Button
+            onClick={testWithCurl}
+            disabled={!validationResult.isValid || !prompt.trim()}
+            variant="secondary"
+            buttonType="outline"
+            size="xl"
+            icon={<Eye size={18} />}
+            iconPosition="left"
+            className="min-w-[200px] shadow-sm hover:shadow-md"
+          >
+            Generar cURL
+          </Button>
+        </div>
+        
+        {(!validationResult.isValid || !prompt.trim()) && (
+          <div className="mt-4 text-center text-sm text-gray-500">
+            {!validationResult.isValid && "⚠️ Se requiere una API key válida"}
+            {!validationResult.isValid && !prompt.trim() && " y "}
+            {!prompt.trim() && "⚠️ Escribe un prompt"}
+            {" para continuar"}
+          </div>
+        )}
       </div>
 
-      {/* Información de la petición con mejor espaciado */}
+      {/* Información de la petición */}
       {requestInfo && (
-        <div 
-          className="p-6 rounded-lg border-l-4"
-          style={{
-            backgroundColor: requestInfo.success ? 'var(--success-50)' : 'var(--error-50)',
-            borderLeftColor: requestInfo.success ? 'var(--success-400)' : 'var(--error-400)',
-            borderWidth: '1px',
-            borderLeftWidth: '4px',
-            borderColor: requestInfo.success ? 'var(--success-200)' : 'var(--error-200)'
-          }}
-        >
-          <div className="space-y-3">
-            <h3 
-              className="font-semibold text-sm flex items-center gap-2"
-              style={{ 
-                color: requestInfo.success ? 'var(--success-700)' : 'var(--error-700)' 
-              }}
-            >
-              <AlertCircle size={16} />
-              {requestInfo.success ? 'Petición exitosa' : 'Error en la petición'}
-            </h3>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-              <div>
-                <span style={{ color: 'var(--secondary-600)' }}>Modelo:</span>
-                <div style={{ color: 'var(--secondary-900)' }} className="font-mono mt-1">
-                  {requestInfo.model}
-                </div>
-              </div>
-              <div>
-                <span style={{ color: 'var(--secondary-600)' }}>Duración:</span>
-                <div style={{ color: 'var(--secondary-900)' }} className="font-mono mt-1">
-                  {requestInfo.duration}
-                </div>
-              </div>
-              <div>
-                <span style={{ color: 'var(--secondary-600)' }}>Hora:</span>
-                <div style={{ color: 'var(--secondary-900)' }} className="font-mono mt-1">
-                  {requestInfo.timestamp}
-                </div>
-              </div>
-              {requestInfo.responseLength && (
-                <div>
-                  <span style={{ color: 'var(--secondary-600)' }}>Caracteres:</span>
-                  <div style={{ color: 'var(--secondary-900)' }} className="font-mono mt-1">
-                    {requestInfo.responseLength}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className={`p-6 border-l-4 ${requestInfo.success 
+            ? 'border-l-success-500 bg-success-50' 
+            : 'border-l-error-500 bg-error-50'}`}
+          >
+            <div className="space-y-4">
+              <h3 className={`font-semibold text-lg flex items-center gap-2
+                ${requestInfo.success ? 'text-success-700' : 'text-error-700'}`}
+              >
+                <AlertCircle size={20} />
+                {requestInfo.success ? '✅ Petición exitosa' : '❌ Error en la petición'}
+              </h3>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+                <div className="bg-white/70 rounded-lg p-3">
+                  <span className="block text-gray-600 text-xs font-medium">Modelo:</span>
+                  <div className="font-mono mt-1 text-gray-900 font-semibold">
+                    {requestInfo.model}
                   </div>
                 </div>
-              )}
+                <div className="bg-white/70 rounded-lg p-3">
+                  <span className="block text-gray-600 text-xs font-medium">Duración:</span>
+                  <div className="font-mono mt-1 text-gray-900 font-semibold">
+                    {requestInfo.duration}
+                  </div>
+                </div>
+                <div className="bg-white/70 rounded-lg p-3">
+                  <span className="block text-gray-600 text-xs font-medium">Hora:</span>
+                  <div className="font-mono mt-1 text-gray-900 font-semibold">
+                    {requestInfo.timestamp}
+                  </div>
+                </div>
+                {requestInfo.responseLength && (
+                  <div className="bg-white/70 rounded-lg p-3">
+                    <span className="block text-gray-600 text-xs font-medium">Caracteres:</span>
+                    <div className="font-mono mt-1 text-gray-900 font-semibold">
+                      {requestInfo.responseLength.toLocaleString()}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Respuesta con mejor espaciado */}
+      {/* Respuesta */}
       {response && (
-        <div 
-          className="p-6 rounded-lg border-l-4"
-          style={{
-            backgroundColor: 'var(--success-50)',
-            borderLeftColor: 'var(--success-400)',
-            borderWidth: '1px',
-            borderLeftWidth: '4px',
-            borderColor: 'var(--success-200)'
-          }}
-        >
-          <h3 
-            className="font-semibold text-sm mb-4 flex items-center gap-2"
-            style={{ color: 'var(--success-700)' }}
-          >
-            <Send size={16} />
-            Respuesta de Gemini
-          </h3>
-          <div 
-            className="text-sm leading-relaxed whitespace-pre-wrap font-mono"
-            style={{ 
-              color: 'var(--secondary-900)',
-              lineHeight: '1.7'
-            }}
-          >
-            {response}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="p-6 border-l-4 border-l-success-500 bg-success-50">
+            <h3 className="font-semibold text-lg flex items-center gap-2 text-success-700 mb-4">
+              <Send size={20} />
+              💬 Respuesta de Gemini
+            </h3>
+            <div className="bg-white rounded-lg p-6 shadow-inner border border-success-200">
+              <div className="text-sm leading-relaxed whitespace-pre-wrap font-mono text-gray-900">
+                {response}
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Error con mejor espaciado y word-wrap arreglado */}
+      {/* Error */}
       {error && (
-        <div 
-          className="p-6 rounded-lg border-l-4"
-          style={{
-            backgroundColor: 'var(--error-50)',
-            borderLeftColor: 'var(--error-400)',
-            borderWidth: '1px',
-            borderLeftWidth: '4px',
-            borderColor: 'var(--error-200)'
-          }}
-        >
-          <h3 
-            className="font-semibold text-sm mb-4 flex items-center gap-2"
-            style={{ color: 'var(--error-700)' }}
-          >
-            <AlertCircle size={16} />
-            Error
-          </h3>
-          <div 
-            className="text-sm leading-relaxed font-mono break-words overflow-hidden"
-            style={{ 
-              color: 'var(--error-600)',
-              lineHeight: '1.7',
-              wordBreak: 'break-all',
-              overflowWrap: 'anywhere'
-            }}
-          >
-            {error}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="p-6 border-l-4 border-l-error-500 bg-error-50">
+            <h3 className="font-semibold text-lg flex items-center gap-2 text-error-700 mb-4">
+              <AlertCircle size={20} />
+              ⚠️ Error
+            </h3>
+            <div className="bg-white rounded-lg p-6 shadow-inner border border-error-200">
+              <div className="text-sm leading-relaxed font-mono break-words overflow-hidden text-error-600">
+                {error}
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Separador visual adicional antes de documentación */}
-      <div className="py-4"></div>
+      {/* Separador visual */}
+      <div className="py-2"></div>
 
-      {/* Documentación colapsible */}
-      <div 
-        className="border rounded-lg"
-        style={{ 
-          borderColor: 'var(--secondary-300)',
-          backgroundColor: 'var(--secondary-50)'
-        }}
-      >
+      {/* Documentación colapsible mejorada */}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <button
           onClick={() => setIsDocumentationExpanded(!isDocumentationExpanded)}
-          className="w-full p-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+          className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50 
+            transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-300 
+            focus:ring-inset group"
         >
-          <span 
-            className="font-medium text-sm"
-            style={{ color: 'var(--secondary-900)' }}
-          >
-            📖 Documentación y Ayuda
-          </span>
-          {isDocumentationExpanded ? (
-            <ChevronUp size={20} style={{ color: 'var(--secondary-600)' }} />
-          ) : (
-            <ChevronDown size={20} style={{ color: 'var(--secondary-600)' }} />
-          )}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center
+              group-hover:bg-primary-200 transition-colors">
+              <span className="text-lg">📖</span>
+            </div>
+            <div>
+              <span className="font-semibold text-base text-gray-900">
+                Documentación y Ayuda
+              </span>
+              <p className="text-sm text-gray-600">
+                Guías de uso, configuración y consejos
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center">
+            {isDocumentationExpanded ? (
+              <ChevronUp size={24} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
+            ) : (
+              <ChevronDown size={24} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
+            )}
+          </div>
         </button>
 
         {isDocumentationExpanded && (
-          <div 
-            className="p-6 border-t space-y-4"
-            style={{ borderTopColor: 'var(--secondary-300)' }}
-          >
-            <div>
-              <h4 
-                className="font-semibold text-sm mb-2"
-                style={{ color: 'var(--secondary-900)' }}
-              >
-                🔑 Cómo obtener tu API Key
-              </h4>
-              <p 
-                className="text-xs leading-relaxed"
-                style={{ color: 'var(--secondary-600)' }}
-              >
-                1. Ve a <strong>Google AI Studio</strong><br />
-                2. Inicia sesión con tu cuenta de Google<br />
-                3. Crea un nuevo proyecto o selecciona uno existente<br />
-                4. Ve a "API Keys" y genera una nueva clave<br />
-                5. Copia la clave y pégala en el campo de arriba
-              </p>
-            </div>
+          <div className="border-t border-gray-200 bg-gray-50">
+            <div className="p-8 space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Sección 1: API Key */}
+                <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                  <h4 className="font-semibold text-base mb-3 text-gray-900 flex items-center gap-2">
+                    🔑 API Key
+                  </h4>
+                  <div className="text-sm leading-relaxed text-gray-700 space-y-2">
+                    <p><strong>1.</strong> Ve a Google AI Studio</p>
+                    <p><strong>2.</strong> Inicia sesión con Google</p>
+                    <p><strong>3.</strong> Crea/selecciona proyecto</p>
+                    <p><strong>4.</strong> Genera nueva API key</p>
+                    <p><strong>5.</strong> Copia y pégala arriba</p>
+                  </div>
+                </div>
 
-            <div>
-              <h4 
-                className="font-semibold text-sm mb-2"
-                style={{ color: 'var(--secondary-900)' }}
-              >
-                🤖 Modelos disponibles
-              </h4>
-              <div 
-                className="text-xs leading-relaxed space-y-1"
-                style={{ color: 'var(--secondary-600)' }}
-              >
-                <div><strong>gemini-2.5-flash:</strong> Rápido y eficiente</div>
-                <div><strong>gemini-2.5-pro:</strong> Máximo rendimiento</div>
-                <div><strong>gemini-1.5-flash:</strong> Versión estable rápida</div>
-                <div><strong>gemini-1.5-pro:</strong> Versión estable completa</div>
+                {/* Sección 2: Modelos */}
+                <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                  <h4 className="font-semibold text-base mb-3 text-gray-900 flex items-center gap-2">
+                    🤖 Modelos
+                  </h4>
+                  <div className="text-sm leading-relaxed text-gray-700 space-y-2">
+                    <div><strong>Flash 2.5:</strong> Rápido y eficiente</div>
+                    <div><strong>Pro 2.5:</strong> Máximo rendimiento</div>
+                    <div><strong>Flash 1.5:</strong> Estable y rápido</div>
+                    <div><strong>Pro 1.5:</strong> Completo y robusto</div>
+                  </div>
+                </div>
+
+                {/* Sección 3: Consejos */}
+                <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+                  <h4 className="font-semibold text-base mb-3 text-gray-900 flex items-center gap-2">
+                    💡 Consejos
+                  </h4>
+                  <div className="text-sm leading-relaxed text-gray-700 space-y-2">
+                    <p>• Prompts claros y específicos</p>
+                    <p>• Flash para tareas simples</p>
+                    <p>• Pro para tareas complejas</p>
+                    <p>• Usa el generador cURL</p>
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <h4 
-                className="font-semibold text-sm mb-2"
-                style={{ color: 'var(--secondary-900)' }}
-              >
-                💡 Consejos de uso
-              </h4>
-              <p 
-                className="text-xs leading-relaxed"
-                style={{ color: 'var(--secondary-600)' }}
-              >
-                • Usa prompts claros y específicos<br />
-                • El modelo Flash es más rápido para tareas simples<br />
-                • El modelo Pro es mejor para tareas complejas<br />
-                • Puedes generar comandos cURL para testing externo
-              </p>
+              {/* Enlaces útiles */}
+              <div className="border-t border-gray-200 pt-6">
+                <div className="flex flex-wrap gap-4 justify-center">
+                  <a
+                    href="https://makersuite.google.com/app/apikey"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white 
+                      rounded-lg hover:bg-primary-700 transition-colors text-sm font-medium shadow-sm"
+                  >
+                    🔗 Google AI Studio
+                  </a>
+                  <a
+                    href="https://ai.google.dev/gemini-api/docs"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 text-white 
+                      rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium shadow-sm"
+                  >
+                    📚 Documentación
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         )}
