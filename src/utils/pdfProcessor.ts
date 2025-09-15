@@ -5,7 +5,7 @@ import { GeminiService } from './geminiService';
 
 // Configurar worker para PDF.js con mejor manejo de errores
 try {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.mjs';
+  pdfjsLib.GlobalWorkerOptions.workerSrc = '/study-lab/pdf.worker.mjs';
 } catch (error) {
   console.warn('Worker local no disponible, usando fallback:', error);
   pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js`;
