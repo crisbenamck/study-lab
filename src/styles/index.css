@@ -54,6 +54,37 @@
   --gradient-warning: linear-gradient(135deg, #d97706, #b45309);
   --gradient-error: linear-gradient(135deg, #dc2626, #b91c1c);
   --gradient-info: linear-gradient(135deg, #0284c7, #0369a1);
+  
+  /* === BUTTON SPECIFIC COLORS === */
+  --btn-primary-bg: #2563eb;
+  --btn-primary-border: #2563eb;
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover-bg: #1d4ed8;
+  --btn-primary-hover-border: #1d4ed8;
+  --btn-primary-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  --btn-primary-shadow-hover: 0 6px 16px rgba(37, 99, 235, 0.4);
+  
+  --btn-secondary-bg: #6b7280;
+  --btn-secondary-border: #6b7280;
+  --btn-secondary-text: #ffffff;
+  --btn-secondary-hover-bg: #4b5563;
+  --btn-secondary-hover-border: #4b5563;
+  --btn-secondary-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+  --btn-secondary-shadow-hover: 0 6px 16px rgba(107, 114, 128, 0.4);
+  
+  --btn-primary-outline-bg: transparent;
+  --btn-primary-outline-border: #2563eb;
+  --btn-primary-outline-text: #2563eb;
+  --btn-primary-outline-hover-bg: #2563eb;
+  --btn-primary-outline-hover-text: #ffffff;
+  
+  --btn-primary-ghost-bg: transparent;
+  --btn-primary-ghost-text: #2563eb;
+  --btn-primary-ghost-hover-bg: #eff6ff;
+  
+  --btn-secondary-ghost-bg: transparent;
+  --btn-secondary-ghost-text: #6b7280;
+  --btn-secondary-ghost-hover-bg: #f9fafb;
 }
 
 /* Dark Theme */
@@ -106,6 +137,37 @@
   --gradient-warning: linear-gradient(135deg, #f59e0b, #d97706);
   --gradient-error: linear-gradient(135deg, #f87171, #ef4444);
   --gradient-info: linear-gradient(135deg, #38bdf8, #0284c7);
+  
+  /* === BUTTON SPECIFIC COLORS - DARK THEME === */
+  --btn-primary-bg: #3b82f6;
+  --btn-primary-border: #3b82f6;
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover-bg: #2563eb;
+  --btn-primary-hover-border: #2563eb;
+  --btn-primary-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  --btn-primary-shadow-hover: 0 6px 16px rgba(59, 130, 246, 0.4);
+  
+  --btn-secondary-bg: #6b7280;
+  --btn-secondary-border: #6b7280;
+  --btn-secondary-text: #ffffff;
+  --btn-secondary-hover-bg: #4b5563;
+  --btn-secondary-hover-border: #4b5563;
+  --btn-secondary-shadow: 0 4px 12px rgba(107, 114, 128, 0.4);
+  --btn-secondary-shadow-hover: 0 6px 16px rgba(107, 114, 128, 0.5);
+  
+  --btn-primary-outline-bg: transparent;
+  --btn-primary-outline-border: #60a5fa;
+  --btn-primary-outline-text: #60a5fa;
+  --btn-primary-outline-hover-bg: #60a5fa;
+  --btn-primary-outline-hover-text: #1e293b;
+  
+  --btn-primary-ghost-bg: transparent;
+  --btn-primary-ghost-text: #60a5fa;
+  --btn-primary-ghost-hover-bg: rgba(96, 165, 250, 0.1);
+  
+  --btn-secondary-ghost-bg: transparent;
+  --btn-secondary-ghost-text: #94a3b8;
+  --btn-secondary-ghost-hover-bg: rgba(148, 163, 184, 0.1);
   
   /* === SCROLLBAR === */
   color-scheme: dark;
@@ -174,6 +236,70 @@
   /* Smooth transitions for theme changes */
   .theme-transition {
     transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* === BUTTON UTILITIES === */
+  .btn-primary-solid {
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-border);
+    color: var(--btn-primary-text);
+    box-shadow: var(--btn-primary-shadow);
+  }
+  
+  .btn-primary-solid:hover {
+    background-color: var(--btn-primary-hover-bg);
+    border-color: var(--btn-primary-hover-border);
+    box-shadow: var(--btn-primary-shadow-hover);
+    transform: translateY(-2px);
+  }
+  
+  .btn-secondary-solid {
+    background-color: var(--btn-secondary-bg);
+    border-color: var(--btn-secondary-border);
+    color: var(--btn-secondary-text);
+    box-shadow: var(--btn-secondary-shadow);
+  }
+  
+  .btn-secondary-solid:hover {
+    background-color: var(--btn-secondary-hover-bg);
+    border-color: var(--btn-secondary-hover-border);
+    box-shadow: var(--btn-secondary-shadow-hover);
+    transform: translateY(-2px);
+  }
+  
+  .btn-primary-outline {
+    background-color: var(--btn-primary-outline-bg);
+    border-color: var(--btn-primary-outline-border);
+    color: var(--btn-primary-outline-text);
+    border-width: 2px;
+  }
+  
+  .btn-primary-outline:hover {
+    background-color: var(--btn-primary-outline-hover-bg);
+    color: var(--btn-primary-outline-hover-text);
+    transform: translateY(-1px);
+  }
+  
+  .btn-primary-ghost {
+    background-color: var(--btn-primary-ghost-bg);
+    color: var(--btn-primary-ghost-text);
+    border-color: transparent;
+  }
+  
+  .btn-primary-ghost:hover {
+    background-color: var(--btn-primary-ghost-hover-bg);
+    transform: translateY(-1px);
+  }
+  
+  .btn-secondary-ghost {
+    background-color: var(--btn-secondary-ghost-bg);
+    color: var(--btn-secondary-ghost-text);
+    border-color: transparent;
+  }
+  
+  .btn-secondary-ghost:hover {
+    background-color: var(--btn-secondary-ghost-hover-bg);
+    transform: translateY(-1px);
   }
 }
 

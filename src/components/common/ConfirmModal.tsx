@@ -61,7 +61,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 			showCloseButton={false}
 		>
 			<div className="space-y-6">
-				<div className="text-gray-700 whitespace-pre-wrap text-sm leading-relaxed">
+				<div className="text-primary whitespace-pre-wrap text-sm leading-relaxed">
 					{message}
 				</div>
 				<div className="flex justify-center space-x-3 pt-2">

@@ -32,231 +32,35 @@ const Button: React.FC<ButtonProps> = ({
   type = 'button',
   ...props
 }) => {
-  // Configuración de variantes
-  const variantConfig = {
-    primary: {
-      solid: {
-        background: '#2563eb',
-        border: '#2563eb',
-        color: '#ffffff',
-        hoverBackground: '#1d4ed8',
-        hoverBorder: '#1d4ed8',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-blue-300',
-        shadow: '0 4px 12px rgba(37, 99, 235, 0.3)'
-      },
-      outline: {
-        background: 'transparent',
-        border: '#2563eb',
-        color: '#2563eb',
-        hoverBackground: '#2563eb',
-        hoverBorder: '#2563eb',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-blue-300',
-        shadow: '0 4px 12px rgba(37, 99, 235, 0.2)'
-      },
-      ghost: {
-        background: 'transparent',
-        border: 'transparent',
-        color: '#2563eb',
-        hoverBackground: '#eff6ff',
-        hoverBorder: 'transparent',
-        hoverColor: '#2563eb',
-        focusRing: 'focus:ring-blue-300',
-        shadow: 'none'
-      }
-    },
-    secondary: {
-      solid: {
-        background: '#6b7280',
-        border: '#6b7280',
-        color: '#ffffff',
-        hoverBackground: '#4b5563',
-        hoverBorder: '#4b5563',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-gray-300',
-        shadow: '0 4px 12px rgba(107, 114, 128, 0.3)'
-      },
-      outline: {
-        background: 'transparent',
-        border: '#6b7280',
-        color: '#6b7280',
-        hoverBackground: '#6b7280',
-        hoverBorder: '#6b7280',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-gray-300',
-        shadow: '0 4px 12px rgba(107, 114, 128, 0.2)'
-      },
-      ghost: {
-        background: 'transparent',
-        border: 'transparent',
-        color: '#6b7280',
-        hoverBackground: '#f9fafb',
-        hoverBorder: 'transparent',
-        hoverColor: '#6b7280',
-        focusRing: 'focus:ring-gray-300',
-        shadow: 'none'
-      }
-    },
-    danger: {
-      solid: {
-        background: '#ef4444',
-        border: '#ef4444',
-        color: '#ffffff',
-        hoverBackground: '#dc2626',
-        hoverBorder: '#dc2626',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-red-300',
-        shadow: '0 4px 12px rgba(239, 68, 68, 0.3)'
-      },
-      outline: {
-        background: 'transparent',
-        border: '#ef4444',
-        color: '#ef4444',
-        hoverBackground: '#ef4444',
-        hoverBorder: '#ef4444',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-red-300',
-        shadow: '0 4px 12px rgba(239, 68, 68, 0.2)'
-      },
-      ghost: {
-        background: 'transparent',
-        border: 'transparent',
-        color: '#ef4444',
-        hoverBackground: '#fef2f2',
-        hoverBorder: 'transparent',
-        hoverColor: '#ef4444',
-        focusRing: 'focus:ring-red-300',
-        shadow: 'none'
-      }
-    },
-    success: {
-      solid: {
-        background: '#10b981',
-        border: '#10b981',
-        color: '#ffffff',
-        hoverBackground: '#059669',
-        hoverBorder: '#059669',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-green-300',
-        shadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
-      },
-      outline: {
-        background: 'transparent',
-        border: '#10b981',
-        color: '#10b981',
-        hoverBackground: '#10b981',
-        hoverBorder: '#10b981',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-green-300',
-        shadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
-      },
-      ghost: {
-        background: 'transparent',
-        border: 'transparent',
-        color: '#10b981',
-        hoverBackground: '#f0fdf4',
-        hoverBorder: 'transparent',
-        hoverColor: '#10b981',
-        focusRing: 'focus:ring-green-300',
-        shadow: 'none'
-      }
-    },
-    warning: {
-      solid: {
-        background: '#f59e0b',
-        border: '#f59e0b',
-        color: '#ffffff',
-        hoverBackground: '#d97706',
-        hoverBorder: '#d97706',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-yellow-300',
-        shadow: '0 4px 12px rgba(245, 158, 11, 0.3)'
-      },
-      outline: {
-        background: 'transparent',
-        border: '#f59e0b',
-        color: '#f59e0b',
-        hoverBackground: '#f59e0b',
-        hoverBorder: '#f59e0b',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-yellow-300',
-        shadow: '0 4px 12px rgba(245, 158, 11, 0.2)'
-      },
-      ghost: {
-        background: 'transparent',
-        border: 'transparent',
-        color: '#f59e0b',
-        hoverBackground: '#fffbeb',
-        hoverBorder: 'transparent',
-        hoverColor: '#f59e0b',
-        focusRing: 'focus:ring-yellow-300',
-        shadow: 'none'
-      }
-    },
-    info: {
-      solid: {
-        background: '#3b82f6',
-        border: '#3b82f6',
-        color: '#ffffff',
-        hoverBackground: '#2563eb',
-        hoverBorder: '#2563eb',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-blue-300',
-        shadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
-      },
-      outline: {
-        background: 'transparent',
-        border: '#3b82f6',
-        color: '#3b82f6',
-        hoverBackground: '#3b82f6',
-        hoverBorder: '#3b82f6',
-        hoverColor: '#ffffff',
-        focusRing: 'focus:ring-blue-300',
-        shadow: '0 4px 12px rgba(59, 130, 246, 0.2)'
-      },
-      ghost: {
-        background: 'transparent',
-        border: 'transparent',
-        color: '#3b82f6',
-        hoverBackground: '#eff6ff',
-        hoverBorder: 'transparent',
-        hoverColor: '#3b82f6',
-        focusRing: 'focus:ring-blue-300',
-        shadow: 'none'
-      }
-    }
-  };
-
-  // Configuración de tamaños
+  // Size configurations - maintaining exact same sizes as original
   const sizeConfig = {
     sm: {
       padding: 'px-3 py-1.5',
       fontSize: 'text-sm',
-      iconSize: 'w-4 h-4',
-      gap: 'gap-1.5'
+      gap: 'gap-1.5',
+      iconSize: 'w-4 h-4'
     },
     md: {
       padding: 'px-4 py-2',
       fontSize: 'text-sm',
-      iconSize: 'w-4 h-4',
-      gap: 'gap-2'
+      gap: 'gap-2',
+      iconSize: 'w-4 h-4'
     },
     lg: {
       padding: 'px-6 py-3',
       fontSize: 'text-base',
-      iconSize: 'w-5 h-5',
-      gap: 'gap-2'
+      gap: 'gap-2.5',
+      iconSize: 'w-5 h-5'
     },
     xl: {
       padding: 'px-8 py-4',
       fontSize: 'text-lg',
-      iconSize: 'w-6 h-6',
-      gap: 'gap-3'
+      gap: 'gap-3',
+      iconSize: 'w-6 h-6'
     }
   };
 
-  // Configuración de border-radius
+  // Rounded configurations - maintaining exact same as original
   const roundedConfig = {
     sm: 'rounded-sm',
     md: 'rounded-md',
@@ -265,59 +69,99 @@ const Button: React.FC<ButtonProps> = ({
     full: 'rounded-full'
   };
 
-  const currentVariant = variantConfig[variant][buttonType];
   const currentSize = sizeConfig[size];
   const currentRounded = roundedConfig[rounded];
 
-  const baseClasses = [
-    'inline-flex',
-    'items-center',
-    'justify-center',
-    'font-semibold',
-    'transition-all',
-    'duration-200',
-    'focus:outline-none',
-    'focus:ring-2',
-    'focus:ring-offset-2',
-    currentVariant.focusRing,
-    currentSize.padding,
-    currentSize.fontSize,
-    currentSize.gap,
-    currentRounded,
-    fullWidth ? 'w-full' : '',
-    disabled || isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
-    className
-  ].filter(Boolean).join(' ');
+  // Get button style classes based on variant and type
+  const getButtonClasses = () => {
+    const baseClasses = [
+      'inline-flex',
+      'items-center',
+      'justify-center',
+      'font-semibold',
+      'transition-all',
+      'duration-200',
+      'focus:outline-none',
+      'focus:ring-2',
+      'focus:ring-offset-2',
+      'theme-transition',
+      currentSize.padding,
+      currentSize.fontSize,
+      currentSize.gap,
+      currentRounded,
+      fullWidth ? 'w-full' : '',
+      disabled || isLoading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
+    ];
 
-  const initialStyles = {
-    backgroundColor: currentVariant.background,
-    color: currentVariant.color,
-    border: `1px solid ${currentVariant.border}`,
-    boxShadow: buttonType === 'solid' ? '0 1px 3px 0 rgba(0, 0, 0, 0.1)' : 'none'
-  };
-
-  const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (disabled || isLoading) return;
-    
-    e.currentTarget.style.backgroundColor = currentVariant.hoverBackground;
-    e.currentTarget.style.borderColor = currentVariant.hoverBorder;
-    e.currentTarget.style.color = currentVariant.hoverColor || currentVariant.color;
-    if (currentVariant.shadow !== 'none' && buttonType === 'solid') {
-      e.currentTarget.style.boxShadow = currentVariant.shadow;
-      e.currentTarget.style.transform = 'translateY(-1px)';
+    // Add focus ring classes
+    if (variant === 'primary') {
+      baseClasses.push('focus:ring-blue-300');
+    } else if (variant === 'secondary') {
+      baseClasses.push('focus:ring-gray-300');
+    } else if (variant === 'danger') {
+      baseClasses.push('focus:ring-red-300');
+    } else if (variant === 'success') {
+      baseClasses.push('focus:ring-green-300');
+    } else if (variant === 'warning') {
+      baseClasses.push('focus:ring-yellow-300');
+    } else if (variant === 'info') {
+      baseClasses.push('focus:ring-blue-300');
     }
+
+    // Add variant and type specific classes
+    if (variant === 'primary') {
+      if (buttonType === 'solid') {
+        baseClasses.push('btn-primary-solid');
+      } else if (buttonType === 'outline') {
+        baseClasses.push('btn-primary-outline');
+      } else if (buttonType === 'ghost') {
+        baseClasses.push('btn-primary-ghost');
+      }
+    } else if (variant === 'secondary') {
+      if (buttonType === 'solid') {
+        baseClasses.push('btn-secondary-solid');
+      } else if (buttonType === 'outline') {
+        baseClasses.push('border-2 border-gray-500 text-gray-500 bg-transparent hover:bg-gray-500 hover:text-white');
+      } else if (buttonType === 'ghost') {
+        baseClasses.push('btn-secondary-ghost');
+      }
+    } else {
+      // For other variants (danger, success, warning, info), use the gradient approach
+      if (buttonType === 'solid') {
+        const variantClasses = {
+          danger: 'bg-gradient-error text-inverse hover:bg-red-700 shadow-theme-md hover:shadow-theme-lg hover:-translate-y-0.5',
+          success: 'bg-gradient-success text-inverse hover:bg-green-700 shadow-theme-md hover:shadow-theme-lg hover:-translate-y-0.5',
+          warning: 'bg-gradient-warning text-inverse hover:bg-yellow-700 shadow-theme-md hover:shadow-theme-lg hover:-translate-y-0.5',
+          info: 'bg-gradient-info text-inverse hover:bg-sky-700 shadow-theme-md hover:shadow-theme-lg hover:-translate-y-0.5'
+        };
+        baseClasses.push(variantClasses[variant]);
+      } else if (buttonType === 'outline') {
+        const outlineClasses = {
+          danger: 'bg-transparent border-2 border-red-600 text-theme-error hover:bg-theme-error hover:text-inverse',
+          success: 'bg-transparent border-2 border-green-600 text-theme-success hover:bg-theme-success hover:text-inverse',
+          warning: 'bg-transparent border-2 border-yellow-600 text-theme-warning hover:bg-theme-warning hover:text-inverse',
+          info: 'bg-transparent border-2 border-sky-600 text-theme-info hover:bg-theme-info hover:text-inverse'
+        };
+        baseClasses.push(outlineClasses[variant]);
+      } else if (buttonType === 'ghost') {
+        const ghostClasses = {
+          danger: 'bg-transparent text-theme-error hover:bg-theme-error',
+          success: 'bg-transparent text-theme-success hover:bg-theme-success',
+          warning: 'bg-transparent text-theme-warning hover:bg-theme-warning',
+          info: 'bg-transparent text-theme-info hover:bg-theme-info'
+        };
+        baseClasses.push(ghostClasses[variant]);
+      }
+    }
+
+    if (className) {
+      baseClasses.push(className);
+    }
+
+    return baseClasses.filter(Boolean).join(' ');
   };
 
-  const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (disabled || isLoading) return;
-    
-    e.currentTarget.style.backgroundColor = currentVariant.background;
-    e.currentTarget.style.borderColor = currentVariant.border;
-    e.currentTarget.style.color = currentVariant.color;
-    e.currentTarget.style.boxShadow = buttonType === 'solid' ? '0 1px 3px 0 rgba(0, 0, 0, 0.1)' : 'none';
-    e.currentTarget.style.transform = 'translateY(0)';
-  };
-
+  // Loading spinner component - maintaining exact same as original
   const LoadingSpinner = () => (
     <svg
       className={`animate-spin ${currentSize.iconSize}`}
@@ -340,6 +184,7 @@ const Button: React.FC<ButtonProps> = ({
     </svg>
   );
 
+  // Icon rendering function - maintaining exact same as original
   const renderIcon = () => {
     if (isLoading) return <LoadingSpinner />;
     if (!icon) return null;
@@ -360,10 +205,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       type={type}
-      className={baseClasses}
-      style={initialStyles}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className={getButtonClasses()}
       disabled={disabled || isLoading}
       {...props}
     >
