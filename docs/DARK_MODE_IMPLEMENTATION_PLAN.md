@@ -1,5 +1,17 @@
 # 🌙 Plan Detallado para Implementación de Modo Oscuro en Study Lab
 
+## 📝 NOTAS IMPORTANTES PARA FASE 5
+
+### 🎨 AJUSTE DE CONTRASTE PENDIENTE
+- **CURRENT:** Texto blanco puro (#ffffff) implementado para WCAG AAA compliance
+- **ISSUE:** El blanco puro puede ser visualmente agresivo en dark mode
+- **PROPOSAL:** Usar un tono más suave como:
+  - `--text-primary: #f8fafc` (slate-50) - más suave visualmente
+  - `--text-primary: #e2e8f0` (slate-200) - alternativa si se necesita más contraste
+- **TESTING NEEDED:** Validar que el contraste sigue cumpliendo WCAG AAA después del cambio
+
+---
+
 ## 📊 Estado Actual
 
 ### ✅ COMPLETADO
