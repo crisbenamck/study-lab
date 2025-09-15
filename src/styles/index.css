@@ -90,7 +90,7 @@
 /* Dark Theme */
 [data-theme="dark"] {
   /* === BACKGROUNDS === */
-  --bg-primary: #0f172a;          /* Main background */
+  --bg-primary: #0f172a;          /* Main background - más oscuro */
   --bg-secondary: #1e293b;        /* Secondary background */  
   --bg-tertiary: #334155;         /* Tertiary background */
   --bg-elevated: #1e293b;         /* Elevated surfaces */
@@ -98,9 +98,9 @@
   --bg-disabled: #475569;         /* Disabled elements */
   
   /* === TEXT COLORS === */
-  --text-primary: #f8fafc;        /* Primary text (AAA) */
-  --text-secondary: #cbd5e1;      /* Secondary text (AAA) */
-  --text-tertiary: #94a3b8;       /* Tertiary text (AA large) */
+  --text-primary: #ffffff;        /* Texto principal - BLANCO PURO para máximo contraste */
+  --text-secondary: #e2e8f0;      /* Texto secundario - mucho más claro */
+  --text-tertiary: #cbd5e1;       /* Texto terciario - más visible */
   --text-disabled: #64748b;       /* Disabled text */
   --text-inverse: #0f172a;        /* Text on light backgrounds */
   
