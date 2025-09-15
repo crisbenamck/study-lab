@@ -19,22 +19,22 @@ const ExplanationReference: FC<ExplanationReferenceProps> = ({ explanation, link
     <div className={`mb-6 ${className}`}>
       {explanation && (
         <>
-          <h4 className="text-sm font-medium text-gray-700 mb-2">Explicación:</h4>
-          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-            <p className="text-gray-900 leading-relaxed">{explanation}</p>
+          <h4 className="text-sm font-medium text-primary mb-2">Explicación:</h4>
+          <div className="bg-info-50 rounded-lg p-4 border border-info-200 theme-transition">
+            <p className="text-primary leading-relaxed">{explanation}</p>
           </div>
         </>
       )}
       {link && (
-        <div className="border-t pt-4 mt-4">
+        <div className="border-t border-gray-light pt-4 mt-4 theme-transition">
           <div className="flex items-center gap-2 text-sm">
-            <LinkIcon className="w-4 h-4 text-gray-500 flex-shrink-0" />
-            <span className="text-gray-500 font-medium">Fuente:</span>
+            <LinkIcon className="w-4 h-4 text-secondary flex-shrink-0" />
+            <span className="text-secondary font-medium">Fuente:</span>
             <a
               href={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:text-blue-800 transition-colors truncate flex-1 hover:underline"
+              className="text-primary-600 hover:text-primary-800 transition-colors truncate flex-1 hover:underline"
             >
               {link}
             </a>
