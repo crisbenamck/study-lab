@@ -40,24 +40,24 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({
       title={isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
     >
       <div className="relative w-5 h-5">
-        {/* Sun Icon */}
+        {/* Sun Icon - Show when in dark mode (to indicate switch to light) */}
         <SunIcon 
           className={`
             absolute inset-0 w-5 h-5 transition-all duration-300
             ${isDark 
-              ? 'opacity-0 rotate-90 scale-75 text-amber-400' 
-              : 'opacity-100 rotate-0 scale-100 text-amber-500'
+              ? 'opacity-100 rotate-0 scale-100 text-amber-400' 
+              : 'opacity-0 rotate-90 scale-75 text-amber-500'
             }
           `}
         />
         
-        {/* Moon Icon */}
+        {/* Moon Icon - Show when in light mode (to indicate switch to dark) */}
         <MoonIcon 
           className={`
             absolute inset-0 w-5 h-5 transition-all duration-300
             ${isDark 
-              ? 'opacity-100 rotate-0 scale-100 text-muted-foreground' 
-              : 'opacity-0 -rotate-90 scale-75 text-muted-foreground'
+              ? 'opacity-0 -rotate-90 scale-75 text-muted-foreground' 
+              : 'opacity-100 rotate-0 scale-100 text-muted-foreground'
             }
           `}
         />
