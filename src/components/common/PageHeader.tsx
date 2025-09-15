@@ -12,9 +12,9 @@ interface PageHeaderProps {
  */
 const PageHeader: React.FC<PageHeaderProps> = ({ title, description, className }) => (
   <div className={`mb-12 text-left ${className || ''}`}>
-    <h1 className="text-4xl font-bold text-gray-800 mb-4">{title}</h1>
+    <h1 className="text-4xl font-bold text-foreground mb-4">{title}</h1>
     {description && (
-      <p className="text-lg text-gray-600 max-w-3xl">{description}</p>
+      <p className="text-lg text-muted-foreground max-w-3xl">{description}</p>
     )}
   </div>
 );
