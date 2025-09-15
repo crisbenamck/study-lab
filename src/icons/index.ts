@@ -50,7 +50,7 @@ export { default as RefreshIcon } from './RefreshIcon';
 export { default as FlashcardsIcon } from './FlashcardsIcon';
 export { default as ExamIcon } from './TestIcon';
 
-// Iconos nuevos para Test API
+// Icons for Gemini Test API
 export { default as SettingsIcon } from './SettingsIcon';
 export { default as WriteIcon } from './WriteIcon';
 export { default as LightBulbIcon } from './LightBulbIcon';

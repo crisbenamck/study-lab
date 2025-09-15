@@ -4,12 +4,12 @@ import PageHeader from '../components/common/PageHeader';
 import Layout from '../components/Layout';
 import type { AppState } from '../types/AppState';
 
-interface TestAPIPageProps {
+interface GeminiTestAPIPageProps {
   appState: AppState;
   showAlert: (message: string, options?: { title?: string; type?: 'info' | 'success' | 'warning' | 'error'; buttonText?: string; }) => void;
 }
 
-const TestAPIPage: React.FC<TestAPIPageProps> = ({
+const GeminiTestAPIPage: React.FC<GeminiTestAPIPageProps> = ({
   appState,
   showAlert
 }) => {
@@ -18,7 +18,7 @@ const TestAPIPage: React.FC<TestAPIPageProps> = ({
       <div className="py-16">
         <div className="max-w-4xl mx-auto px-4">
           <PageHeader
-            title="Test de API Gemini"
+            title="Gemini Test API"
             description="Prueba la conexión y configuración de la API de Google AI Studio"
           />
           
@@ -32,4 +32,4 @@ const TestAPIPage: React.FC<TestAPIPageProps> = ({
   );
 };
 
-export default TestAPIPage;
+export default GeminiTestAPIPage;

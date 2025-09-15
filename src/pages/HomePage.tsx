@@ -87,11 +87,11 @@ const HomePage: React.FC = () => {
       ]
     },
     {
-      id: 'api-test',
+      id: 'gemini-api-test',
       title: 'Test de API',
       description: 'Prueba la conexión y configuración de la API de Google AI Studio para asegurar el correcto funcionamiento.',
       icon: <ExamIcon className="w-8 h-8" />,
-      link: '/study-lab/api-test',
+      link: '/study-lab/gemini-api-test',
       color: 'bg-red-50 text-red-600',
       borderColor: 'border-red-200 hover:border-red-300',
       features: [
