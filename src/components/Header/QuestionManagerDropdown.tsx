@@ -31,7 +31,7 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
           
           {/* Badge entre el texto y el ícono */}
           {questions.length > 0 && (
-            <div className="bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold ml-2 min-w-[20px]">
+            <div className="bg-blue-600 dark:bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold ml-2 min-w-[20px]">
               {questions.length}
             </div>
           )}
@@ -77,7 +77,7 @@ const QuestionManagerDropdown: React.FC<QuestionManagerDropdownProps> = ({
                   
                   {/* Badge individual para Ver Preguntas en el dropdown */}
                   {isQuestionsPage && questions.length > 0 && (
-                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-primary text-primary-foreground text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium px-1 min-w-[24px]">
+                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-blue-600 dark:bg-blue-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-medium px-1 min-w-[24px]">
                       {questions.length}
                     </span>
                   )}
