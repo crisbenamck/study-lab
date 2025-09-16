@@ -128,36 +128,38 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
           {/* Sección inferior: Inputs alineados con los textos */}
           <div className="grid grid-cols-[auto_1fr] gap-3">
             <div className="w-12"></div>
-            <div className="flex items-center gap-2 min-w-0">
-              <input
-                type="number"
-                placeholder="Desde"
-                value={rangeStart}
-                onChange={(e) => onRangeStartChange(e.target.value)}
-                onClick={(e) => {
-                  onScopeChange('range');
-                  e.stopPropagation();
-                }}
-                onFocus={() => setFocusedInput('rangeStart')}
-                onBlur={() => setFocusedInput(null)}
-                className="scope-card-input flex-1 min-w-0 p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-blue-500 focus:outline-none"
-                min="1"
-              />
-              <span className="text-gray-500 text-sm flex-shrink-0">a</span>
-              <input
-                type="number"
-                placeholder="Hasta"
-                value={rangeEnd}
-                onChange={(e) => onRangeEndChange(e.target.value)}
-                onClick={(e) => {
-                  onScopeChange('range');
-                  e.stopPropagation();
-                }}
-                onFocus={() => setFocusedInput('rangeEnd')}
-                onBlur={() => setFocusedInput(null)}
-                className="scope-card-input flex-1 min-w-0 p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-blue-500 focus:outline-none"
-                min="1"
-              />
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  placeholder="Desde"
+                  value={rangeStart}
+                  onChange={(e) => onRangeStartChange(e.target.value)}
+                  onClick={(e) => {
+                    onScopeChange('range');
+                    e.stopPropagation();
+                  }}
+                  onFocus={() => setFocusedInput('rangeStart')}
+                  onBlur={() => setFocusedInput(null)}
+                  className="scope-card-input flex-1 min-w-0 p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-blue-500 focus:outline-none"
+                  min="1"
+                />
+                <span className="text-gray-500 text-sm flex-shrink-0">a</span>
+                <input
+                  type="number"
+                  placeholder="Hasta"
+                  value={rangeEnd}
+                  onChange={(e) => onRangeEndChange(e.target.value)}
+                  onClick={(e) => {
+                    onScopeChange('range');
+                    e.stopPropagation();
+                  }}
+                  onFocus={() => setFocusedInput('rangeEnd')}
+                  onBlur={() => setFocusedInput(null)}
+                  className="scope-card-input flex-1 min-w-0 p-2 border border-gray-300 rounded-lg text-sm bg-white focus:border-blue-500 focus:outline-none"
+                  min="1"
+                />
+              </div>
               {rangeError && (
                 <p className="text-red-600 text-xs mt-2">{rangeError}</p>
               )}
