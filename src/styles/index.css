@@ -446,6 +446,12 @@ select:focus {
   background-color: #f8fafc !important; /* gray-50 */
 }
 
+/* Dropdown Items Active + Hover - Light Mode (higher specificity) */
+.dropdown-item.dropdown-item-active:hover {
+  color: #2563eb !important; /* blue-600 */
+  background-color: #dbeafe !important; /* blue-50 - keep original active background */
+}
+
 /* Dropdown Items - Dark Mode */
 [data-theme="dark"] .dropdown-item {
   color: #d1d5db !important; /* gray-300 */
@@ -459,6 +465,12 @@ select:focus {
 [data-theme="dark"] .dropdown-item:hover {
   color: #e5e7eb !important; /* gray-200 */
   background-color: #374151 !important; /* gray-700 */
+}
+
+/* Dropdown Items Active + Hover - Dark Mode (higher specificity) */
+[data-theme="dark"] .dropdown-item.dropdown-item-active:hover {
+  color: #e5e7eb !important; /* gray-200 */
+  background-color: #1e40af !important; /* blue-800 - keep original active background */
 }
 
 /* Dropdown Active Indicator - Light Mode */
