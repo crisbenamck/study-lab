@@ -463,8 +463,8 @@ select:focus {
 }
 
 [data-theme="dark"] .dropdown-item:hover {
-  color: #e5e7eb !important; /* gray-200 */
-  background-color: #374151 !important; /* gray-700 */
+  color: #f8fafc !important; /* slate-50 - more contrast */
+  background-color: #475569 !important; /* slate-600 - more visible background */
 }
 
 /* Dropdown Items Active + Hover - Dark Mode (higher specificity) */
