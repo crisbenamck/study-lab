@@ -25,8 +25,8 @@ const StudyModeSelector: React.FC<StudyModeSelectorProps> = ({ mode, onModeChang
   ];
 
   return (
-    <div className="mb-10 pb-8 border-b border-primary theme-transition">
-      <h2 className="text-2xl font-semibold text-primary dark:text-slate-200 mb-4">
+    <div className="mb-10 pb-8 border-b theme-transition" style={{ borderColor: 'var(--border-primary)' }}>
+      <h2 className="text-2xl font-semibold mb-4 study-section-title">
         Tipo de Práctica
       </h2>
       

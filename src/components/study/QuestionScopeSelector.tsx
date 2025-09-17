@@ -58,15 +58,15 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
   const isRandomCardFocused = focusedInput === 'randomCount' || randomCardFocused;
 
   return (
-    <div className="mb-10 pb-8 border-b border-primary">
-      <h2 className="text-2xl font-semibold text-primary dark:text-slate-200 mb-4">
+    <div className="mb-10 pb-8 border-b theme-transition" style={{ borderColor: 'var(--border-primary)' }}>
+      <h2 className="text-2xl font-semibold mb-4 study-section-title">
         Preguntas a Estudiar
       </h2>
       
       {/* Información por defecto */}
-      <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg">
+      <div className="mb-6 p-4 border rounded-lg scope-info-card">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 max-w-none">
-          <p className="text-blue-800 dark:text-blue-200 text-sm flex-1">
+          <p className="text-sm flex-1 scope-info-text">
             <strong>Por defecto:</strong> Si no seleccionas ninguna opción específica, la práctica iniciará con todas las preguntas disponibles ({questionsCount} pregunta{questionsCount !== 1 ? 's' : ''}).
           </p>
           {(scope === 'range' || scope === 'random') && (
@@ -89,29 +89,21 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
           onClick={() => onScopeChange('range')}
           onFocusCapture={handleRangeFocusIn}
           onBlurCapture={handleRangeFocusOut}
-          className={`p-6 rounded-xl transition-all duration-200 text-left hover:shadow-md flex flex-col min-h-[140px] focus:outline-2 focus:outline-blue-500 focus:outline-offset-2 ${
-            scope === 'range'
-              ? 'border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400 shadow-lg ring-2 ring-blue-200 dark:ring-blue-800'
-              : isRangeCardFocused
-              ? 'border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400 shadow-lg'
-              : 'border border-primary hover:border-secondary dark:border-slate-600 dark:hover:border-slate-500 bg-background dark:bg-slate-800/50'
+          className={`p-6 rounded-xl border-2 transition-all duration-200 text-left hover:shadow-md flex flex-col min-h-[140px] focus:outline-2 focus:outline-blue-500 focus:outline-offset-2 scope-card ${
+            scope === 'range' ? 'selected' : isRangeCardFocused ? 'focused' : ''
           }`}
         >
           {/* Sección superior: Icono y textos */}
           <div className="flex-1 mb-4">
             <div className="grid grid-cols-[auto_1fr_auto] gap-3">
-              <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                scope === 'range' || isRangeCardFocused
-                  ? 'bg-blue-100 text-blue-600 dark:bg-blue-800/50 dark:text-blue-300' 
-                  : 'bg-muted text-secondary dark:bg-slate-700 dark:text-slate-400'
-              }`}>
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 icon-container">
                 <TargetIcon className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-primary dark:text-slate-200">
+                <h3 className="text-base font-semibold">
                   Rango específico
                 </h3>
-                <p className="text-secondary dark:text-slate-400 text-xs">
+                <p className="text-xs">
                   Ingresa el rango de preguntas a estudiar
                 </p>
               </div>
@@ -141,10 +133,10 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
                   }}
                   onFocus={() => setFocusedInput('rangeStart')}
                   onBlur={() => setFocusedInput(null)}
-                  className="scope-card-input flex-1 min-w-0 p-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none placeholder:text-gray-500 dark:placeholder:text-slate-400"
+                  className="scope-card-input flex-1 min-w-0 p-2 border rounded-lg text-sm focus:outline-none"
                   min="1"
                 />
-                <span className="text-gray-500 dark:text-slate-400 text-sm flex-shrink-0">a</span>
+                <span className="text-sm flex-shrink-0 scope-input-separator">a</span>
                 <input
                   type="number"
                   placeholder="Hasta"
@@ -156,12 +148,12 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
                   }}
                   onFocus={() => setFocusedInput('rangeEnd')}
                   onBlur={() => setFocusedInput(null)}
-                  className="scope-card-input flex-1 min-w-0 p-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none placeholder:text-gray-500 dark:placeholder:text-slate-400"
+                  className="scope-card-input flex-1 min-w-0 p-2 border rounded-lg text-sm focus:outline-none"
                   min="1"
                 />
               </div>
               {rangeError && (
-                <p className="text-red-600 dark:text-red-400 text-xs mt-2">{rangeError}</p>
+                <p className="text-xs mt-2 scope-error-text">{rangeError}</p>
               )}
             </div>
           </div>
@@ -172,29 +164,21 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
           onClick={() => onScopeChange('random')}
           onFocusCapture={handleRandomFocusIn}
           onBlurCapture={handleRandomFocusOut}
-          className={`p-6 rounded-xl transition-all duration-200 text-left hover:shadow-md flex flex-col min-h-[140px] focus:outline-2 focus:outline-blue-500 focus:outline-offset-2 ${
-            scope === 'random'
-              ? 'border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400 shadow-lg ring-2 ring-blue-200 dark:ring-blue-800'
-              : isRandomCardFocused
-              ? 'border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/30 dark:border-blue-400 shadow-lg'
-              : 'border border-primary hover:border-secondary dark:border-slate-600 dark:hover:border-slate-500 bg-background dark:bg-slate-800/50'
+          className={`p-6 rounded-xl border-2 transition-all duration-200 text-left hover:shadow-md flex flex-col min-h-[140px] focus:outline-2 focus:outline-blue-500 focus:outline-offset-2 scope-card ${
+            scope === 'random' ? 'selected' : isRandomCardFocused ? 'focused' : ''
           }`}
         >
           {/* Sección superior: Icono y textos */}
           <div className="flex-1 mb-4">
             <div className="grid grid-cols-[auto_1fr_auto] gap-3">
-              <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                scope === 'random' || isRandomCardFocused
-                  ? 'bg-blue-100 text-blue-600 dark:bg-blue-800/50 dark:text-blue-300' 
-                  : 'bg-muted text-secondary dark:bg-slate-700 dark:text-slate-400'
-              }`}>
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 icon-container">
                 <RefreshIcon className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-primary dark:text-slate-200">
+                <h3 className="text-base font-semibold">
                   Preguntas aleatorias
                 </h3>
-                <p className="text-secondary dark:text-slate-400 text-xs">
+                <p className="text-xs">
                   Selecciona cuántas preguntas aleatorias quieres estudiar
                 </p>
               </div>
@@ -223,11 +207,11 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
                 }}
                 onFocus={() => setFocusedInput('randomCount')}
                 onBlur={() => setFocusedInput(null)}
-                className="scope-card-input flex-1 min-w-0 p-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none placeholder:text-gray-500 dark:placeholder:text-slate-400"
+                className="scope-card-input flex-1 min-w-0 p-2 border rounded-lg text-sm focus:outline-none"
                 min="1"
                 max={questionsCount}
               />
-              <span className="text-gray-500 dark:text-slate-400 text-sm flex-shrink-0">(máx. {questionsCount})</span>
+              <span className="text-sm flex-shrink-0 scope-input-separator">(máx. {questionsCount})</span>
             </div>
           </div>
         </button>

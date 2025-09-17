@@ -30,6 +30,8 @@
   /* === SEMANTIC COLORS === */
   --color-primary: #3b82f6;       /* Primary color */
   --color-primary-hover: #2563eb; /* Primary hover */
+  --color-primary-bg: #eff6ff;    /* Primary background (blue-50) */
+  --color-primary-text: #1e40af;  /* Primary text (blue-800) */
   --color-success: #059669;       /* Success green (AAA) */
   --color-success-bg: #d1fae5;    /* Success background */
   --color-warning: #d97706;       /* Warning yellow (AAA) */
@@ -113,6 +115,8 @@
   /* === SEMANTIC COLORS === */
   --color-primary: #60a5fa;       /* Primary color */
   --color-primary-hover: #3b82f6; /* Primary hover */
+  --color-primary-bg: #1e3a8a;    /* Primary background (blue-800/20) */
+  --color-primary-text: #93c5fd;  /* Primary text (blue-300) */
   --color-success: #10b981;       /* Success green (AAA) */
   --color-success-bg: #064e3b;    /* Success background */
   --color-warning: #f59e0b;       /* Warning yellow (AAA) */
@@ -507,6 +511,172 @@ select:focus {
 
 .loading-spinner .opacity-75 {
   opacity: 0.75;
+}
+
+/* === STUDY COMPONENTS === */
+/* Study Mode Card - Using CSS Variables System */
+.study-mode-card {
+  background-color: var(--bg-primary) !important;
+  border-color: var(--border-primary) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.study-mode-card:hover {
+  border-color: var(--border-secondary) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.study-mode-card.selected {
+  background-color: var(--color-primary-bg) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.study-mode-card .icon-container {
+  background-color: var(--bg-elevated) !important;
+  color: var(--text-secondary) !important;
+}
+
+.study-mode-card.selected .icon-container {
+  background-color: var(--color-primary) !important;
+  color: var(--bg-primary) !important;
+}
+
+.study-mode-card h3 {
+  color: var(--text-primary) !important;
+}
+
+.study-mode-card p {
+  color: var(--text-secondary) !important;
+}
+
+/* Study Configuration Components */
+.study-config-container {
+  background-color: var(--bg-primary) !important;
+  border-color: var(--border-primary) !important;
+}
+
+.study-config-title {
+  color: var(--text-primary) !important;
+}
+
+.study-config-description {
+  color: var(--text-secondary) !important;
+}
+
+/* Study Section Headers */
+.study-section-title {
+  color: var(--text-primary) !important;
+  border-color: var(--border-primary) !important;
+}
+
+/* === QUESTION SCOPE SELECTOR SPECIFIC STYLES === */
+
+/* Info card at the top */
+.scope-info-card {
+  background-color: var(--color-primary-bg) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.scope-info-text {
+  color: var(--color-primary-text) !important;
+}
+
+/* Scope selection cards */
+.scope-card {
+  background-color: var(--bg-elevated) !important;
+  border-color: var(--border-primary) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.2s ease-in-out;
+}
+
+.scope-card:hover {
+  border-color: var(--border-secondary) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.scope-card.selected,
+.scope-card.focused {
+  background-color: var(--color-primary-bg) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* Scope card icons */
+.scope-card .icon-container {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-secondary) !important;
+}
+
+.scope-card.selected .icon-container,
+.scope-card.focused .icon-container {
+  background-color: var(--color-primary) !important;
+  color: var(--bg-primary) !important;
+}
+
+/* Scope card titles and descriptions */
+.scope-card h3 {
+  color: var(--text-primary) !important;
+}
+
+.scope-card p {
+  color: var(--text-secondary) !important;
+}
+
+/* Input fields within scope cards */
+.scope-card-input {
+  background-color: var(--bg-input) !important;
+  border-color: var(--border-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.scope-card-input:focus {
+  border-color: var(--color-primary) !important;
+  outline: none !important;
+}
+
+.scope-card-input::placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+/* Input separators and labels */
+.scope-input-separator {
+  color: var(--text-secondary) !important;
+}
+
+/* Error messages */
+p.scope-error-text,
+.scope-card .scope-error-text {
+  color: var(--color-error) !important;
+  font-weight: 500;
+}
+
+/* === EXAM CONFIGURATION SPECIFIC STYLES === */
+
+/* Input fields in exam configuration */
+.exam-config-input {
+  background-color: var(--bg-input) !important;
+  border-color: var(--border-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.exam-config-input:focus {
+  border-color: var(--color-primary) !important;
+  outline: none !important;
+}
+
+.exam-config-input::placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+/* Input labels and helper text */
+.exam-config-label {
+  color: var(--text-secondary) !important;
+}
+
+.exam-config-helper-text {
+  color: var(--text-secondary) !important;
 }
 
 /* Selection styles */
