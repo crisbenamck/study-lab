@@ -4,7 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: ['class', '[data-theme="dark"]'], // Support for data-theme attribute
+  darkMode: ['selector', '[data-theme="dark"]'], // Use data-theme attribute only
   theme: {
     extend: {
       colors: {
