@@ -10,15 +10,16 @@ interface StartStudyButtonProps {
 
 const StartStudyButton: React.FC<StartStudyButtonProps> = ({ mode, onStartSession }) => {
   return (
-    <div>
+    <div className="flex justify-center mt-8">
       <Button
         onClick={onStartSession}
         variant="primary"
         size="xl"
         icon={<TargetIcon />}
         iconPosition="left"
+        className="start-study-button"
       >
-        Iniciar {mode === 'flashcards' ? 'Flash Cards' : 'Exam'}
+        Iniciar {mode === 'flashcards' ? 'Flash Cards' : 'Examen'}
       </Button>
     </div>
   );

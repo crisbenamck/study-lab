@@ -519,6 +519,7 @@ select:focus {
   background-color: var(--bg-primary) !important;
   border-color: var(--border-primary) !important;
   color: var(--text-primary) !important;
+  cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
 
@@ -588,6 +589,7 @@ select:focus {
   background-color: var(--bg-elevated) !important;
   border-color: var(--border-primary) !important;
   color: var(--text-primary) !important;
+  cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
 
@@ -695,15 +697,44 @@ p.scope-error-text,
    ======================== */
 
 /* Dark mode specific styling for study components */
+[data-theme="dark"] .study-mode-card {
+  background-color: var(--bg-primary) !important; /* Reset to primary background */
+  border-color: var(--border-primary) !important;
+}
+
 [data-theme="dark"] .study-mode-card.selected {
   background-color: #374151 !important; /* gray-700 - elegant background */
-  border-color: #9ca3af !important; /* gray-400 - subtle border */
+}
+
+/* Dark mode: Colored borders matching SVG icons */
+[data-theme="dark"] .study-mode-card:nth-child(1).selected {
+  border-color: #059669 !important; /* emerald-600 - Flash Cards border */
+}
+
+[data-theme="dark"] .study-mode-card:nth-child(2).selected {
+  border-color: #dc2626 !important; /* red-600 - Exam border */
+}
+
+/* Dark mode: Reset background for all scope cards first */
+[data-theme="dark"] .scope-card {
+  background-color: var(--bg-primary) !important; /* Reset to primary background */
+  border-color: var(--border-primary) !important;
 }
 
 [data-theme="dark"] .scope-card.selected,
 [data-theme="dark"] .scope-card.focused {
   background-color: #374151 !important; /* gray-700 - consistent with study cards */
-  border-color: #9ca3af !important; /* gray-400 - subtle border */
+}
+
+/* Dark mode: Colored borders matching SVG icons for scope cards */
+[data-theme="dark"] .scope-card:nth-child(1).selected,
+[data-theme="dark"] .scope-card:nth-child(1).focused {
+  border-color: #7c3aed !important; /* violet-600 - Range selector border */
+}
+
+[data-theme="dark"] .scope-card:nth-child(2).selected,
+[data-theme="dark"] .scope-card:nth-child(2).focused {
+  border-color: #ea580c !important; /* orange-600 - Random selector border */
 }
 
 /* Dark mode: Colorful SVG icons for better UX/UI */
@@ -738,4 +769,90 @@ p.scope-error-text,
 [data-theme="dark"] .scope-card .icon-container {
   background-color: #4b5563 !important; /* gray-600 - neutral */
   color: #9ca3af !important; /* gray-400 - subtle */
+}
+
+/* Dark mode: Enhanced input visibility with darker backgrounds */
+[data-theme="dark"] .scope-card-input {
+  background-color: #1f2937 !important; /* gray-800 - darker than card background */
+  border-color: #4b5563 !important; /* gray-600 - subtle border */
+  color: #f3f4f6 !important; /* gray-100 - high contrast text */
+}
+
+[data-theme="dark"] .scope-card-input:focus {
+  border-color: var(--color-primary) !important;
+  background-color: #111827 !important; /* gray-900 - even darker on focus */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important; /* subtle focus ring */
+}
+
+[data-theme="dark"] .scope-card-input::placeholder {
+  color: #9ca3af !important; /* gray-400 - visible placeholder */
+}
+
+[data-theme="dark"] .exam-config-input {
+  background-color: #1f2937 !important; /* gray-800 - darker than card background */
+  border-color: #4b5563 !important; /* gray-600 - subtle border */
+  color: #f3f4f6 !important; /* gray-100 - high contrast text */
+}
+
+[data-theme="dark"] .exam-config-input:focus {
+  border-color: var(--color-primary) !important;
+  background-color: #111827 !important; /* gray-900 - even darker on focus */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important; /* subtle focus ring */
+}
+
+[data-theme="dark"] .exam-config-input::placeholder {
+  color: #9ca3af !important; /* gray-400 - visible placeholder */
+}
+
+/* Dark mode: Study configuration containers with distinct background */
+[data-theme="dark"] .study-config-container {
+  background-color: #374151 !important; /* gray-700 - cleaner, more subtle */
+  border-color: #4b5563 !important; /* gray-600 - softer border */
+}
+
+/* Dark mode: Better contrast and visual hierarchy for sub-cards */
+[data-theme="dark"] .study-config-container .study-mode-card {
+  background-color: #1f2937 !important; /* gray-800 - darker for better contrast */
+  border-color: #374151 !important; /* gray-700 - subtle border */
+  transition: all 0.2s ease-in-out;
+}
+
+[data-theme="dark"] .study-config-container .study-mode-card:hover {
+  background-color: #111827 !important; /* gray-900 - darker on hover */
+  border-color: #4b5563 !important; /* gray-600 - more visible border on hover */
+}
+
+[data-theme="dark"] .study-config-container .study-mode-card.selected {
+  background-color: #065f46 !important; /* emerald-800 - colored background for selection */
+  border-color: #10b981 !important; /* emerald-500 - bright border for clear selection */
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important; /* emerald glow */
+}
+
+/* Dark mode: Enhanced Start Study Button */
+[data-theme="dark"] .start-study-button {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important; /* emerald gradient */
+  border: 2px solid #10b981 !important; /* emerald-500 border */
+  box-shadow: 
+    0 4px 12px rgba(16, 185, 129, 0.3),
+    0 8px 24px rgba(6, 95, 70, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important; /* multi-layer shadow + inner highlight */
+  transition: all 0.3s ease !important;
+}
+
+[data-theme="dark"] .start-study-button:hover {
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%) !important; /* darker gradient on hover */
+  border-color: #34d399 !important; /* emerald-400 - brighter border */
+  box-shadow: 
+    0 6px 16px rgba(16, 185, 129, 0.4),
+    0 12px 32px rgba(6, 95, 70, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important; /* enhanced shadow on hover */
+  transform: translateY(-2px) !important; /* subtle lift effect */
+}
+
+[data-theme="dark"] .start-study-button:active {
+  transform: translateY(0px) !important; /* reset lift on click */
+  box-shadow: 
+    0 2px 8px rgba(16, 185, 129, 0.3),
+    0 4px 16px rgba(6, 95, 70, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important; /* reduced shadow when pressed */
 }
