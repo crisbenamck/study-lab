@@ -689,3 +689,53 @@ p.scope-error-text,
   background-color: var(--color-primary);
   color: var(--text-inverse);
 }
+
+/* ========================
+   DARK MODE SPECIFIC OVERRIDES
+   ======================== */
+
+/* Dark mode specific styling for study components */
+[data-theme="dark"] .study-mode-card.selected {
+  background-color: #374151 !important; /* gray-700 - elegant background */
+  border-color: #9ca3af !important; /* gray-400 - subtle border */
+}
+
+[data-theme="dark"] .scope-card.selected,
+[data-theme="dark"] .scope-card.focused {
+  background-color: #374151 !important; /* gray-700 - consistent with study cards */
+  border-color: #9ca3af !important; /* gray-400 - subtle border */
+}
+
+/* Dark mode: Colorful SVG icons for better UX/UI */
+[data-theme="dark"] .study-mode-card:nth-child(1).selected .icon-container {
+  background-color: #059669 !important; /* emerald-600 - Flash Cards */
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .study-mode-card:nth-child(2).selected .icon-container {
+  background-color: #dc2626 !important; /* red-600 - Exam */
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .scope-card:nth-child(1).selected .icon-container,
+[data-theme="dark"] .scope-card:nth-child(1).focused .icon-container {
+  background-color: #7c3aed !important; /* violet-600 - Range selector */
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .scope-card:nth-child(2).selected .icon-container,
+[data-theme="dark"] .scope-card:nth-child(2).focused .icon-container {
+  background-color: #ea580c !important; /* orange-600 - Random selector */
+  color: #ffffff !important;
+}
+
+/* Dark mode: Unselected icons remain neutral but slightly tinted */
+[data-theme="dark"] .study-mode-card .icon-container {
+  background-color: #4b5563 !important; /* gray-600 - neutral */
+  color: #9ca3af !important; /* gray-400 - subtle */
+}
+
+[data-theme="dark"] .scope-card .icon-container {
+  background-color: #4b5563 !important; /* gray-600 - neutral */
+  color: #9ca3af !important; /* gray-400 - subtle */
+}
