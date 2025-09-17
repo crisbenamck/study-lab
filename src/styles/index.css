@@ -830,29 +830,29 @@ p.scope-error-text,
 
 /* Dark mode: Enhanced Start Study Button */
 [data-theme="dark"] .start-study-button {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important; /* emerald gradient */
-  border: 2px solid #10b981 !important; /* emerald-500 border */
+  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important; /* blue gradient - más suave */
+  border: 2px solid #3b82f6 !important; /* blue-500 border - menos agresivo */
   box-shadow: 
-    0 4px 12px rgba(16, 185, 129, 0.3),
-    0 8px 24px rgba(6, 95, 70, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important; /* multi-layer shadow + inner highlight */
+    0 4px 12px rgba(59, 130, 246, 0.2),
+    0 8px 24px rgba(30, 64, 175, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important; /* sombras más suaves */
   transition: all 0.3s ease !important;
 }
 
 [data-theme="dark"] .start-study-button:hover {
-  background: linear-gradient(135deg, #047857 0%, #065f46 100%) !important; /* darker gradient on hover */
-  border-color: #34d399 !important; /* emerald-400 - brighter border */
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important; /* hover más claro pero suave */
+  border-color: #60a5fa !important; /* blue-300 - más suave */
   box-shadow: 
-    0 6px 16px rgba(16, 185, 129, 0.4),
-    0 12px 32px rgba(6, 95, 70, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important; /* enhanced shadow on hover */
+    0 6px 16px rgba(59, 130, 246, 0.25),
+    0 12px 32px rgba(30, 64, 175, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important; /* sombras reducidas */
   transform: translateY(-2px) !important; /* subtle lift effect */
 }
 
 [data-theme="dark"] .start-study-button:active {
   transform: translateY(0px) !important; /* reset lift on click */
   box-shadow: 
-    0 2px 8px rgba(16, 185, 129, 0.3),
-    0 4px 16px rgba(6, 95, 70, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important; /* reduced shadow when pressed */
+    0 2px 8px rgba(59, 130, 246, 0.2),
+    0 4px 16px rgba(30, 64, 175, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important; /* sombras aún más reducidas */
 }
