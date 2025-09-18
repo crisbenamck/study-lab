@@ -856,3 +856,193 @@ p.scope-error-text,
     0 4px 16px rgba(30, 64, 175, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.1) !important; /* sombras aún más reducidas */
 }
+
+/* ========================
+   FLASHCARD IMPROVEMENTS - SOLID COLORS
+   ======================== */
+
+/* Flashcard page background - usar fondo principal */
+.flashcard-page-bg {
+  background-color: var(--bg-primary);
+}
+
+[data-theme="dark"] .flashcard-page-bg {
+  background-color: var(--bg-primary) !important;
+}
+
+/* Flashcard question background - solid colors */
+.flashcard-question-bg {
+  background-color: #fef7ed !important; /* orange-50 */
+}
+
+[data-theme="dark"] .flashcard-question-bg {
+  background-color: #374151 !important; /* gray-700 */
+}
+
+/* Flashcard answer background - solid colors */
+.flashcard-answer-bg {
+  background-color: #f0fdf4 !important; /* green-50 */
+}
+
+[data-theme="dark"] .flashcard-answer-bg {
+  background-color: #065f46 !important; /* emerald-800 */
+}
+
+/* Dark mode flashcard text colors */
+[data-theme="dark"] .flashcard-question-text {
+  color: #f3f4f6 !important; /* gray-100 for better contrast */
+}
+
+[data-theme="dark"] .flashcard-answer-text {
+  color: #f3f4f6 !important; /* gray-100 for better contrast */
+}
+
+/* Dark mode card borders */
+[data-theme="dark"] .flashcard-card-border {
+  border-color: #374151 !important;
+  background-color: #1f2937 !important;
+}
+
+[data-theme="dark"] .flashcard-card-border:hover {
+  border-color: #4b5563 !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Navigation buttons dark mode styles */
+[data-theme="dark"] .flashcard-nav-button {
+  background-color: #374151 !important; /* gray-700 */
+  border-color: #6b7280 !important; /* gray-500 */
+  color: #d1d5db !important; /* gray-300 */
+}
+
+[data-theme="dark"] .flashcard-nav-button:hover {
+  background-color: #4b5563 !important; /* gray-600 */
+  border-color: #9ca3af !important; /* gray-400 */
+  color: #f9fafb !important; /* gray-50 */
+}
+
+[data-theme="dark"] .flashcard-nav-button:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+/* ActivityHeader dark mode styles */
+[data-theme="dark"] .activity-header-bg {
+  background-color: #1f2937 !important; /* gray-800 */
+  border-color: #374151 !important; /* gray-700 */
+}
+
+[data-theme="dark"] .activity-header-icon-bg {
+  background-color: #374151 !important; /* gray-700 */
+  color: #60a5fa !important; /* blue-400 */
+}
+
+[data-theme="dark"] .activity-header-title {
+  color: #f9fafb !important; /* gray-50 */
+}
+
+[data-theme="dark"] .activity-header-subtitle {
+  color: #d1d5db !important; /* gray-300 */
+}
+
+[data-theme="dark"] .activity-header-timer {
+  color: #f3f4f6 !important; /* gray-100 */
+}
+
+[data-theme="dark"] .activity-header-timer.warning {
+  color: #fca5a5 !important; /* red-300 */
+}
+
+/* ProgressBar dark mode styles */
+.progress-bar-bg {
+  background-color: #e5e7eb; /* gray-200 for light mode */
+}
+
+.progress-bar-fill {
+  background-color: #2563eb; /* blue-600 for light mode */
+}
+
+.progress-bar-text {
+  color: #6b7280; /* gray-500 for light mode */
+}
+
+[data-theme="dark"] .progress-bar-bg {
+  background-color: #4b5563 !important; /* gray-600 */
+}
+
+[data-theme="dark"] .progress-bar-fill {
+  background-color: #60a5fa !important; /* blue-400 */
+}
+
+[data-theme="dark"] .progress-bar-text {
+  color: #d1d5db !important; /* gray-300 */
+}
+
+/* ========================
+   FLASHCARD EXPLANATION CONTAINER
+   ======================== */
+
+/* Contenedor de explicación en FlashCard */
+.flashcard-explanation-container {
+  background-color: var(--bg-elevated); /* Usar fondo elevado consistente */
+  border-color: var(--border-primary);
+}
+
+/* ========================
+   FLASHCARD HEADER LABELS
+   ======================== */
+
+/* Etiquetas de header de FlashCard (Pregunta #1, Respuesta Correcta, etc.) */
+.flashcard-header-label {
+  background-color: #fed7aa; /* orange-100 */
+  color: #c2410c; /* orange-700 */
+  border-color: #fed7aa; /* orange-200 */
+}
+
+[data-theme="dark"] .flashcard-header-label {
+  background-color: #4b5563 !important; /* gray-600 */
+  color: #d1d5db !important; /* gray-300 */
+  border-color: #6b7280 !important; /* gray-500 */
+}
+
+/* Etiquetas de respuesta en flashcards */
+.flashcard-answer-label {
+  background-color: #dcfce7; /* emerald-100 */
+  color: #047857; /* emerald-700 */
+  border-color: #bbf7d0; /* emerald-200 */
+}
+
+[data-theme="dark"] .flashcard-answer-label {
+  background-color: #065f46 !important; /* emerald-800 */
+  color: #6ee7b7 !important; /* emerald-300 */
+  border-color: #047857 !important; /* emerald-700 */
+}
+
+/* ========================
+   EXPLANATION REFERENCE DARK MODE FIXES
+   ======================== */
+
+/* ExplanationReference dark mode background */
+[data-theme="dark"] .explanation-reference-container .bg-gray-50 {
+  background-color: #374151 !important; /* gray-700 */
+}
+
+[data-theme="dark"] .explanation-reference-container .border-gray-200 {
+  border-color: #4b5563 !important; /* gray-600 */
+}
+
+[data-theme="dark"] .explanation-reference-container .text-slate-900 {
+  color: #f1f5f9 !important; /* slate-100 */
+}
+
+[data-theme="dark"] .explanation-reference-container .text-slate-700 {
+  color: #cbd5e1 !important; /* slate-300 */
+}
+
+[data-theme="dark"] .explanation-reference-container .text-blue-600 {
+  color: #60a5fa !important; /* blue-400 */
+}
+
+[data-theme="dark"] .explanation-reference-container .text-blue-600:hover {
+  color: #93c5fd !important; /* blue-300 */
+}

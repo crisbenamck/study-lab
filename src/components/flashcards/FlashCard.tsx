@@ -8,46 +8,33 @@ import ExplanationReference from '../common/ExplanationReference';
 // Card header subcomponent
 const CardHeader: React.FC<{ label: string; helper: string }> = ({ label, helper }) => (
   <div className="flex items-center justify-between mb-4">
-    <span className="text-sm font-medium text-primary-600 bg-primary-100 px-3 py-1 rounded-full">
+    <span className="flashcard-header-label text-sm font-medium px-3 py-1 rounded-full border">
       {label}
     </span>
     <span className="text-xs text-tertiary">{helper}</span>
   </div>
 );
 
-// Card footer subcomponent
-const CardFooter: React.FC<{ helper: string }> = ({ helper }) => (
-  <div className="text-center">
-    <div className="inline-flex items-center text-sm text-secondary">
-      <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-      </svg>
-      {helper}
-    </div>
-  </div>
-);
-
 // Question face subcomponent
 const QuestionFace: React.FC<{ question: Question }> = ({ question }) => (
-  <div className="p-6 h-full flex flex-col">
+  <div className="p-6 h-full flex flex-col bg-orange-50 flashcard-question-bg rounded-xl">
     <CardHeader label={`Pregunta #${question.question_number}`} helper="Click para ver respuesta" />
     <div className="flex-1 flex items-center justify-center">
-      <p className="text-xl text-primary text-center leading-relaxed">
+      <p className="text-xl text-gray-800 flashcard-question-text text-center leading-relaxed font-medium">
         {question.question_text}
       </p>
     </div>
-    <CardFooter helper="Toca para voltear" />
   </div>
 );
 
 // Answer face subcomponent
 const AnswerFace: React.FC<{ correctOptions: Question['options']; multi: boolean }> = ({ correctOptions, multi }) => (
-  <div className="p-6 h-full flex flex-col">
+  <div className="p-6 h-full flex flex-col bg-green-50 flashcard-answer-bg rounded-xl">
     <CardHeader label={multi ? 'Respuestas Correctas' : 'Respuesta Correcta'} helper="Click para volver" />
     <div className="flex-1 flex flex-col justify-center space-y-4">
       {multi && (
         <div className="text-center mb-2">
-          <span className="text-sm font-medium text-primary" data-testid="flashcard-answer">
+          <span className="flashcard-answer-label text-sm font-medium px-3 py-1 rounded-full border" data-testid="flashcard-answer">
             {correctOptions.length} respuestas correctas
           </span>
         </div>
@@ -55,11 +42,11 @@ const AnswerFace: React.FC<{ correctOptions: Question['options']; multi: boolean
       {correctOptions.map((option, index) => (
         <span
           key={index}
-          className="block text-xl font-medium text-primary text-center"
+          className="block text-xl font-medium text-gray-800 flashcard-answer-text text-center"
           data-testid="flashcard-answer"
         >
           {multi && (
-            <span className="font-bold text-lg mr-3 bg-surface rounded-full w-8 h-8 inline-flex items-center justify-center border border-gray">
+            <span className="font-bold text-lg mr-3 bg-purple-100 text-purple-700 rounded-full w-8 h-8 inline-flex items-center justify-center border border-purple-300">
               {index + 1}
             </span>
           )}
@@ -67,7 +54,6 @@ const AnswerFace: React.FC<{ correctOptions: Question['options']; multi: boolean
         </span>
       ))}
     </div>
-    <CardFooter helper="Toca para volver" />
   </div>
 );
 
@@ -114,12 +100,12 @@ const FlashCard: React.FC<FlashCardProps> = ({
           onClick={handleFlip}
         >
           {/* Card front - Question */}
-          <div className="absolute inset-0 w-full h-full backface-hidden bg-surface rounded-lg shadow-lg border-2 border-gray-light hover:border-primary-300 transition-colors theme-transition">
+          <div className="absolute inset-0 w-full h-full backface-hidden bg-white rounded-xl shadow-xl border-2 border-orange-200 hover:border-orange-300 hover:shadow-2xl transition-all duration-300 theme-transition flashcard-card-border">
             <QuestionFace question={question} />
           </div>
 
           {/* Card back - Only correct answers */}
-          <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-surface rounded-lg shadow-lg border-2 border-gray-light hover:border-primary-300 transition-colors theme-transition">
+          <div className="absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-white rounded-xl shadow-xl border-2 border-emerald-200 hover:border-emerald-300 hover:shadow-2xl transition-all duration-300 theme-transition flashcard-card-border">
             <AnswerFace correctOptions={correctOptions} multi={correctOptions.length > 1} />
           </div>
         </div>
@@ -135,6 +121,7 @@ const FlashCard: React.FC<FlashCardProps> = ({
           size="md"
           icon={<ArrowLeftIcon />}
           iconPosition="left"
+          className="border-gray-300 text-gray-700 bg-white hover:bg-gray-100 hover:border-gray-400 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flashcard-nav-button"
         >
           Anterior
         </Button>
@@ -143,10 +130,11 @@ const FlashCard: React.FC<FlashCardProps> = ({
           <Button
             onClick={handleFlip}
             variant="info"
-            buttonType="outline"
+            buttonType="solid"
             size="md"
             icon={<EyeIcon />}
             iconPosition="left"
+            className="bg-indigo-500 text-white hover:bg-indigo-600 transition-colors duration-200"
           >
             {isFlipped ? 'Ver Pregunta' : 'Ver Respuesta'}
           </Button>
@@ -160,13 +148,14 @@ const FlashCard: React.FC<FlashCardProps> = ({
           size="md"
           icon={<ArrowRightIcon />}
           iconPosition="right"
+          className="border-gray-300 text-gray-700 bg-white hover:bg-gray-100 hover:border-gray-400 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed flashcard-nav-button"
         >
           Siguiente
         </Button>
       </div>
 
       {/* Additional info below buttons */}
-      <div className="w-full space-y-4 border-t border-gray-light pt-6 theme-transition">
+      <div className="flashcard-explanation-container w-full space-y-4 border-t pt-6 rounded-lg p-4 theme-transition">
         <ExplanationReference explanation={question.explanation} link={question.link} />
       </div>
     </div>

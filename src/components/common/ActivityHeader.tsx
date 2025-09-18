@@ -38,21 +38,21 @@ const ActivityHeader: React.FC<ActivityHeaderProps> = ({
   showTimer = false,
 }) => (
   <div className="w-full mb-8">
-    <div className="bg-white border-b top-0 z-10">
+    <div className="bg-white border-b top-0 z-10 activity-header-bg">
       <div className="max-w-4xl mx-auto py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-start w-full">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-blue-100 text-blue-600 mr-3 mt-1">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-blue-100 text-blue-600 mr-3 mt-1 activity-header-icon-bg">
               {icon}
             </div>
             <div className="flex flex-col w-full">
-              <h1 className="text-xl font-semibold text-gray-800">{title}</h1>
-              {subtitle && <p className="text-sm text-gray-600">{subtitle}</p>}
+              <h1 className="text-xl font-semibold text-gray-800 activity-header-title">{title}</h1>
+              {subtitle && <p className="text-sm text-gray-600 activity-header-subtitle">{subtitle}</p>}
             </div>
           </div>
           <div className="flex items-center gap-4 ml-4">
             {showTimer && typeof timeLeft === 'number' && !isNaN(timeLeft) && timeLeft >= 0 && formatTime(timeLeft) !== '' && (
-              <div className={`text-base font-mono ${timeLeft < 300 ? 'text-red-600' : 'text-gray-700'}`}>
+              <div className={`text-base font-mono activity-header-timer ${timeLeft < 300 ? 'warning text-red-600' : 'text-gray-700'}`}>
                 ⏰ {formatTime(timeLeft)}
               </div>
             )}
@@ -70,7 +70,7 @@ const ActivityHeader: React.FC<ActivityHeaderProps> = ({
       </div>
     </div>
     {showProgressBar && typeof progressCurrent === 'number' && typeof progressTotal === 'number' && (
-      <div className="w-full bg-white">
+      <div className="w-full bg-white activity-header-bg">
         <div className="max-w-4xl mx-auto pt-2 pb-0">
           <ProgressBar current={progressCurrent} total={progressTotal} />
         </div>
