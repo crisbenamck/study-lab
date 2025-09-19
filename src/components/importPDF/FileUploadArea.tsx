@@ -74,7 +74,7 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
         </div>
       )}
 
-      <div className="border-2 border-dashed border-primary rounded-xl p-8 text-center hover:border-primary-400 hover:bg-primary-50 transition-all duration-300 mb-6 theme-transition">
+      <div className="border-2 border-dashed border-primary rounded-xl p-8 text-center hover:border-secondary hover:bg-elevated transition-all duration-300 mb-6 theme-transition">
         <Upload className="w-12 h-12 text-tertiary mx-auto mb-4" />
         <h3 className="text-lg font-semibold text-primary mb-2">
           Arrastra un archivo PDF aquí

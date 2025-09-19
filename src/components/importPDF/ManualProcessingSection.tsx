@@ -58,7 +58,7 @@ const ManualProcessingSection: React.FC<ManualProcessingSectionProps> = ({
   }
 
   return (
-    <div className="bg-surface border border-gray-light rounded-lg p-4 mb-6 theme-transition">
+    <div className="bg-card border border-primary rounded-lg p-4 mb-6 theme-transition">
       <div className="flex items-center space-x-2 mb-3">
         <Settings className="w-5 h-5 text-secondary" />
         <h3 className="font-medium text-primary">Configuración de procesamiento</h3>
@@ -76,7 +76,7 @@ const ManualProcessingSection: React.FC<ManualProcessingSectionProps> = ({
               max={totalPages}
               value={pageToProcess}
               onChange={(e) => setPageToProcess(parseInt(e.target.value) || 1)}
-              className="flex-1 px-3 py-2 border border-gray rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-background text-primary theme-transition"
+              className="flex-1 px-3 py-2 border border-primary rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 bg-input text-primary theme-transition"
             />
             <span className="text-sm text-secondary">de {totalPages}</span>
           </div>

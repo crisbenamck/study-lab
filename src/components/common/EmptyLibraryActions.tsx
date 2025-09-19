@@ -12,19 +12,19 @@ interface EmptyLibraryActionsProps {
  * Used in question and study pages.
  */
 const EmptyLibraryActions: React.FC<EmptyLibraryActionsProps> = ({ onCreate, onImport }) => (
-  <div className="bg-white">
+  <div className="bg-primary">
     <div className="max-w-5xl mx-auto px-4 py-8">
       <div className="text-center mb-16">
         <div className="max-w-3xl mx-auto mb-16">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+          <h2 className="text-2xl font-semibold text-primary mb-4">
             Tu biblioteca está vacía
           </h2>
-          <p className="text-lg text-gray-600 leading-relaxed">
+          <p className="text-lg text-secondary leading-relaxed">
             Comienza creando tu primera pregunta o importa contenido desde un archivo PDF para construir tu colección de estudio.
           </p>
         </div>
         <div className="mb-16">
-          <h3 className="text-lg font-bold text-blue-700">
+          <h3 className="text-lg font-bold text-theme-info">
             ¡Selecciona una opción para comenzar ahora!
           </h3>
         </div>

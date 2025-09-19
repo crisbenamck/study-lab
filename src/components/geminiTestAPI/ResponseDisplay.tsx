@@ -9,9 +9,9 @@ interface ResponseDisplayProps {
 const ResponseDisplay: React.FC<ResponseDisplayProps> = ({ response, error }) => {
   if (error) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-card rounded-lg shadow-sm border border-primary">
         <div className="p-6 border-l-4 border-l-red-500">
-          <h3 className="font-semibold text-lg flex items-center gap-2 text-gray-800 mb-4">
+          <h3 className="font-semibold text-lg flex items-center gap-2 text-primary mb-4">
             <ErrorIcon className="w-5 h-5" />
             Error
           </h3>
@@ -27,19 +27,19 @@ const ResponseDisplay: React.FC<ResponseDisplayProps> = ({ response, error }) =>
 
   if (response) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-card rounded-lg shadow-sm border border-primary">
         <div className="p-6 border-l-4 border-l-green-500">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-lg flex items-center gap-2 text-gray-800">
+            <h3 className="font-semibold text-lg flex items-center gap-2 text-primary">
               <MessageIcon className="w-5 h-5" />
               Respuesta de Gemini
             </h3>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-secondary">
               {response.length.toLocaleString()} caracteres
             </span>
           </div>
-          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-            <div className="text-gray-800 leading-relaxed whitespace-pre-wrap">
+          <div className="bg-elevated rounded-lg p-4 border border-primary">
+            <div className="text-primary leading-relaxed whitespace-pre-wrap">
               {response}
             </div>
           </div>

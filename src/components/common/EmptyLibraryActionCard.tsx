@@ -23,12 +23,12 @@ const EmptyLibraryActionCard: React.FC<EmptyLibraryActionCardProps> = ({
   onClick,
   variant = 'primary',
 }) => (
-  <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 flex flex-col items-center text-center">
+  <div className="bg-card rounded-xl shadow-sm border border-primary p-8 flex flex-col items-center text-center">
     <div className="w-16 h-16 rounded-lg flex items-center justify-center mb-4 bg-blue-500">
       {icon}
     </div>
-    <h4 className="text-xl font-bold text-gray-900 mb-2">{title}</h4>
-    <p className="text-gray-600 mb-6">{description}</p>
+    <h4 className="text-xl font-bold text-primary mb-2">{title}</h4>
+    <p className="text-secondary mb-6">{description}</p>
     <button
       aria-label={buttonText}
       className={`inline-flex items-center gap-2 px-5 py-2 rounded-lg font-semibold text-white ${variant === 'primary' ? 'bg-blue-700 hover:bg-blue-800' : 'bg-gray-500 hover:bg-gray-600'} transition-colors`}
