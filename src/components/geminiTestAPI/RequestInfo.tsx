@@ -16,13 +16,13 @@ interface RequestInfoProps {
 
 const RequestInfo: React.FC<RequestInfoProps> = ({ requestInfo }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+    <div className="bg-card rounded-lg shadow-sm border border-primary">
       <div className={`p-6 border-l-4 ${requestInfo.success 
         ? 'border-l-green-500' 
         : 'border-l-red-500'}`}
       >
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-lg flex items-center gap-2 text-gray-800">
+          <h3 className="font-semibold text-lg flex items-center gap-2 text-primary">
             <AlertCircle size={20} />
             Información de la petición
           </h3>
@@ -36,27 +36,27 @@ const RequestInfo: React.FC<RequestInfoProps> = ({ requestInfo }) => {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div>
-            <span className="block text-gray-500 text-sm font-medium">Modelo:</span>
-            <div className="font-mono text-gray-900 font-semibold">
+            <span className="block text-secondary text-sm font-medium">Modelo:</span>
+            <div className="font-mono text-primary font-semibold">
               {requestInfo.model}
             </div>
           </div>
           <div>
-            <span className="block text-gray-500 text-sm font-medium">Duración:</span>
-            <div className="font-mono text-gray-900 font-semibold">
+            <span className="block text-secondary text-sm font-medium">Duración:</span>
+            <div className="font-mono text-primary font-semibold">
               {requestInfo.duration}
             </div>
           </div>
           <div>
-            <span className="block text-gray-500 text-sm font-medium">Hora:</span>
-            <div className="font-mono text-gray-900 font-semibold">
+            <span className="block text-secondary text-sm font-medium">Hora:</span>
+            <div className="font-mono text-primary font-semibold">
               {requestInfo.timestamp}
             </div>
           </div>
           {requestInfo.responseLength && (
             <div>
-              <span className="block text-gray-500 text-sm font-medium">Caracteres:</span>
-              <div className="font-mono text-gray-900 font-semibold">
+              <span className="block text-secondary text-sm font-medium">Caracteres:</span>
+              <div className="font-mono text-primary font-semibold">
                 {requestInfo.responseLength.toLocaleString()}
               </div>
             </div>
