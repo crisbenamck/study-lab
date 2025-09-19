@@ -104,7 +104,7 @@ const ProcessingOptionsSection: React.FC<ProcessingOptionsSectionProps> = ({
         <div className="text-center">
           <button
             onClick={() => setShowManualProcessing(!showManualProcessing)}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 text-xs underline bg-gray-100 text-gray-700 border border-gray-300 shadow-sm hover:bg-gray-200 hover:border-gray-400 hover:shadow-md transform hover:-translate-y-0.5"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 text-xs underline bg-blue-600 text-white border border-blue-700 shadow-sm hover:bg-blue-700 hover:border-blue-800 hover:shadow-md transform hover:-translate-y-0.5"
           >
             {showManualProcessing ? '🔽 Ocultar' : '⚙️ Mostrar'} configuración manual (página específica)
           </button>

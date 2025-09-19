@@ -188,7 +188,7 @@ INSTRUCTIONS:
 1. Look for questions throughout the ENTIRE document
 2. Identify answer options (A, B, C, D, etc.)
 3. If you cannot determine the correct answer, mark the first one as correct
-4. Extract maximum 50 questions to avoid very long responses
+4. Extract maximum 200 questions to avoid very long responses
 5. ALL extracted content must be in English only
 
 REQUIRED JSON FORMAT:
