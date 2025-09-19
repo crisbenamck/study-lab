@@ -15,10 +15,10 @@ const StartProcessingButton: React.FC<StartProcessingButtonProps> = ({
   <button
     onClick={onClick}
     disabled={isDisabled}
-    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-300 w-full justify-center text-white border shadow-sm theme-transition ${
+    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 w-full justify-center border shadow-sm theme-transition ${
       isDisabled 
-        ? 'bg-gray-disabled border-gray-disabled text-tertiary cursor-not-allowed' 
-        : 'bg-primary-600 border-primary-600 hover:bg-primary-700 hover:border-primary-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0'
+        ? 'bg-gray-400 border-gray-400 text-gray-600 cursor-not-allowed' 
+        : 'bg-blue-600 border-blue-600 text-white hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0'
     }`}
   >
     {isProcessing ? (
