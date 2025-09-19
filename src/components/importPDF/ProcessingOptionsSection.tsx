@@ -62,24 +62,24 @@ const ProcessingOptionsSection: React.FC<ProcessingOptionsSectionProps> = ({
   }
 
   return (
-    <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+    <div className="bg-theme-success rounded-lg p-4 mb-6">
       <div className="flex items-center space-x-2 mb-3">
-        <FileText className="w-5 h-5 text-green-600" />
-        <h3 className="font-medium text-green-800">🚀 Procesar PDF Completo</h3>
+        <FileText className="w-5 h-5 text-theme-success" />
+        <h3 className="font-medium text-theme-success">🚀 Procesar PDF Completo</h3>
       </div>
       
       <div className="space-y-4">
-        <p className="text-sm text-green-700 text-center">
+        <p className="text-sm text-theme-success text-center">
           Para optimizar el procesamiento, indica qué tipo de contenido tiene tu PDF:
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+          <div className="bg-card border border-primary rounded-lg p-4 shadow-sm">
             <div className="flex items-center space-x-2 mb-3">
               <span className="text-2xl">📝</span>
-              <h4 className="font-semibold text-gray-800">Solo texto</h4>
+              <h4 className="font-semibold text-primary">Solo texto</h4>
             </div>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-secondary mb-4">
               PDF con preguntas en texto simple, sin imágenes complejas
             </p>
             <ProcessingButton
@@ -91,12 +91,12 @@ const ProcessingOptionsSection: React.FC<ProcessingOptionsSectionProps> = ({
             </ProcessingButton>
           </div>
           
-          <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+          <div className="bg-card border border-primary rounded-lg p-4 shadow-sm">
             <div className="flex items-center space-x-2 mb-3">
               <span className="text-2xl">🖼️</span>
-              <h4 className="font-semibold text-gray-800">Con imágenes</h4>
+              <h4 className="font-semibold text-primary">Con imágenes</h4>
             </div>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-secondary mb-4">
               PDF con diagramas, tablas complejas o preguntas con imágenes
             </p>
             <ProcessingButton
@@ -118,28 +118,29 @@ const ProcessingOptionsSection: React.FC<ProcessingOptionsSectionProps> = ({
         </div>
         
         {isProcessing && processingProgress && (
-          <div className="mt-4 p-3 bg-green-100 border border-green-200 rounded-md">
+          <div className="mt-4 p-3 bg-theme-success rounded-md border border-primary">
             <div className="flex items-center space-x-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-green-600"></div>
-              <span className="text-sm text-green-700">{processingProgress}</span>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+              <span className="text-sm text-theme-success">{processingProgress}</span>
             </div>
             
             {individualProcessingProgress && individualProcessingProgress.stage === 'processing' && (
               <div className="mt-3 space-y-2">
-                <div className="flex justify-between text-xs text-green-600">
+                <div className="flex justify-between text-xs text-theme-success">
                   <span>Procesando preguntas individualmente</span>
                   <span>{individualProcessingProgress.currentQuestion}/{individualProcessingProgress.totalQuestions}</span>
                 </div>
-                <div className="w-full bg-green-200 rounded-full h-2">
+                <div className="w-full bg-elevated rounded-full h-2">
                   <div 
-                    className="bg-green-600 h-2 rounded-full transition-all duration-300"
+                    className="h-2 rounded-full transition-all duration-300"
                     style={{ 
+                      backgroundColor: 'var(--color-success)',
                       width: `${Math.round((individualProcessingProgress.currentQuestion / individualProcessingProgress.totalQuestions) * 100)}%` 
                     }}
                   ></div>
                 </div>
                 {individualProcessingProgress.currentQuestionText && (
-                  <p className="text-xs text-green-600 truncate">
+                  <p className="text-xs text-theme-success truncate">
                     📝 {individualProcessingProgress.currentQuestionText}
                   </p>
                 )}

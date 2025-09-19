@@ -101,7 +101,7 @@ const PDFImport: React.FC<PDFImportProps> = ({
   const hasApiKey = Boolean(geminiApiKey?.trim());
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-4xl mx-auto p-6 space-y-6 bg-primary text-primary">
       <ApiKeyConfig
         geminiApiKey={geminiApiKey}
         saveGeminiApiKey={saveGeminiApiKey}

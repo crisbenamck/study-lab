@@ -54,17 +54,17 @@ const UserProgressSection: React.FC<UserProgressSectionProps> = ({
 
   return (
     <div 
-      className="bg-gray-50 rounded-lg p-4 mt-6"
+      className="bg-elevated rounded-lg p-4 mt-6"
     >
-      <h4 className="font-medium text-gray-800 mb-3">🚀 Progreso:</h4>
+      <h4 className="font-medium text-primary mb-3">🚀 Progreso:</h4>
       <div className="space-y-3">
         {steps.map((step) => (
           <div key={step.id} className="flex items-center space-x-3">
             {getStepIcon(step.completed, step.inProgress)}
             <span className={`text-sm ${
-              step.completed ? 'text-gray-700 font-medium' : 
+              step.completed ? 'text-secondary font-medium' : 
               step.inProgress ? 'text-blue-600 font-medium' :
-              'text-gray-500'
+              'text-tertiary'
             }`}>
               {step.text}
             </span>
@@ -72,8 +72,8 @@ const UserProgressSection: React.FC<UserProgressSectionProps> = ({
         ))}
       </div>
       
-      <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
-        <p className="text-xs text-blue-700">
+      <div className="mt-4 p-3 bg-theme-info rounded border border-primary">
+        <p className="text-xs text-theme-info">
           💡 <strong>Tip:</strong> Usa el "Procesamiento Directo" para mejores resultados. 
           Analiza todo el PDF automáticamente y genera explicaciones detalladas.
         </p>
