@@ -74,7 +74,7 @@ const QuestionScopeSelector: React.FC<QuestionScopeSelectorProps> = ({
               onClick={() => onScopeChange(null)}
               variant="primary"
               size="sm"
-              className="self-start md:ml-4 whitespace-nowrap"
+              className="self-center md:ml-4 whitespace-nowrap scope-reset-button"
             >
               Usar todas
             </Button>

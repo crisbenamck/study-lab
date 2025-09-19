@@ -116,7 +116,7 @@
   --color-primary: #60a5fa;       /* Primary color */
   --color-primary-hover: #3b82f6; /* Primary hover */
   --color-primary-bg: #1e3a8a;    /* Primary background (blue-800/20) */
-  --color-primary-text: #93c5fd;  /* Primary text (blue-300) */
+  --color-primary-text: #f3f4f6;  /* Primary text (gray-100) - better contrast on dark blue background */
   --color-success: #10b981;       /* Success green (AAA) */
   --color-success-bg: #064e3b;    /* Success background */
   --color-warning: #f59e0b;       /* Warning yellow (AAA) */
@@ -145,7 +145,7 @@
   /* === BUTTON SPECIFIC COLORS - DARK THEME === */
   --btn-primary-bg: #3b82f6;
   --btn-primary-border: #3b82f6;
-  --btn-primary-text: #e2e8f0;        /* slate-200 - texto de botón suavizado */
+  --btn-primary-text: #ffffff;        /* white - maximum contrast for better readability */
   --btn-primary-hover-bg: #2563eb;
   --btn-primary-hover-border: #2563eb;
   --btn-primary-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
@@ -584,6 +584,29 @@ select:focus {
   color: var(--color-primary-text) !important;
 }
 
+/* Reset button in scope info card */
+.scope-reset-button {
+  background-color: var(--btn-primary-bg) !important;
+  color: var(--btn-primary-text) !important;
+  border-color: var(--btn-primary-border) !important;
+}
+
+.scope-reset-button:hover {
+  background-color: var(--btn-primary-hover-bg) !important;
+  border-color: var(--btn-primary-hover-border) !important;
+}
+
+[data-theme="dark"] .scope-reset-button {
+  background-color: #10b981 !important; /* emerald-500 - green contrast against blue background */
+  color: #ffffff !important; /* white text */
+  border-color: #10b981 !important;
+}
+
+[data-theme="dark"] .scope-reset-button:hover {
+  background-color: #059669 !important; /* emerald-600 on hover */
+  border-color: #059669 !important;
+}
+
 /* Scope selection cards */
 .scope-card {
   background-color: var(--bg-elevated) !important;
@@ -828,33 +851,46 @@ p.scope-error-text,
   box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2) !important; /* emerald glow */
 }
 
-/* Dark mode: Enhanced Start Study Button */
+/* Light mode: Elegant Start Study Button - unitono y estético */
+.start-study-button {
+  background: #2563eb !important; /* solid blue-600 */
+  border: 1px solid #1d4ed8 !important; /* blue-700 border */
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1) !important; /* minimal shadow */
+  transition: all 0.2s ease !important;
+}
+
+.start-study-button:hover {
+  background: #1d4ed8 !important; /* blue-700 on hover */
+  border-color: #1e40af !important; /* blue-800 border */
+  box-shadow: 0 3px 6px rgba(37, 99, 235, 0.15) !important; /* subtle shadow increase */
+  transform: translateY(-1px) !important; /* minimal lift */
+}
+
+.start-study-button:active {
+  background: #1e40af !important; /* blue-800 when pressed */
+  transform: translateY(0px) !important; /* reset position */
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.1) !important; /* reduced shadow */
+}
+
+/* Dark mode: Elegant Start Study Button - unitono y estético */
 [data-theme="dark"] .start-study-button {
-  background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%) !important; /* blue gradient - más suave */
-  border: 2px solid #3b82f6 !important; /* blue-500 border - menos agresivo */
-  box-shadow: 
-    0 4px 12px rgba(59, 130, 246, 0.2),
-    0 8px 24px rgba(30, 64, 175, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important; /* sombras más suaves */
-  transition: all 0.3s ease !important;
+  background: #3b82f6 !important; /* solid blue-500 */
+  border: 1px solid #2563eb !important; /* blue-600 border */
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1) !important; /* minimal shadow */
+  transition: all 0.2s ease !important;
 }
 
 [data-theme="dark"] .start-study-button:hover {
-  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%) !important; /* hover más claro pero suave */
-  border-color: #60a5fa !important; /* blue-300 - más suave */
-  box-shadow: 
-    0 6px 16px rgba(59, 130, 246, 0.25),
-    0 12px 32px rgba(30, 64, 175, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15) !important; /* sombras reducidas */
-  transform: translateY(-2px) !important; /* subtle lift effect */
+  background: #2563eb !important; /* blue-600 on hover */
+  border-color: #1d4ed8 !important; /* blue-700 border */
+  box-shadow: 0 3px 6px rgba(59, 130, 246, 0.15) !important; /* subtle shadow increase */
+  transform: translateY(-1px) !important; /* minimal lift */
 }
 
 [data-theme="dark"] .start-study-button:active {
-  transform: translateY(0px) !important; /* reset lift on click */
-  box-shadow: 
-    0 2px 8px rgba(59, 130, 246, 0.2),
-    0 4px 16px rgba(30, 64, 175, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important; /* sombras aún más reducidas */
+  background: #1d4ed8 !important; /* blue-700 when pressed */
+  transform: translateY(0px) !important; /* reset position */
+  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.1) !important; /* reduced shadow */
 }
 
 /* ========================
