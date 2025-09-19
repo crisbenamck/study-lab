@@ -47,10 +47,10 @@ const FileUploadArea: React.FC<FileUploadAreaProps> = ({
     }
   }, [handleFileChange]);
 
-  const baseButtonClasses = "inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-md cursor-pointer transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 text-white border shadow-sm theme-transition";
+  const baseButtonClasses = "inline-flex items-center justify-center px-6 py-3 text-sm font-semibold rounded-md cursor-pointer transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500";
   const buttonClasses = isLoadingFile
-    ? `${baseButtonClasses} bg-gray-disabled border-gray-disabled cursor-not-allowed`
-    : `${baseButtonClasses} bg-primary-600 border-primary-600 hover:bg-primary-700 hover:border-primary-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0`;
+    ? `${baseButtonClasses} bg-gray-400 text-white border border-gray-400 cursor-not-allowed`
+    : `${baseButtonClasses} bg-blue-600 text-white border border-blue-600 hover:bg-blue-700 hover:border-blue-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0`;
 
   if (selectedFile) {
     return (
