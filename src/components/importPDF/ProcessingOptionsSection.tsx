@@ -6,14 +6,15 @@ interface ProcessingButtonProps {
   isProcessing: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  disabled?: boolean;
 }
 
-const ProcessingButton: React.FC<ProcessingButtonProps> = ({ isProcessing, onClick, children }) => (
+const ProcessingButton: React.FC<ProcessingButtonProps> = ({ isProcessing, onClick, children, disabled = false }) => (
   <button
     onClick={onClick}
-    disabled={isProcessing}
+    disabled={isProcessing || disabled}
     className={`w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-300 text-white border shadow-sm ${
-      isProcessing 
+      (isProcessing || disabled)
         ? 'bg-gray-400 border-gray-400 cursor-not-allowed' 
         : 'bg-emerald-500 border-emerald-500 hover:bg-emerald-600 hover:border-emerald-600 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0'
     }`}
@@ -22,6 +23,11 @@ const ProcessingButton: React.FC<ProcessingButtonProps> = ({ isProcessing, onCli
       <span className="flex items-center gap-2">
         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
         Procesando...
+      </span>
+    ) : disabled ? (
+      <span className="flex items-center gap-2">
+        <span>🚫</span>
+        {children || 'No disponible'}
       </span>
     ) : (
       <span className="flex items-center gap-2">
@@ -79,6 +85,7 @@ const ProcessingOptionsSection: React.FC<ProcessingOptionsSectionProps> = ({
             <ProcessingButton
               isProcessing={isProcessing}
               onClick={() => onIntelligentProcessing('text-only')}
+              disabled={true}
             >
               Solo texto
             </ProcessingButton>
