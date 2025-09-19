@@ -133,7 +133,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         <div className="flex items-center justify-between">
           <div>
             {!isEditing && (
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-2xl font-bold text-primary mb-2">
                 Nueva pregunta {nextQuestionNumber.toString().padStart(4, '0')}
               </h2>
             )}
@@ -155,13 +155,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
         {/* Question text */}
         <div>
-          <label className="block text-md font-medium text-gray-700 mb-2">
-            <span className="text-sm font-bold text-black mb-2">Texto de la pregunta</span> <span className="text-red-500">*</span>
+          <label className="block text-md font-medium text-secondary mb-2">
+            <span className="text-sm font-bold text-primary mb-2">Texto de la pregunta</span> <span className="text-red-500">*</span>
           </label>
           <textarea
             {...register('question_text', { required: 'El texto de la pregunta es obligatorio' })}
             rows={4}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-white text-gray-900"
+            className="w-full border border-primary rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-input text-primary"
             placeholder="Escribe el texto de la pregunta aquí..."
           />
           {errors.question_text && (
@@ -175,15 +175,15 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             {...register('requires_multiple_answers')}
             className="form-checkbox mr-2"
           />
-          <label className="text-sm text-gray-700">
+          <label className="text-sm text-secondary">
             Esta pregunta permite varias respuestas correctas
           </label>
         </div>
         {/* Answer options */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <label className="block text-md font-medium text-gray-700">
-              <span className="text-sm font-bold text-black mb-2">Opciones de respuesta</span> <span className="text-red-500">*</span>
+            <label className="block text-md font-medium text-secondary">
+              <span className="text-sm font-bold text-primary mb-2">Opciones de respuesta</span> <span className="text-red-500">*</span>
             </label>
             <div className="flex items-center gap-2">
               <Button
@@ -212,7 +212,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
             {fields.map((field, index) => (
               <div key={field.id} className="option-item flex gap-2 items-center min-h-[56px]">
                 <div className="flex flex-col items-center">
-                  <div className="option-letter flex items-center justify-center text-base font-semibold text-gray-500 bg-gray-100 rounded-full min-w-[32px] min-h-[32px]">
+                  <div className="option-letter flex items-center justify-center text-base font-semibold text-secondary bg-elevated rounded-full min-w-[32px] min-h-[32px]">
                     {String.fromCharCode(65 + index)}
                   </div>
                   <div className="min-h-[20px] w-full mt-1 flex items-center justify-center">
@@ -227,7 +227,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                       {...register(`options.${index}.option_text`, {
                         required: 'El texto de la opción es obligatorio'
                       })}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-white text-gray-900 min-h-[56px]"
+                      className="w-full border border-primary rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-input text-primary min-h-[56px]"
                       placeholder={`Texto de opción ${String.fromCharCode(65 + index)}`}
                       rows={2}
                     />
@@ -243,7 +243,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                           setValue(`options.${index}.is_correct`, isChecked);
                         }}
                       />
-                      <label className="text-sm text-gray-700">Correcta</label>
+                      <label className="text-sm text-secondary">Correcta</label>
                     </div>
                   </div>
                   {errors.options?.[index]?.option_text && (
@@ -269,8 +269,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
 
         {/* Reference link */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            <span className="text-sm font-bold text-black mb-2">Enlace de referencia</span>
+          <label className="block text-sm font-medium text-secondary mb-2">
+            <span className="text-sm font-bold text-primary mb-2">Enlace de referencia</span>
           </label>
           <input
             type="url"
@@ -280,7 +280,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
                 message: 'Debe ser una URL válida (http:// o https://)'
               }
             })}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition bg-white text-gray-900"
+            className="w-full border border-primary rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition bg-input text-primary"
             placeholder="https://ejemplo.com/fuente-informacion"
           />
           {errors.link && (
@@ -289,13 +289,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({
         </div>
         {/* Explanation */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            <span className="text-sm font-bold text-black mb-2">Explicación</span>
+          <label className="block text-sm font-medium text-secondary mb-2">
+            <span className="text-sm font-bold text-primary mb-2">Explicación</span>
           </label>
           <textarea
             {...register('explanation')}
             rows={4}
-            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-white text-gray-900"
+            className="w-full border border-primary rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition resize-y bg-input text-primary"
             placeholder="Agrega una explicación detallada de por qué las respuestas son correctas..."
           />
           {errors.explanation && (
