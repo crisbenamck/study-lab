@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '../common/Button';
 import type { ReactNode } from 'react';
 import ProgressBar from './ProgressBar';
+import { ClockIcon } from '../../icons';
 
 interface ActivityHeaderProps {
   icon: ReactNode;
@@ -38,7 +39,7 @@ const ActivityHeader: React.FC<ActivityHeaderProps> = ({
   showTimer = false,
 }) => (
   <div className="w-full mb-8">
-    <div className="bg-white border-b top-0 z-10 activity-header-bg">
+    <div className="bg-white border-b top-0 z-10 activity-header-bg px-4 rounded-t-lg">
       <div className="max-w-4xl mx-auto py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-start w-full">
@@ -52,8 +53,9 @@ const ActivityHeader: React.FC<ActivityHeaderProps> = ({
           </div>
           <div className="flex items-center gap-4 ml-4">
             {showTimer && typeof timeLeft === 'number' && !isNaN(timeLeft) && timeLeft >= 0 && formatTime(timeLeft) !== '' && (
-              <div className={`text-base font-mono activity-header-timer ${timeLeft < 300 ? 'warning text-red-600' : 'text-gray-700'}`}>
-                ⏰ {formatTime(timeLeft)}
+              <div className={`text-base font-mono activity-header-timer flex items-center gap-2 ${timeLeft < 300 ? 'warning text-red-600' : 'text-gray-700'}`}>
+                <ClockIcon className="w-5 h-5" />
+                {formatTime(timeLeft)}
               </div>
             )}
             <Button
@@ -70,7 +72,7 @@ const ActivityHeader: React.FC<ActivityHeaderProps> = ({
       </div>
     </div>
     {showProgressBar && typeof progressCurrent === 'number' && typeof progressTotal === 'number' && (
-      <div className="w-full bg-white activity-header-bg">
+      <div className="w-full bg-white activity-header-bg px-4 pb-4 rounded-b-lg">
         <div className="max-w-4xl mx-auto pt-2 pb-0">
           <ProgressBar current={progressCurrent} total={progressTotal} />
         </div>

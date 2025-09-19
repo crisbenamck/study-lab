@@ -33,6 +33,7 @@ export { default as RobotIcon } from './RobotIcon';
 export { default as ChartIcon } from './ChartIcon';
 export { default as LoadingIcon } from './LoadingIcon';
 export { default as UnlockIcon } from './UnlockIcon';
+export { default as ClockIcon } from './ClockIcon';
 
 // Iconos de documentos y archivos
 export { default as FileTextIcon } from './FileTextIcon';

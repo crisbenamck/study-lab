@@ -928,13 +928,24 @@ p.scope-error-text,
 
 /* ActivityHeader dark mode styles */
 [data-theme="dark"] .activity-header-bg {
-  background-color: #1f2937 !important; /* gray-800 */
-  border-color: #374151 !important; /* gray-700 */
+  background-color: #374151 !important; /* gray-700 - lighter for consistency with cards */
+  border-color: #4b5563 !important; /* gray-600 */
 }
 
 [data-theme="dark"] .activity-header-icon-bg {
   background-color: #374151 !important; /* gray-700 */
   color: #60a5fa !important; /* blue-400 */
+}
+
+/* ActivityHeader icon with orange theme for flashcards */
+.activity-header-icon-bg {
+  background-color: #ea580c !important; /* orange-600 */
+  color: #ffffff !important; /* white */
+}
+
+[data-theme="dark"] .activity-header-icon-bg {
+  background-color: #ea580c !important; /* orange-600 - consistent across themes */
+  color: #ffffff !important; /* white */
 }
 
 [data-theme="dark"] .activity-header-title {

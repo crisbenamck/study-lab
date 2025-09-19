@@ -126,7 +126,7 @@ const StudyFlashCardsPage: React.FC<StudyFlashCardsPageProps> = ({ showConfirm }
       <div className="max-w-4xl mx-auto py-8">
         {/* Header unificado */}
         <ActivityHeader
-          icon={<BookIcon className="w-5 h-5 text-orange-600" />}
+          icon={<BookIcon className="w-5 h-5 text-white" />}
           title="Modo Flashcards"
           subtitle={getScopeText(currentSession.config)}
           progressCurrent={currentQuestionIndex}
